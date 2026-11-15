@@ -18,6 +18,11 @@ request. Donations in the demo are simulated; no card is charged.
 - Locally: download this repo and open `index.html` in a browser. No server
   and no internet needed; it runs straight from the file.
 
+The home page is a full pitch page: type your own shul's name in the hero and
+the whole demo re-brands as you type; press "לראות את השבת נכנסת" to watch the
+screen enter Shabbat; move Friday's Mincha in the "update once" lab and see the
+site, the phone and the screen follow; and use the hours calculator and FAQ.
+
 Try the TV screen: open "מסך בית הכנסת" (or "TV screen"), press "12 שניות
 לפני הדלקת נרות", and watch it switch to Shabbat Shalom with candles by
 itself.
