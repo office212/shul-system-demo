@@ -3,7 +3,7 @@
 .input.bad { border-color: var(--warn); box-shadow: 0 0 0 3px color-mix(in srgb, var(--warn) 22%, transparent); }
 
 /* the nav: every item reachable at 1280, with a fade and an arrow when more is hidden */
-@media (max-width: 1500px) { .nav button { padding: 10px 8px; font-size: 14px; gap: 5px; } .nav button svg.ic { width: 17px; height: 17px; } .nav { padding: 0 10px; } }
+@media (max-width: 1500px) { .nav button .lock { display: none; } .nav button { padding: 10px 8px; font-size: 14px; gap: 5px; } .nav button svg.ic { width: 17px; height: 17px; } .nav { padding: 0 10px; } }
 .bar { position: sticky; }
 .bar::before, .bar::after { content: ""; position: absolute; bottom: 0; height: 44px; width: 54px; pointer-events: none; opacity: 0; transition: opacity .2s; z-index: 2; display: grid; place-items: center; color: var(--a-soft); font-size: 22px; font-weight: 800; }
 .bar::before { inset-inline-start: 0; background: linear-gradient(to left, transparent, var(--p2) 70%); content: "›"; }

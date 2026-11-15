@@ -167,5 +167,6 @@
     campaign: { name: B("קמפיין הבניין", "The building campaign"), goal: 50000, base: 30861, baseDonors: 81, end: "2026-12-13" },
     /* collected in the months before the sample ledger starts (September) */
     history: [[B("יוני", "Jun"), 7400], [B("יולי", "Jul"), 6100], [B("אוג׳", "Aug"), 6800]],
-    sales: { phone: "347-244-9382", tel: "+13472449382", email: "hanochhason@gmail.com" } };
+    /* video: the path of the 90-second tour video once it exists, e.g. "assets/tour.mp4". Empty = the slot stays hidden. */
+    sales: { phone: "347-244-9382", tel: "+13472449382", email: "hanochhason@gmail.com", video: "" } };
 })();

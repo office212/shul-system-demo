@@ -21,17 +21,18 @@
   function pn(n) { return '<div class="pn"><span class="pi">' + KN.logo() + "</span><div><b>" + esc(L(n.title)) + "</b><span>" + esc(L(n.body)) + "</span></div></div>"; }
   function p7() { return S.prayers.filter(function (p) { return p.id === "p7"; })[0] || S.prayers.filter(function (p) { return p.days.indexOf(5) >= 0; })[0]; }
   function siteRows() { var me = p7(); return KN.dayPrayers(5).map(function (p) { return '<div class="' + (me && p.id === me.id ? "me" : "") + '"><span>' + esc(L(p.name)) + "</span><b>" + KN.time(p.time) + "</b></div>"; }).join(""); }
-  function shabBtn() { return KN.isShabbat() ? ic("clock") + T("להחזיר ליום שישי", "Back to Friday afternoon") : ic("flame") + T("לראות את השבת נכנסת", "Watch Shabbat come in"); }
+  function shabBtn() { return KN.isShabbat() ? ic("clock") + T("להחזיר ליום שישי", "Back to Friday afternoon") : ic("flame") + T("הדמיית הדלקת נרות", "Simulate candle lighting"); }
 
   /* ================= the landing page ================= */
   KN.views.landing = {
     render: function () {
       var me = p7(), mins = [30, 90, 45, 40];
-      var hero = '<section class="hx"><div class="hx-in"><div><span class="hx-pill"><i></i>' + T("הדגמה חיה · כל כפתור כאן עובד", "Live demo · every button here works") + "</span><h1>" + T("כל בית הכנסת,", "Your whole shul,") + "<em>" + T("במערכת אחת.", "in one system.") + '</em></h1><p class="hx-lede">' +
-        T("זמני תפילה, מסך שעובר לשבת <b>מעצמו</b>, כספים, תרומות, חברים והתראות. הגבאי מעדכן פעם אחת, וזה מופיע באתר, בטלפונים ועל המסך.", "Davening times, a screen that switches to Shabbat <b>by itself</b>, finance, donations, members and notifications. The gabbai updates once; the site, the phones and the screen follow.") +
+      var cp = KN.campaign();
+      var hero = '<section class="hx"><div class="hx-in"><div><span class="hx-pill"><i></i>' + T("הדמו פתוח: בלי הרשמה, בלי שיחת מכירה", "Open demo: no sign-up, no sales call") + "</span><h1>" + T("המסך, הכספים והקהילה.", "The screen, the money, the community.") + "<em>" + T("בעברית, במערכת אחת.", "Hebrew first, in one system.") + '</em></h1><p class="hx-lede">' +
+        T("מערכת ניהול מלאה לבית הכנסת: מסך טלוויזיה שעובר לשבת <b>מעצמו</b>, כספים, תרומות, עליות ומקומות. הגבאי מעדכן פעם אחת, וזה מופיע באתר, בטלפונים ועל המסך.", "A complete system for your shul: a TV screen that enters Shabbat <b>by itself</b>, finance, donations, aliyot and seats. Update once; the site, the phones and the screen follow.") +
         '</p><div class="hx-name"><label for="hxName">' + ic("edit") + T("נסו עם השם של בית הכנסת שלכם", "Try it with your own shul's name") + '</label><input id="hxName" data-on="hxName" autocomplete="off" maxlength="40" placeholder="' + T("למשל: בית הכנסת אהבת שלום", "e.g. Congregation Ahavat Shalom") + '" value="' + (custom() ? esc(KN.shulName()) : "") + '"><small>' + T("הקלידו, וכל ההדגמה הופכת לשלכם: המסך, האתר, הקבלות והמיילים.", "Type, and the whole demo becomes yours: the screen, the site, the receipts and the emails.") + "</small></div>" +
-        '<div class="hx-cta"><button class="btn gold lg" data-act="tourStart">' + ic("play") + T("סיור מודרך · 3 דקות", "Take the tour · 3 minutes") + '</button><button class="btn ghost lg" id="hxShab" data-act="hxShabbat">' + shabBtn() + '</button></div><div class="hx-proof">' + chk("בלי התקנה", "Nothing to install") + chk("בלי ציוד חדש", "No new hardware") + chk("הקמה מלווה", "Guided setup") + "</div></div>" +
-        '<div class="hx-stage"><div class="tvframe"><div class="tvhost" id="heroTv" data-go="tv" title="' + T("לפתוח את המסך", "Open the screen") + '"></div></div><div class="hx-cap"><span class="live"><i></i>' + T("חי · המסך של בית הכנסת", "LIVE · the shul's screen") + '</span><button class="btn sm ghost" data-go="tv">' + T("לפתוח מסך מלא", "Open full screen") + " " + ic("arrow", "flip") + '</button></div><div class="hphone" aria-hidden="true"><div class="scr"><div class="pc" id="hpClock"></div><div class="pd">' + esc(KN.shulName()) + '</div><div class="stackn" id="hpStack"></div></div></div></div></div></section>';
+        '<div class="hx-cta"><button class="btn gold lg" data-act="tourStart">' + ic("play") + T("סיור מודרך · 3 דקות", "Take the tour · 3 minutes") + '</button><a class="btn lg wa-h" href="' + KN.waLink() + '" target="_blank" rel="noopener">' + ic("wa") + 'WhatsApp</a></div><div class="hx-proof">' + chk("בלי הרשמה", "No sign-up") + chk("עברית קודם", "Hebrew first") + chk("מסך הטלוויזיה כלול", "The TV screen is included") + chk("בלי תשלום לפי חבר", "No per-member fee") + chk("הקמה מלווה", "Guided setup") + "</div></div>" +
+        '<div class="hx-stage"><div class="tvframe"><div class="tvhost" id="heroTv" data-go="tv" title="' + T("לפתוח את המסך", "Open the screen") + '"></div></div><div class="hx-cap"><button class="btn sm gold" id="hxShab" data-act="hxShabbat">' + shabBtn() + '</button></div><button class="hqm" data-act="proGo" data-to="hq" aria-label="' + T("לפתוח את מרכז הפיקוד", "Open the command center") + '"><div class="hqm-h"><span class="live"><i></i>' + T("מרכז הפיקוד", "Command center") + "</span><em>" + T("נתוני דמו", "Demo data") + '</em></div><div class="hqm-k"><div><b>' + KN.moneyT(KN.monthCollected()) + "</b><span>" + T("נגבה בנובמבר", "Collected in Nov") + "</span></div><div><b>" + S.members.length + "</b><span>" + T("מתפללים", "Members") + "</span></div><div><b>" + cp.pct.toFixed(1) + "%</b><span>" + T("מיעד הקמפיין", "Of the campaign") + '</span></div></div><div class="hqm-f" id="hqmFeed"></div></button></div></div></section>';
       var ribbon = '<div class="ribbon"><div class="ribbon-in">' + [[S.members.length, "", "מתפללים רשומים", "Registered members"], [KN.monthCollected(), "$", "נגבה בנובמבר", "Collected in November"], [S.prayers.reduce(function (a, p) { return a + p.days.length; }, 0), "", "מניינים בשבוע", "Minyanim a week"], [S.dedications.length, "", "הקדשות על המסך", "Dedications on screen"]].map(function (s) {
         return '<div class="rb"><div class="v" data-count="' + s[0] + '" data-pre="' + s[1] + '">0</div><div class="k">' + T(s[2], s[3]) + "</div></div>"; }).join("") + '</div><p class="ribbon-note">' + T("מספרים חיים מתוך ההדגמה. תרמו, אשרו בקשה או רשמו נדר, והם משתנים.", "Live numbers from the demo. Donate, approve a request or record a neder and they change.") + "</p></div>";
       var OLD = [["מחברת נדרים", "The nedarim notebook", "מי חייב מה? רק הגבאי יודע.", "Who owes what? Only the gabbai knows."], ["קבוצות וואטסאפ", "WhatsApp groups", "שינוי בזמן המנחה נבלע בין מאה הודעות.", "A changed Mincha time drowns among a hundred messages."], ["קובצי אקסל", "Excel files", "שלושה עותקים, אף אחד לא מעודכן.", "Three copies, none of them current."], ["פתקים על הלוח", "Notes on the board", "הקדשה שנשכחה, יארצייט שהתפספס.", "A forgotten dedication, a missed yahrzeit."], ["קבלות בכתב יד", "Handwritten receipts", "ובסוף השנה: ערב שלם של מכתבי מס.", "And at year end: a whole evening of tax letters."]];
@@ -64,19 +65,20 @@
         ["הזמנים מתאימים למנהג שלנו?", "Do the times follow our custom?", "כן. הזמנים והניסוחים על המסך מותאמים למנהג בית הכנסת שלכם, ואתם קובעים אותם בהגדרות.", "Yes. The times and the wording on the screen follow your shul's custom, and you set them in the settings."],
         ["כמה זה עולה?", "How much does it cost?", "אין תשלום לפי חבר. את כל הפרטים נשמח לתת בשיחה קצרה.", "There is no per-member fee. We are glad to give you the details on a short call."]];
       var faq = '<section class="sx"><div class="sx-h" data-rv><span class="eyebrow">' + T("שאלות נפוצות", "Common questions") + "</span><h2>" + T("מה ששואלים אותנו <em>בכל שיחה</em>", "What we are asked <em>on every call</em>") + '</h2></div><div class="faq" data-rv>' + FAQ.map(function (f, i) { return "<details" + (i === 0 ? " open" : "") + "><summary>" + T(f[0], f[1]) + "</summary><p>" + T(f[2], f[3]) + "</p></details>"; }).join("") + '</div><p class="center" style="margin-top:20px"><button class="btn sec" data-go="included">' + ic("list") + T("הרשימה המלאה: מה כלול", "The full list: what's included") + '</button> <button class="btn sec" data-act="contactMsg">' + ic("mail") + T("לנסות את טופס יצירת הקשר של הקהילה", "Try the shul's contact form") + "</button></p></section>";
-      return hero + ribbon + '<div class="page" style="animation:none;padding-top:0">' + ba + lab + (KN.proSection ? KN.proSection() : "") + bento + roles + calc + steps + faq + KN.cta() + KN.foot() + "</div>";
+      return hero + ribbon + '<div class="page" style="animation:none;padding-top:0">' + KN.videoSection() + ba + lab + (KN.proSection ? KN.proSection() : "") + bento + roles + calc + KN.onboardSection() + steps + KN.trustSection() + faq + KN.cta() + KN.foot() + "</div>";
     },
     after: function (root) {
       var btn = document.getElementById("hxShab"), cdT = null;
       KN.tvMount(document.getElementById("heroTv"), { onMode: function () { clearInterval(cdT); if (btn) btn.innerHTML = shabBtn(); } });
       KN.tvMount(document.getElementById("labTv"));
-      /* the phone: a live clock and notifications that keep arriving */
-      var list = S.notifications.slice(0, 6), i = 0, stack = document.getElementById("hpStack"), clock = document.getElementById("hpClock");
-      function tickPhone() { var d = KN.now(); clock.textContent = KN.time(String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0")).replace(/ (AM|PM)/, ""); }
-      function pushOne() { if (!list.length) return; stack.insertAdjacentHTML("afterbegin", pn(list[i++ % list.length])); while (stack.children.length > 3) stack.lastChild.remove(); }
-      tickPhone(); pushOne(); pushOne();
-      var t1 = setInterval(tickPhone, 1000), t2 = setInterval(pushOne, 3600);
-      KN.cleanup.push(function () { clearInterval(t1); clearInterval(t2); clearInterval(cdT); });
+      /* the command-center preview: automations firing, built from the demo's own people and amounts */
+      var feed = document.getElementById("hqmFeed"), db = S.members.filter(function (m) { return KN.balance(m) > 0.004; }), fi = 0;
+      function line() { var m = db[fi % Math.max(1, db.length)] || S.members[0], k = fi++ % 4;
+        return [T("תזכורת תשלום נשלחה · ", "Payment reminder sent · ") + L(m.name), T("נדר נרשם · שלישי · ", "Neder recorded · third aliyah · ") + L(S.members[fi % S.members.length].name), T("מקום נמכר וחויב · שורה ", "Seat sold and charged · row ") + (1 + fi % 9), T("קבלה נשלחה במייל · תרומה ", "Receipt emailed · donation ") + KN.moneyT([36, 72, 180, 101][fi % 4])][k]; }
+      function pushLine() { if (!feed || !feed.isConnected) return; feed.insertAdjacentHTML("afterbegin", "<div>" + ic("check") + "<span>" + esc(line()) + "</span></div>"); while (feed.children.length > 3) feed.lastChild.remove(); }
+      pushLine(); pushLine(); pushLine();
+      var t2 = setInterval(pushLine, 2600);
+      KN.cleanup.push(function () { clearInterval(t2); clearInterval(cdT); });
       KN._hxCount = function () {
         clearInterval(cdT);
         cdT = setInterval(function () { var s = Math.ceil((KN.CANDLE - KN.now().getTime()) / 1000); if (s <= 0 || !btn.isConnected) { clearInterval(cdT); return; } btn.innerHTML = ic("flame") + T("הדלקת נרות בעוד ", "Candle lighting in ") + s + T(" שניות…", "s…"); }, 250);
@@ -92,7 +94,6 @@
     var v = el.value.trim();
     S.shul.nameHe = v || D.shul.nameHe; S.shul.nameEn = v || D.shul.nameEn;
     KN.save(); KN.renderBar();
-    document.querySelectorAll(".hphone .pd").forEach(function (e) { e.textContent = KN.shulName(); });
     clearTimeout(nameDeb); nameDeb = setTimeout(function () { KN.tvRefresh(); }, 160);
   };
   /* watch Shabbat come in on the hero screen: 12 seconds before candle lighting, then it switches by itself */
