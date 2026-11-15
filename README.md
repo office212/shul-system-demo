@@ -23,6 +23,19 @@ the whole demo re-brands as you type; press "לראות את השבת נכנסת
 screen enter Shabbat; move Friday's Mincha in the "update once" lab and see the
 site, the phone and the screen follow; and use the hours calculator and FAQ.
 
+The management layer (switch role to Admin, or press Ctrl+K anywhere):
+
+- **Command center** (`#/hq`): KPIs with trends, a smart assistant that proposes
+  one-click actions (payment reminders, matching a payment, approving a
+  yahrzeit, offering an open kiddush), a campaign thermometer, today's schedule
+  and a live feed with an optional simulation of incoming sample donations.
+- **Aliyot board** (`#/aliyot`): auto-assigns honors by chiyuv (yahrzeit, Bar
+  Mitzvah, new baby) and rotation, prints a gabbai's sheet, and records
+  everything as nedarim on Saturday night.
+- **Seat map** (`#/seats`): High Holiday seating; click a seat to sell, hold or
+  release it, and the charge lands on the member's account.
+- **Quick search** (Ctrl+K): members, screens and actions.
+
 Try the TV screen: open "מסך בית הכנסת" (or "TV screen"), press "12 שניות
 לפני הדלקת נרות", and watch it switch to Shabbat Shalom with candles by
 itself.
