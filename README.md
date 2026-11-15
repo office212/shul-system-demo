@@ -7,7 +7,7 @@ English, with a role switcher and a customization panel that re-skins the
 whole demo live.
 
 **Everything here is fictional.** The shul is "Kehillat Noam", a made-up
-Sephardi congregation. Every person, amount, dedication, and date is invented
+congregation. Every person, amount, dedication, and date is invented
 sample data. No real congregation, member, or payment is involved, and
 nothing leaves the browser: there is no server, no database, and no network
 request. Donations in the demo are simulated; no card is charged.

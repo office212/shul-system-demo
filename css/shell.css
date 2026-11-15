@@ -1,0 +1,72 @@
+/* Kehillat Noam | the shell: nothing fixed may sit on content. */
+.page { padding-bottom: 116px; }
+.input.bad { border-color: var(--warn); box-shadow: 0 0 0 3px color-mix(in srgb, var(--warn) 22%, transparent); }
+
+/* the nav: every item reachable at 1280, with a fade and an arrow when more is hidden */
+@media (max-width: 1500px) { .nav button { padding: 10px 8px; font-size: 14px; gap: 5px; } .nav button svg.ic { width: 17px; height: 17px; } .nav { padding: 0 10px; } }
+.bar { position: sticky; }
+.bar::before, .bar::after { content: ""; position: absolute; bottom: 0; height: 44px; width: 54px; pointer-events: none; opacity: 0; transition: opacity .2s; z-index: 2; display: grid; place-items: center; color: var(--a-soft); font-size: 22px; font-weight: 800; }
+.bar::before { inset-inline-start: 0; background: linear-gradient(to left, transparent, var(--p2) 70%); content: "›"; }
+.bar::after { inset-inline-end: 0; background: linear-gradient(to right, transparent, var(--p2) 70%); content: "‹"; }
+[dir="ltr"] .bar::before { background: linear-gradient(to right, var(--p2) 30%, transparent); content: "‹"; }
+[dir="ltr"] .bar::after { background: linear-gradient(to left, var(--p2) 30%, transparent); content: "›"; }
+.bar.nf-s::before, .bar.nf-e::after { opacity: 1; }
+.rs-b .w { display: none; }
+
+/* the contact button: a pill for five seconds, then a small icon in the page gutter */
+.fab { bottom: 20px; inset-inline-start: 8px; min-height: 48px; transition: opacity .3s, translate .3s, transform .18s, padding .3s; }
+.fab span { max-width: 240px; overflow: hidden; white-space: nowrap; transition: max-width .4s ease, opacity .3s; }
+.fab.mini, [dir="rtl"] .fab.mini { padding: 0; width: 40px; min-height: 40px; justify-content: center; animation: none; }
+.fab.mini span { max-width: 0; opacity: 0; }
+.fab.mini svg { width: 19px; height: 19px; }
+.fab.mini:hover, [dir="rtl"] .fab.mini:hover { width: auto; padding: 0 16px; } .fab.mini:hover span { max-width: 240px; opacity: 1; }
+.fab.opp { inset-inline-start: auto; inset-inline-end: 8px; }
+.fab.off { display: none; }
+@media (min-width: 1001px) { .page.wide { padding-inline: 60px; } }
+.totop { position: fixed; z-index: 59; bottom: 20px; inset-inline-end: 8px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--p); cursor: pointer; display: grid; place-items: center; box-shadow: var(--shadow-sm); opacity: 0; pointer-events: none; translate: 0 14px; transition: opacity .25s, translate .25s; }
+.totop.show { opacity: 1; pointer-events: auto; translate: 0 0; }
+.fab.opp ~ .totop { inset-inline-end: auto; inset-inline-start: 8px; }
+body:has(#tour) .totop, body:has(#modal) .totop, body:has(#panel) .totop, body:has(#cmdk) .totop, body:has(#cmdk) .fab { display: none; }
+
+/* the phone's bottom bar */
+.bnav { display: none; }
+@media (max-width: 760px) {
+  .bnav { position: fixed; z-index: 58; inset: auto 0 0 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); background: color-mix(in srgb, var(--p2) 96%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 5px 4px calc(5px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(255, 255, 255, .14); box-shadow: 0 -10px 24px -14px rgba(0, 0, 0, .6); }
+  .bnav button { border: 0; background: none; color: rgba(255, 255, 255, .8); display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 5px 2px; font-size: 11px; font-weight: 700; cursor: pointer; border-radius: 10px; min-width: 0; }
+  .bnav button span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .bnav button[aria-current="page"] { color: #fff; background: rgba(255, 255, 255, .12); }
+  .bnav button.gold { color: var(--a-soft); }
+  .bnav svg.ic { width: 21px; height: 21px; }
+  body:has(#tour) .bnav, body:has(#cmdk) .bnav { display: none; }
+  .page { padding-bottom: 104px; }
+  .fab { display: none !important; }
+  .totop { display: none; }
+  .top-inline { display: block; margin-top: 26px; }
+  #toasts { bottom: 76px; }
+  .ck-f, .rs-b { display: none; }
+}
+@media (hover: none), (pointer: coarse) { kbd { display: none !important; } }
+
+/* the tour card sits at the top on the TV stops, so the countdown, the ticker and the QR stay visible */
+.tour.top { bottom: auto; top: 112px; }
+@media (max-width: 760px) { .tour.top { top: 8px; } }
+
+/* contact sheet */
+.cta-box a.wa { background: #1faa59; color: #fff; }
+.cta-box a.wa svg { width: 22px; height: 22px; }
+.talk-box { max-width: 420px; margin: 16px auto 0; }
+.talk-box a.alt { background: var(--p); color: #fff; }
+.talk-box a { animation: none !important; font-size: 18px !important; padding: 12px 20px !important; }
+.cb { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); text-align: start; }
+.cb h3 { margin-bottom: 10px; }
+.mailcard { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; }
+.mailcard .fi { width: 40px; height: 40px; border-radius: 11px; background: var(--a-tint); color: var(--a-text); display: grid; place-items: center; flex: none; }
+.mailcard > div { flex: 1; min-width: 0; } .mailcard b { display: block; color: var(--p); } .mailcard span { font-size: 14px; color: var(--muted); }
+.seatbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-top: 14px; padding: 12px 16px; border-radius: 16px; background: var(--ok-tint); border: 2px solid var(--ok); animation: fadeUp .3s ease both; }
+.seatbar b { display: block; color: var(--p); font-size: 17px; } .seatbar span { color: var(--muted); font-weight: 700; }
+.seatbar .input { max-width: 240px; }
+.seatmap { min-width: 880px; }
+@media (max-width: 640px) { .seatmap { min-width: 780px; } }
+
+.top-inline { display: none; }
+@media (max-width: 760px) { .top-inline { display: block; margin-top: 26px; } }

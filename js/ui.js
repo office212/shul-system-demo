@@ -47,7 +47,7 @@
     { go: "finance", role: "finance", clock: "motzash", spot: ".feed", pre: "donation", t: B("דקה אחר כך", "A minute later"), x: B("אצל גבאי הכספים התרומה כבר בספרים ובפעמון. אף אחד לא הקליד כלום.", "On the finance gabbai's desk the donation is already in the books and on the bell. Nobody typed anything.") },
     { go: "member", role: "member", clock: "motzash", spot: "#yzCard", t: B("המתפלל בבית", "The member at home"), x: B("יתרה, תשלום בכרטיס, והיארצייטים של המשפחה. הוא מוסיף יארצייט, והגבאי מאשר.", "Balance, card payment, and the family's yahrzeits. He adds a yahrzeit and the gabbai approves.") },
     { go: "admin/join", role: "admin", clock: "motzash", spot: ".req", t: B("המנהל", "The admin"), x: B("בקשת הצטרפות חדשה מאושרת בלחיצה, והמצטרף מקבל מייל ברוכים הבאים.", "A new join request is approved with one click, and the new member gets a welcome email.") },
-    { go: "hq", role: "admin", clock: "motzash", spot: "#hqAsst", t: B("מרכז השליטה", "The command center"), x: B("העוזר החכם מראה למנהל מה דורש טיפול: חייבים, תשלום לא מזוהה, קידוש בלי חסות. כל דבר נפתר בלחיצה אחת.", "The smart assistant shows the admin what needs attention: open balances, an unmatched payment, a kiddush with no sponsor. Each is solved with one click.") },
+    { go: "hq", role: "admin", clock: "motzash", spot: "#hqAsst", t: B("מרכז הפיקוד", "The command center"), x: B("העוזר החכם מראה למנהל מה דורש טיפול: חייבים, תשלום לא מזוהה, קידוש בלי חסות. כל דבר נפתר בלחיצה אחת.", "The smart assistant shows the admin what needs attention: open balances, an unmatched payment, a kiddush with no sponsor. Each is solved with one click.") },
     { go: "aliyot", role: "content", clock: "friPM", spot: ".al", t: B("לוח העליות", "The aliyot board") , x: B("שיבוץ אוטומטי: מי שיש לו יארצייט, בר מצווה או הולדת בת מקבל עלייה. במוצאי שבת הכול נרשם כנדרים.", "Auto-assign: whoever has a yahrzeit, a Bar Mitzvah or a new baby gets an aliyah. On Saturday night it all becomes nedarim.") },
     { go: "seats", role: "admin", clock: "friPM", spot: "#seatmap", t: B("מפת המקומות", "The seat map"), x: B("כל המקומות לימים הנוראים במבט אחד. לוחצים על מקום פנוי, מוכרים, והחיוב נרשם בחשבון המתפלל.", "Every High Holiday seat at a glance. Click a free seat, sell it, and the charge lands on the member's account.") },
     { go: "landing", role: "visitor", clock: "friPM", spot: ".tvframe", pre: "customize", t: B("ועכשיו: שלכם", "And now: yours"), x: B("שם, לוגו וצבעים משלכם. בחרו ערכת עיצוב בצד, וכל המערכת מתחלפת, כולל המסך.", "Your own name, logo and colors. Pick a theme at the side and the whole system changes, the screen included.") }
@@ -55,7 +55,7 @@
   var cur = -1;
   function sampleDonation() {
     if (S.lastDonation) return;
-    var name = B("יונתן ברוך", "Jonathan Baruch"), ref = KN.nextRef(), rec = { id: "G" + Date.now(), date: KN.todayIso(), amount: 180, fee: 5.68, total: 185.68, donor: name, email: "jonathan.baruch@example.org", ref: ref, fund: "general", method: "card", fresh: true };
+    var name = B("יונתן ברוך", "Jonathan Baruch"), ref = KN.nextRef(), rec = { id: "G" + Date.now(), date: KN.todayIso(), amount: 180, fee: 5.68, total: 185.68, donor: name, email: "jonathan.baruch@mail.demo", ref: ref, method: "card", fresh: true };
     S.donations.unshift(rec); S.lastDonation = rec;
     KN.log("pay", B("תרומה חדשה $180 · יונתן ברוך", "New donation $180 · Jonathan Baruch"));
     KN.notify({ kind: "payment", title: B("תרומה חדשה התקבלה", "New donation received"), body: B("יונתן ברוך תרם $180 · תרומה כללית · " + ref, "Jonathan Baruch donated $180 · General donation · " + ref), to: ["finance", "admin"] });
@@ -67,7 +67,7 @@
   }
   function card() {
     var old = document.getElementById("tour"); if (old) old.remove(); if (cur < 0) return;
-    var s = STEPS[cur], el = document.createElement("div"); el.className = "tour"; el.id = "tour"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", T("סיור מודרך", "Guided tour"));
+    var s = STEPS[cur], el = document.createElement("div"); el.className = "tour" + (/^tv/.test(s.go) ? " top" : ""); el.id = "tour"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", T("סיור מודרך", "Guided tour"));
     el.innerHTML = '<div class="step">' + T("סיור מודרך · תחנה ", "GUIDED TOUR · STOP ") + (cur + 1) + T(" מתוך ", " OF ") + STEPS.length + "</div><h3>" + esc(KN.L(s.t)) + "</h3><p>" + esc(KN.L(s.x)) + '</p><div class="bar2"><i style="width:' + ((cur + 1) / STEPS.length * 100) + '%"></i></div><div class="row"><button class="btn sm sec" data-act="tourEnd">' + T("יציאה מהסיור", "Exit the tour") + '</button><span class="row">' + (cur > 0 ? '<button class="btn sm sec" data-act="tourPrev">' + T("הקודם", "Back") + "</button>" : "") + '<button class="btn sm gold" data-act="tourNext">' + (cur === STEPS.length - 1 ? T("סיום", "Finish") : T("הבא", "Next")) + " " + ic("arrow") + "</button></span></div>";
     document.body.appendChild(el);
   }
@@ -87,6 +87,6 @@
   KN.act.tourPrev = function () { if (cur > 0) show(cur - 1); };
   KN.act.tourEnd = function (el, ev, done) {
     cur = -1; card(); spot(); KN.closePanel();
-    if (done) KN.modal('<div class="center"><div class="okmark" style="background:var(--a)">' + ic("star") + "</div><h2>" + T("זה הכול. עכשיו תורכם.", "That's the tour. Now it's your turn.") + '</h2><p class="lede" style="margin:8px auto 16px">' + T("המשיכו ללחוץ על הכול בעצמכם: החליפו תפקיד, תרמו, אשרו בקשות. וכשתרצו את המערכת לבית הכנסת שלכם:", "Keep pressing everything yourselves: switch roles, donate, approve requests. And when you want the system for your own shul:") + '</p><div class="cta-box" style="max-width:360px;margin:0 auto"><a href="tel:' + D.sales.tel + '">' + ic("phone") + '<bdi class="ltr">' + D.sales.phone + '</bdi></a><a class="alt" style="background:var(--p);color:#fff" href="mailto:' + D.sales.email + '">' + ic("mail") + '<bdi class="ltr">' + D.sales.email + '</bdi></a></div><p style="margin-top:16px"><button class="btn sec" data-go="included">' + T("מה כלול במערכת", "What's included") + "</button></p></div>");
+    if (done) KN.modal('<div class="center"><div class="okmark" style="background:var(--a)">' + ic("star") + "</div><h2>" + T("זה הכול. עכשיו תורכם.", "That's the tour. Now it's your turn.") + '</h2><p class="lede" style="margin:8px auto 16px">' + T("המשיכו ללחוץ על הכול בעצמכם: החליפו תפקיד, תרמו, אשרו בקשות. וכשתרצו את המערכת לבית הכנסת שלכם:", "Keep pressing everything yourselves: switch roles, donate, approve requests. And when you want the system for your own shul:") + '</p><div class="cta-box talk-box">' + KN.contactBtns() + '</div><p class="row" style="margin-top:16px;justify-content:center"><button class="btn sec" data-go="included">' + T("מה כלול במערכת", "What's included") + '</button><button class="btn sec" data-act="demoReset">' + ic("refresh") + T("להתחיל את הדמו מחדש", "Start the demo over") + "</button></p></div>");
   };
 })();
