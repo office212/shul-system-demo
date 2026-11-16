@@ -90,10 +90,10 @@
   /* ---------- people, balances ---------- */
   KN.member = function (id) { return S.members.filter(function (m) { return m.id === id; })[0]; };
   KN.balance = function (m) { return Math.round((m.ledger || []).reduce(function (a, e) { return a + (e.type === "charge" ? e.amount : -e.amount); }, 0) * 100) / 100; };
-  KN.ROLES = [{ id: "visitor", he: "אורח", en: "Visitor" }, { id: "member", he: "מתפלל", en: "Member" }, { id: "finance", he: "גבאי כספים", en: "Finance gabbai" }, { id: "content", he: "גבאי תוכן", en: "Content gabbai" }, { id: "admin", he: "מנהל ראשי", en: "Admin / Super admin" }];
+  KN.ROLES = [{ id: "visitor", he: "אורח / תורם", en: "Visitor / donor" }, { id: "member", he: "מתפלל", en: "Member" }, { id: "finance", he: "גבאי כספים", en: "Finance gabbai" }, { id: "content", he: "גבאי תוכן", en: "Content gabbai" }, { id: "admin", he: "נשיא / מנהל ראשי", en: "President / admin" }, { id: "rabbi", he: "הרב", en: "The Rabbi" }];
   KN.roleName = function (id) { var r = KN.ROLES.filter(function (x) { return x.id === id; })[0]; return r ? T(r.he, r.en) : id; };
   KN.me = function () { return KN.member({ member: "m1", finance: "m9", content: "m10", admin: "m12" }[S.role] || ""); };
-  KN.can = function (what) { var r = S.role; return what === "finance" ? (r === "finance" || r === "admin") : what === "content" ? (r === "content" || r === "admin") : what === "admin" ? r === "admin" : what === "member" ? r !== "visitor" : what === "staff" ? (r !== "visitor" && r !== "member") : true; };
+  KN.can = function (what) { var r = S.role; return what === "finance" ? (r === "finance" || r === "admin") : what === "content" ? (r === "content" || r === "admin") : what === "admin" ? r === "admin" : what === "member" ? r !== "visitor" : what === "staff" ? (r !== "visitor" && r !== "member") : what === "rabbi" ? r === "rabbi" : true; };
   KN.setRole = function (r, go) { S.role = r; KN.save(); KN.renderBar(); if (go) { if (location.hash === "#/" + go) KN.render(); else location.hash = "#/" + go; } else KN.render(); KN.toast(T("מציגים עכשיו כ: ", "Now viewing as: ") + KN.roleName(r)); };
   KN.nextRef = function () { S.seq++; return "KN-2026-" + String(S.seq).padStart(5, "0"); };
   KN.notify = function (n) { n.id = "N" + Date.now() + Math.floor(Math.random() * 99); n.unread = true; n.when = D.B("עכשיו", "Just now"); S.notifications.unshift(n); KN.save(); KN.renderBar(); };
@@ -149,8 +149,8 @@
   };
 
   /* ---------- the demo bar ---------- */
-  KN.NAV = [["landing", "בית", "Home", "home"], ["hq", "מרכז פיקוד", "Command center", "grid", "staff"], ["times", "זמנים", "Times", "clock"], ["tv", "המסך", "TV screen", "tv"], ["donate", "תרומה", "Donate", "heart"], ["join", "הצטרפות", "Join", "users"],
-    ["member", "אישי", "My account", "user", "member"], ["finance", "כספים", "Finance", "coins", "finance"], ["aliyot", "עליות", "Aliyot", "scroll", "staff"], ["seats", "מקומות", "Seats", "seat", "staff"], ["admin", "ניהול", "Admin", "shield", "content"], ["notifications", "התראות", "Notifications", "bell"], ["included", "מה כלול", "What's included", "list"]];
+  KN.NAV = [["landing", "בית", "Home", "home"], ["hq", "מרכז פיקוד", "Command", "grid", "staff"], ["times", "זמנים", "Times", "clock"], ["tv", "המסך", "TV screen", "tv"], ["donate", "תרומה", "Donate", "heart"], ["join", "הצטרפות", "Join", "users"],
+    ["member", "אישי", "Account", "user", "member"], ["finance", "כספים", "Finance", "coins", "finance"], ["aliyot", "עליות", "Aliyot", "scroll", "staff"], ["seats", "מקומות", "Seats", "seat", "staff"], ["admin", "ניהול", "Admin", "shield", "content"], ["notifications", "התראות", "Alerts", "bell"], ["included", "מה כלול", "Included", "list"], ["compare", "השוואה", "Compare", "search"]];
   KN.renderBar = function () {
     var cur = KN.route().name, unread = KN.myNotifs().filter(function (n) { return n.unread; }).length;
     document.documentElement.lang = S.lang; document.documentElement.dir = S.lang === "he" ? "rtl" : "ltr";
@@ -172,7 +172,7 @@
   KN.route = function () { var h = (location.hash || "#/landing").replace(/^#\/?/, "").split("/"); return { name: KN.views[h[0]] ? h[0] : "landing", arg: h[1] || "", arg2: h[2] || "" }; };
   KN.go = function (name) { if (location.hash === "#/" + name) KN.render(); else location.hash = "#/" + name; };
   KN.lockPage = function (need) {
-    var names = { member: ["member"], finance: ["finance", "admin"], content: ["content", "admin"], admin: ["admin"], staff: ["admin", "finance", "content"] }[need];
+    var names = { member: ["member"], finance: ["finance", "admin"], content: ["content", "admin"], admin: ["admin"], staff: ["admin", "finance", "content"], rabbi: ["rabbi"] }[need];
     return '<div class="page"><div class="card lock-page"><div class="big">' + ic("lock") + "</div><h2>" + T("המסך הזה שמור לבעלי תפקיד", "This screen is for a specific role") + '</h2><p class="lede" style="margin:8px auto 18px">' +
       T("במערכת האמיתית רק ", "In the real system only ") + names.map(KN.roleName).join(T(" או ", " or ")) + T(" רואים את המסך הזה. בהדגמה אפשר להחליף תפקיד בלחיצה, בלי סיסמה.", " can see this screen. In the demo you switch roles with one click, no password.") +
       '</p><div class="row" style="justify-content:center">' + names.map(function (r) { return '<button class="btn" data-act="asRole" data-r="' + r + '">' + T("להציג כ", "View as ") + KN.roleName(r) + "</button>"; }).join("") + "</div></div></div>";
