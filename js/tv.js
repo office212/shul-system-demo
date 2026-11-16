@@ -37,6 +37,7 @@
   }
   function zRows(iso) {
     var z = KN.zman(iso), R = [["alot", "עלות השחר", "Alot HaShachar"], ["netz", "הנץ החמה", "Netz (sunrise)"], ["shemaGra", "סוף זמן ק״ש", "Latest Shema"], ["chatzot", "חצות", "Chatzot"], ["minchaGedola", "מנחה גדולה", "Mincha Gedola"], ["minchaKetana", "מנחה קטנה", "Mincha Ketana"], ["plag", "פלג המנחה", "Plag HaMincha"], ["shkiah", "שקיעה", "Shkiah (sunset)"], ["tzeit", "צאת הכוכבים", "Tzeit HaKochavim"], ["rt", "רבנו תם", "Rabbeinu Tam"]];
+    if (KN.nusachRows && !KN.nusachRows().rt) R = R.filter(function (r) { return r[0] !== "rt"; });
     return R.map(function (r) { return "<div><span>" + T(r[1], r[2]) + "</span><b>" + KN.time(z[r[0]]) + "</b></div>"; }).join("");
   }
   KN.zRows = zRows;
@@ -62,7 +63,7 @@
     var sh = D.shiurim.map(function (s) { return "<span><b>" + esc(L(s.name)) + "</b> " + KN.time(s.t) + " · " + esc(L(s.who)) + "</span>"; }).join("");
     var strip = '<div class="tv-strip"><span class="lab">' + T("שיעורי תורה", "Shiurim") + '</span><div class="run"' + (shab ? ' style="animation:none"' : "") + ">" + sh + (shab ? "" : sh) + "</div></div>";
     inst.stage.className = "tv tv-fade" + (shab ? " shabbat" : "");
-    inst.stage.innerHTML = '<div class="tv-demo">' + T("הדגמה · DEMO", "DEMO") + "</div>" + head + '<div class="tv-body">' + left + centre + right + "</div>" + strip;
+    inst.stage.innerHTML = '<div class="tv-demo">' + T("הדגמה · DEMO", "DEMO") + "</div>" + (S.tvOffline ? '<div class="tv-net off">' + T("לא מקוון · ממשיך מהמטמון", "Offline · running from cache") + "</div>" : '<div class="tv-net">' + T("מוכן לא מקוון", "Offline-ready") + "</div>") + head + '<div class="tv-body">' + left + centre + right + "</div>" + strip;
     inst.mode = m; inst.slides = shab ? [] : slides(); inst.dayKey = day.iso;
     if (!shab) {
       var startAt = 0;

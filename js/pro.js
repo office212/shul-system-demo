@@ -23,6 +23,7 @@
     if (S.joinReqs.length) out.push({ id: "join", icon: "users", title: S.joinReqs.length + T(" בקשות הצטרפות ממתינות", " join requests are waiting"), sub: T("הוותיקה ביותר מחכה מיום רביעי.", "The oldest has been waiting since Wednesday."), btn: T("לאישור", "Review"), act: "proGo", to: "admin/join", need: "admin" });
     if (pend || P.done.yzok) out.push({ id: "yzok", icon: "check", done: P.done.yzok, title: P.done.yzok ? T("היארצייט אושר ויעלה למסך", "The yahrzeit was approved for the screen") : T("יארצייט ממתין לאישור: ", "A yahrzeit awaits approval: ") + L(pend.name), sub: pend ? L(pend.rel) + " · " + KN.hdate(pend.hDay, pend.hMonth) : T("המתפלל קיבל הודעה.", "The member was notified."), btn: T("לאשר", "Approve"), act: "yzOk" });
     if (kd || P.done.kd) out.push({ id: "kd", icon: "gift", done: P.done.kd, title: P.done.kd ? T("ההצעה נשלחה לכל המתפללים", "The offer went out to all members") : L((kd || {}).what) + T(" עדיין בלי חסות", " has no sponsor yet"), sub: T("הודעה לטלפון של כל המתפללים, עם כפתור ״אני לוקח״.", "A push to every member's phone, with an \"I'll take it\" button."), btn: T("להציע למתפללים", "Offer it to members"), act: "kdOffer" });
+    if (KN.moreInsights) KN.moreInsights(out);
     return out;
   }
   function asstHtml(compact) {
