@@ -3,7 +3,7 @@
    nothing here talks to any backend. */
 (function () {
   "use strict";
-  var D = window.KN_DATA, G = window.KN_GEN, KEY = "knSalesDemo.v1";
+  var D = window.KN_DATA, G = window.KN_GEN, KEY = "knSalesDemo.v2";
   var KN = window.KN = { views: {}, act: {}, on: {}, cleanup: [] };
   function clone(x) { return JSON.parse(JSON.stringify(x)); }
   function fresh() {
@@ -45,7 +45,7 @@
     star: "M12 3l2.7 5.8 6.3.8-4.6 4.4 1.2 6.3L12 17.300 6.400 20.300l1.200-6.300L3 9.600l6.300-.8z", cloud: "M7 18a4 4 0 01-.5-8 5.5 5.5 0 0110.600-1A4.500 4.500 0 0117 18z", globe: "M12 21a9 9 0 100-18 9 9 0 000 18zM3 12h18M12 3c3 3.500 3 14.500 0 18M12 3c-3 3.500-3 14.500 0 18", key: "M14 10a4 4 0 11-3.900-4 4 4 0 013.900 4zM13 12l8 8M17 16l2-2",
     edit: "M4 20l4-1L19 8l-3-3L5 16zM14 6l3 3", flame: "M12 3c1 4 5 5.500 5 10a5 5 0 01-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z", list: "M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01", arrow: "M5 12h14M13 6l6 6-6 6", x: "M6 6l12 12M18 6L6 18", eye: "M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 15a3 3 0 100-6 3 3 0 000 6z", gift: "M4 10h16v10H4zM3 7h18v3H3zM12 7v13M12 7c-2-4-6-3-5 0M12 7c2-4 6-3 5 0",
     grid: "M4 4h7v7H4zM13 4h7v4h-7zM13 11h7v9h-7zM4 14h7v6H4z", spark: "M12 3l1.800 5.200L19 10l-5.200 1.800L12 17l-1.800-5.200L5 10l5.200-1.800zM19 15l.8 2.200 2.200.8-2.200.8L19 21l-.8-2.200-2.200-.8 2.200-.8z", scroll: "M7 4h10v16H7zM4 6h3M4 18h3M17 6h3M17 18h3M4 4v4M4 16v4M20 4v4M20 16v4M10 9h4M10 12h4M10 15h4",
-    seat: "M6 4h12v9H6zM4 13h16v4H4zM6 17v3M18 17v3", send: "M4 12l16-8-6 16-3-7z", zap: "M13 3L5 14h6l-1 7 8-11h-6z", trend: "M4 17l5-5 4 4 7-8M15 8h5v5", target: "M12 21a9 9 0 100-18 9 9 0 000 18zM12 16a4 4 0 100-8 4 4 0 000 8zM12 12h.01" };
+    seat: "M6 4h12v9H6zM4 13h16v4H4zM6 17v3M18 17v3", send: "M4 12l16-8-6 16-3-7z", zap: "M13 3L5 14h6l-1 7 8-11h-6z", trend: "M4 17l5-5 4 4 7-8M15 8h5v5", refresh: "M4 12a8 8 0 0114-5l2 2M20 4v5h-5M20 12a8 8 0 01-14 5l-2-2M4 20v-5h5", up: "M12 19V5M5 12l7-7 7 7", wa: "M5 19l1.200-3.600A8 8 0 1112 20a8 8 0 01-3.700-.9zM9 9c0 3 3 6 6 6l1.200-1.500-2-1-1 .8c-1-.4-2-1.400-2.400-2.400l.8-1-1-2z", target: "M12 21a9 9 0 100-18 9 9 0 000 18zM12 16a4 4 0 100-8 4 4 0 000 8zM12 12h.01" };
   var ic = KN.ic = function (n, cls) { return '<svg class="ic' + (cls ? " " + cls : "") + '" viewBox="0 0 24 24" aria-hidden="true"><path d="' + (IC[n] || IC.star) + '"/></svg>'; };
   var MARKS = {
     arch: '<path d="M10 44V22a14 14 0 0128 0v22" fill="none" stroke="currentColor" stroke-width="3"/><path d="M6 44h36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="24" r="4.5" fill="currentColor"/><path d="M24 12v4M15.500 16l2.500 3M32.500 16L30 19" stroke="currentColor" stroke-width="2.200" stroke-linecap="round"/>',
@@ -75,6 +75,10 @@
     S.clock = p.id; clockBase = p.t; clockSet = Date.now(); KN.save();
     if (!quiet) { KN.renderBar(); KN.render(); }
   };
+  /* set the demo clock to any moment (the Shabbat autopilot's slider) */
+  KN.setClockAt = function (t) { clockBase = t; clockSet = Date.now(); if (KN.tvRefresh) KN.tvRefresh(); };
+  /* extra modules register themselves here; the command center, quick search and What's included list them */
+  KN.MODS = []; KN.mod = function (o) { KN.MODS.push(o); };
   KN.now = function () { return new Date(clockBase + (Date.now() - clockSet)); };
   KN.isShabbat = function (d) { var t = (d || KN.now()).getTime(); return t >= CANDLE && t < ENDS; };
   KN.CANDLE = CANDLE; KN.ENDS = ENDS;
@@ -86,10 +90,10 @@
   /* ---------- people, balances ---------- */
   KN.member = function (id) { return S.members.filter(function (m) { return m.id === id; })[0]; };
   KN.balance = function (m) { return Math.round((m.ledger || []).reduce(function (a, e) { return a + (e.type === "charge" ? e.amount : -e.amount); }, 0) * 100) / 100; };
-  KN.ROLES = [{ id: "visitor", he: "אורח", en: "Visitor" }, { id: "member", he: "מתפלל", en: "Member" }, { id: "finance", he: "גבאי כספים", en: "Finance gabbai" }, { id: "content", he: "גבאי תוכן", en: "Content gabbai" }, { id: "admin", he: "מנהל ראשי", en: "Admin / Super admin" }];
+  KN.ROLES = [{ id: "visitor", he: "אורח / תורם", en: "Visitor / donor" }, { id: "member", he: "מתפלל", en: "Member" }, { id: "finance", he: "גבאי כספים", en: "Finance gabbai" }, { id: "content", he: "גבאי תוכן", en: "Content gabbai" }, { id: "admin", he: "נשיא / מנהל ראשי", en: "President / admin" }, { id: "rabbi", he: "הרב", en: "The Rabbi" }];
   KN.roleName = function (id) { var r = KN.ROLES.filter(function (x) { return x.id === id; })[0]; return r ? T(r.he, r.en) : id; };
   KN.me = function () { return KN.member({ member: "m1", finance: "m9", content: "m10", admin: "m12" }[S.role] || ""); };
-  KN.can = function (what) { var r = S.role; return what === "finance" ? (r === "finance" || r === "admin") : what === "content" ? (r === "content" || r === "admin") : what === "admin" ? r === "admin" : what === "member" ? r !== "visitor" : what === "staff" ? (r !== "visitor" && r !== "member") : true; };
+  KN.can = function (what) { var r = S.role; return what === "finance" ? (r === "finance" || r === "admin") : what === "content" ? (r === "content" || r === "admin") : what === "admin" ? r === "admin" : what === "member" ? r !== "visitor" : what === "staff" ? (r !== "visitor" && r !== "member") : what === "rabbi" ? r === "rabbi" : true; };
   KN.setRole = function (r, go) { S.role = r; KN.save(); KN.renderBar(); if (go) { if (location.hash === "#/" + go) KN.render(); else location.hash = "#/" + go; } else KN.render(); KN.toast(T("מציגים עכשיו כ: ", "Now viewing as: ") + KN.roleName(r)); };
   KN.nextRef = function () { S.seq++; return "KN-2026-" + String(S.seq).padStart(5, "0"); };
   KN.notify = function (n) { n.id = "N" + Date.now() + Math.floor(Math.random() * 99); n.unread = true; n.when = D.B("עכשיו", "Just now"); S.notifications.unshift(n); KN.save(); KN.renderBar(); };
@@ -145,8 +149,8 @@
   };
 
   /* ---------- the demo bar ---------- */
-  KN.NAV = [["landing", "בית", "Home", "home"], ["hq", "מרכז שליטה", "Command center", "grid", "staff"], ["times", "זמני תפילה", "Davening times", "clock"], ["tv", "מסך בית הכנסת", "The TV screen", "tv"], ["donate", "תרומות", "Donate", "heart"], ["join", "הצטרפות", "Join", "users"],
-    ["member", "האזור האישי", "My account", "user", "member"], ["finance", "כספים", "Finance", "coins", "finance"], ["aliyot", "עליות", "Aliyot", "scroll", "staff"], ["seats", "מקומות", "Seats", "seat", "staff"], ["admin", "ניהול", "Admin", "shield", "content"], ["notifications", "התראות", "Notifications", "bell"], ["included", "מה כלול", "What's included", "list"]];
+  KN.NAV = [["landing", "בית", "Home", "home"], ["hq", "מרכז פיקוד", "Command", "grid", "staff"], ["times", "זמנים", "Times", "clock"], ["tv", "המסך", "TV screen", "tv"], ["donate", "תרומה", "Donate", "heart"], ["join", "הצטרפות", "Join", "users"],
+    ["member", "אישי", "Account", "user", "member"], ["finance", "כספים", "Finance", "coins", "finance"], ["aliyot", "עליות", "Aliyot", "scroll", "staff"], ["seats", "מקומות", "Seats", "seat", "staff"], ["admin", "ניהול", "Admin", "shield", "content"], ["notifications", "התראות", "Alerts", "bell"], ["included", "מה כלול", "Included", "list"], ["compare", "השוואה", "Compare", "search"]];
   KN.renderBar = function () {
     var cur = KN.route().name, unread = KN.myNotifs().filter(function (n) { return n.unread; }).length;
     document.documentElement.lang = S.lang; document.documentElement.dir = S.lang === "he" ? "rtl" : "ltr";
@@ -168,7 +172,7 @@
   KN.route = function () { var h = (location.hash || "#/landing").replace(/^#\/?/, "").split("/"); return { name: KN.views[h[0]] ? h[0] : "landing", arg: h[1] || "", arg2: h[2] || "" }; };
   KN.go = function (name) { if (location.hash === "#/" + name) KN.render(); else location.hash = "#/" + name; };
   KN.lockPage = function (need) {
-    var names = { member: ["member"], finance: ["finance", "admin"], content: ["content", "admin"], admin: ["admin"], staff: ["admin", "finance", "content"] }[need];
+    var names = { member: ["member"], finance: ["finance", "admin"], content: ["content", "admin"], admin: ["admin"], staff: ["admin", "finance", "content"], rabbi: ["rabbi"] }[need];
     return '<div class="page"><div class="card lock-page"><div class="big">' + ic("lock") + "</div><h2>" + T("המסך הזה שמור לבעלי תפקיד", "This screen is for a specific role") + '</h2><p class="lede" style="margin:8px auto 18px">' +
       T("במערכת האמיתית רק ", "In the real system only ") + names.map(KN.roleName).join(T(" או ", " or ")) + T(" רואים את המסך הזה. בהדגמה אפשר להחליף תפקיד בלחיצה, בלי סיסמה.", " can see this screen. In the demo you switch roles with one click, no password.") +
       '</p><div class="row" style="justify-content:center">' + names.map(function (r) { return '<button class="btn" data-act="asRole" data-r="' + r + '">' + T("להציג כ", "View as ") + KN.roleName(r) + "</button>"; }).join("") + "</div></div></div>";

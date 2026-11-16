@@ -25,6 +25,7 @@
     add("announcements", T("הודעות", "Announcements"), S.announcements.map(function (a) { return { id: a.id, html: '<div class="tv-it' + (S.tvNew === a.id ? " new" : "") + '"><b>' + esc(L(a.title)) + "</b>" + esc(L(a.text)) + "</div>" }; }));
     add("kiddush", T("לוח הקידושים", "Kiddush sponsors"), S.kiddush.map(function (k) { return { id: k.id, html: it(L(k.what) + " · " + L(k.by), L(k.why), k.id) }; }));
     out.push({ kind: "rabbi", ids: [], html: "<h3>" + T("דבר הרב לפרשת ", "The Rabbi's word · ") + esc(L(W.parasha)) + '</h3><div class="orn"></div><div class="tv-list"><div class="tv-it" style="font-size:40px;line-height:1.5;padding:30px;font-family:var(--display)">' + esc(L(D.rabbi)) + "<small>" + esc(L(S.shul.rabbi)) + "</small></div></div>" });
+    if (KN.tvExtraSlides) KN.tvExtraSlides(out);
     return out;
   }
   function prayerRows(d, m) {
@@ -36,6 +37,7 @@
   }
   function zRows(iso) {
     var z = KN.zman(iso), R = [["alot", "עלות השחר", "Alot HaShachar"], ["netz", "הנץ החמה", "Netz (sunrise)"], ["shemaGra", "סוף זמן ק״ש", "Latest Shema"], ["chatzot", "חצות", "Chatzot"], ["minchaGedola", "מנחה גדולה", "Mincha Gedola"], ["minchaKetana", "מנחה קטנה", "Mincha Ketana"], ["plag", "פלג המנחה", "Plag HaMincha"], ["shkiah", "שקיעה", "Shkiah (sunset)"], ["tzeit", "צאת הכוכבים", "Tzeit HaKochavim"], ["rt", "רבנו תם", "Rabbeinu Tam"]];
+    if (KN.nusachRows && !KN.nusachRows().rt) R = R.filter(function (r) { return r[0] !== "rt"; });
     return R.map(function (r) { return "<div><span>" + T(r[1], r[2]) + "</span><b>" + KN.time(z[r[0]]) + "</b></div>"; }).join("");
   }
   KN.zRows = zRows;
@@ -60,8 +62,8 @@
     } else centre = '<div class="tv-centre"><div data-tv="slide" style="display:flex;flex-direction:column;flex:1;min-height:0"></div><div class="tv-dots" data-tv="dots"></div></div>';
     var sh = D.shiurim.map(function (s) { return "<span><b>" + esc(L(s.name)) + "</b> " + KN.time(s.t) + " · " + esc(L(s.who)) + "</span>"; }).join("");
     var strip = '<div class="tv-strip"><span class="lab">' + T("שיעורי תורה", "Shiurim") + '</span><div class="run"' + (shab ? ' style="animation:none"' : "") + ">" + sh + (shab ? "" : sh) + "</div></div>";
-    inst.stage.className = "tv tv-fade" + (shab ? " shabbat" : "");
-    inst.stage.innerHTML = '<div class="tv-demo">' + T("הדגמה · DEMO", "DEMO") + "</div>" + head + '<div class="tv-body">' + left + centre + right + "</div>" + strip;
+    inst.stage.className = "tv tv-fade" + (shab ? " shabbat" : "") + (KN.tvClass ? KN.tvClass(inst) : "");
+    inst.stage.innerHTML = '<div class="tv-demo">' + T("הדגמה · DEMO", "DEMO") + "</div>" + (S.tvOffline ? '<div class="tv-net off">' + T("לא מקוון · ממשיך מהמטמון", "Offline · running from cache") + "</div>" : '<div class="tv-net">' + T("מוכן לא מקוון", "Offline-ready") + "</div>") + head + '<div class="tv-body">' + left + centre + right + "</div>" + strip;
     inst.mode = m; inst.slides = shab ? [] : slides(); inst.dayKey = day.iso;
     if (!shab) {
       var startAt = 0;

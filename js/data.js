@@ -17,7 +17,7 @@
     dues: B("דמי חבר שנתיים תשפ״ז", "Annual membership 5787"), kiddush: B("חסות קידוש", "Kiddush sponsorship"), ner: B("נר למאור", "Ner Lamaor"),
     al3: B("נדר · עלייה שלישית", "Neder · third aliyah"), al6: B("נדר · עלייה שישית", "Neder · sixth aliyah"), maftir: B("נדר · מפטיר", "Neder · Maftir"),
     petichah: B("נדר · פתיחת ההיכל", "Neder · opening the Ark"), hagbah: B("נדר · הגבהה", "Neder · Hagbah"), misheb: B("נדר · מי שברך", "Neder · Mi Sheberach"),
-    hanukkah: B("תרומה למסיבת חנוכה", "Chanukah party donation"), building: B("קרן הבניין", "Building fund"), seuda: B("חסות סעודה שלישית", "Seudah Shlishit sponsorship"),
+    hanukkah: B("תרומה למסיבת חנוכה", "Chanukah party donation"), building: B("תרומה לקמפיין הבניין", "Building campaign gift"), seuda: B("חסות סעודה שלישית", "Seudah Shlishit sponsorship"),
     pay: B("תשלום", "Payment")
   };
   var n = 0;
@@ -25,7 +25,7 @@
   function p(date, amount, method) { return { id: "L" + (++n), date: date, type: "payment", amount: amount, desc: D.pay, method: method }; }
   var P = { noach: B("פרשת נח", "Noach"), lech: B("פרשת לך לך", "Lech Lecha"), vayera: B("פרשת וירא", "Vayera"), chayei: B("פרשת חיי שרה", "Chayei Sarah"), toldot: B("פרשת תולדות", "Toldot"), bereshit: B("פרשת בראשית", "Bereshit") };
   function M(id, he, en, phone, since, ledger, extra) {
-    var o = { id: id, name: B(he, en), email: en.toLowerCase().replace(/[^a-z]+/g, ".") + "@example.com", phone: "(555) 010-" + phone, since: since, status: "active", ledger: ledger };
+    var o = { id: id, name: B(he, en), email: en.toLowerCase().replace(/[^a-z]+/g, ".") + "@noam.demo", phone: "(555) 010-" + phone, since: since, status: "active", ledger: ledger };
     if (extra) for (var k in extra) o[k] = extra[k];
     return o;
   }
@@ -49,22 +49,39 @@
     M("m11", "חיים פרץ", "Chaim Peretz", "0121", 2019, [c("2026-09-13", 600, D.dues), p("2026-09-18", 600, "check"), c("2026-11-07", 100, D.hanukkah), p("2026-11-12", 100, "card")]),
     M("m12", "גבריאל אדרי", "Gavriel Edri", "0122", 1998, [c("2026-09-13", 600, D.dues), p("2026-09-13", 600, "check"), c("2026-10-24", 200, D.building), p("2026-10-25", 200, "check")], { perm: "admin" })
   ];
+
+  /* 108 more households, generated the same way every time (a fixed seed), so the shul
+     has about 120 members and every screen counts the same people and the same money. */
+  (function () {
+    var FN = [["אהרן", "Aharon"], ["בנימין", "Binyamin"], ["דניאל", "Daniel"], ["אליעזר", "Eliezer"], ["גדעון", "Gideon"], ["הלל", "Hillel"], ["יצחק", "Yitzchak"], ["יהושע", "Yehoshua"], ["מנחם", "Menachem"], ["נתן", "Natan"], ["עזרא", "Ezra"], ["פנחס", "Pinchas"], ["צבי", "Tzvi"], ["ראובן", "Reuven"], ["שלמה", "Shlomo"], ["תומר", "Tomer"], ["אריאל", "Ariel"], ["יונתן", "Yonatan"], ["עמית", "Amit"], ["אלחנן", "Elchanan"], ["ישראל", "Yisrael"], ["מרדכי", "Mordechai"], ["נחום", "Nachum"], ["עקיבא", "Akiva"]];
+    var LN = [["כהן", "Cohen"], ["לוי", "Levi"], ["פרידמן", "Friedman"], ["מזרחי", "Mizrachi"], ["גולדברג", "Goldberg"], ["שפירא", "Shapiro"], ["כץ", "Katz"], ["בן שושן", "Ben Shushan"], ["רוזנברג", "Rosenberg"], ["אוחנה", "Ohana"], ["וייס", "Weiss"], ["חדד", "Hadad"], ["גרינברג", "Greenberg"], ["אשכנזי", "Ashkenazi"], ["הורוביץ", "Horowitz"], ["אבוטבול", "Abutbul"], ["קליין", "Klein"], ["שוורץ", "Schwartz"], ["נחמיאס", "Nachmias"], ["ברגר", "Berger"], ["סבג", "Sabag"], ["זילברמן", "Silberman"], ["גבריאלי", "Gavrieli"], ["שטרן", "Stern"], ["מלכה", "Malka"], ["הלפרין", "Halperin"], ["רבינוביץ", "Rabinowitz"], ["דיין", "Dayan"], ["טנא", "Tene"]];
+    var seed = 20261120, NED = [D.al3, D.al6, D.petichah, D.hagbah, D.misheb, D.maftir], AMT = [36, 52, 72, 101, 126], MTH = ["card", "check", "zelle", "cash"];
+    function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+    function day(mo, a, b) { var d = a + Math.floor(rnd() * (b - a + 1)); return "2026-" + mo + "-" + (d < 10 ? "0" + d : d); }
+    for (var i = 0; i < 108; i++) {
+      var f = FN[(i * 7 + 3) % FN.length], l = LN[(i * 11 + Math.floor(i / LN.length) * 5) % LN.length], r = rnd(), L = [c("2026-09-13", 600, D.dues)];
+      if (r < 0.34) L.push(p(day("09", 14, 30), 600, MTH[i % 4])); else if (r < 0.58) L.push(p(day("10", 1, 30), 600, MTH[i % 4])); else if (r < 0.86) L.push(p(day("11", 1, 19), 600, MTH[i % 4])); else if (r < 0.93) L.push(p(day("10", 5, 28), 300, MTH[i % 4]));
+      if (rnd() < 0.35) { var a1 = AMT[Math.floor(rnd() * AMT.length)]; L.push(c("2026-10-24", a1, NED[i % NED.length], P.lech)); if (rnd() < 0.8) L.push(p(day("10", 25, 31), a1, MTH[(i + 1) % 4])); }
+      if (rnd() < 0.3) { var a2 = AMT[Math.floor(rnd() * AMT.length)]; L.push(c("2026-11-07", a2, NED[(i + 2) % NED.length], P.chayei)); if (rnd() < 0.6) L.push(p(day("11", 8, 19), a2, MTH[(i + 2) % 4])); }
+      members.push(M("m" + (13 + i), f[0] + " " + l[0], f[1] + " " + l[1], String(1000 + i * 7 % 9000).slice(-4), 1998 + Math.floor(rnd() * 28), L));
+    }
+  })();
   /* general donations (people who are not members): one ledger, counted in income */
   var donations = [
-    { id: "G1", date: "2026-11-02", amount: 180, donor: B("רחל ושמואל קורן", "Rachel & Shmuel Koren"), email: "koren.family@example.org", ref: "KN-2026-00412", fund: "general" },
-    { id: "G2", date: "2026-11-05", amount: 36, donor: B("אורח מהשבת", "A Shabbat guest"), email: "guest.one@example.org", ref: "KN-2026-00413", fund: "general" },
-    { id: "G3", date: "2026-11-09", amount: 500, donor: B("קרן משפחת לנדאו", "The Landau Family Fund"), email: "landau.fund@example.org", ref: "KN-2026-00414", fund: "building" },
-    { id: "G4", date: "2026-11-12", amount: 72, donor: B("דניאל שרעבי", "Daniel Sharabi"), email: "d.sharabi@example.org", ref: "KN-2026-00415", fund: "kiddush" },
-    { id: "G5", date: "2026-11-17", amount: 101, donor: B("מרים עטיה", "Miriam Attia"), email: "m.attia@example.org", ref: "KN-2026-00416", fund: "general" }
+    { id: "G1", date: "2026-11-02", amount: 180, donor: B("רחל ושמואל קורן", "Rachel & Shmuel Koren"), email: "koren.family@mail.demo", ref: "KN-2026-00412" },
+    { id: "G2", date: "2026-11-05", amount: 36, donor: B("אורח מהשבת", "A Shabbat guest"), email: "guest.one@mail.demo", ref: "KN-2026-00413" },
+    { id: "G3", date: "2026-11-09", amount: 500, donor: B("משפחת לנדאו", "The Landau family"), email: "landau.family@mail.demo", ref: "KN-2026-00414" },
+    { id: "G4", date: "2026-11-12", amount: 72, donor: B("דניאל שרעבי", "Daniel Sharabi"), email: "d.sharabi@mail.demo", ref: "KN-2026-00415" },
+    { id: "G5", date: "2026-11-17", amount: 101, donor: B("מרים עטיה", "Miriam Attia"), email: "m.attia@mail.demo", ref: "KN-2026-00416" }
   ];
   var unmatched = [
-    { id: "U1", ref: "KN-2026-00409", amount: 54, name: "R TOLEDANO", email: "rafi.t.work@example.net", date: "2026-11-18", type: "donation", hint: "m5" },
-    { id: "U2", ref: "KN-2026-00410", amount: 250, name: "JONATHAN BAROUKH", email: "j.baroukh@example.org", date: "2026-11-19", type: "donation", hint: "" }
+    { id: "U1", ref: "KN-2026-00409", amount: 54, name: "R TOLEDANO", email: "rafi.t.work@mail.demo", date: "2026-11-18", type: "donation", hint: "m5" },
+    { id: "U2", ref: "KN-2026-00410", amount: 250, name: "JONATHAN BAROUKH", email: "j.baroukh@mail.demo", date: "2026-11-19", type: "donation", hint: "" }
   ];
   var joinReqs = [
-    { id: "J1", name: B("עמנואל בן חיים", "Emanuel Ben Chaim"), email: "emanuel.bc@example.com", phone: "(555) 010-0141", when: "2026-11-18", note: B("עברנו לשכונה בקיץ", "We moved to the neighborhood this summer") },
-    { id: "J2", name: B("יונתן אסייג", "Yonatan Assayag"), email: "y.assayag@example.com", phone: "(555) 010-0142", when: "2026-11-19", note: B("מתפלל אצלכם בשבתות כבר שנה", "Davening with you on Shabbat for a year") },
-    { id: "J3", name: B("אורי לוי־נחמני", "Ori Levi-Nachmani"), email: "ori.ln@example.com", phone: "(555) 010-0143", when: "2026-11-20", note: B("חתן של משפחת מימון", "Son-in-law of the Maimon family") }
+    { id: "J1", name: B("עמנואל בן חיים", "Emanuel Ben Chaim"), email: "emanuel.bc@mail.demo", phone: "(555) 010-0141", when: "2026-11-18", note: B("עברנו לשכונה בקיץ", "We moved to the neighborhood this summer") },
+    { id: "J2", name: B("יונתן אסייג", "Yonatan Assayag"), email: "y.assayag@mail.demo", phone: "(555) 010-0142", when: "2026-11-19", note: B("מתפלל אצלכם בשבתות כבר שנה", "Davening with you on Shabbat for a year") },
+    { id: "J3", name: B("אורי לוי־נחמני", "Ori Levi-Nachmani"), email: "ori.ln@mail.demo", phone: "(555) 010-0143", when: "2026-11-20", note: B("חתן של משפחת מימון", "Son-in-law of the Maimon family") }
   ];
   /* ----- the week on the screen ----- */
   var yahrzeits = [
@@ -144,7 +161,12 @@
   window.KN_DATA = { B: B, HDAY: HDAY, HMONTHS: HMONTHS, DOW: DOW, DOW_S: DOW_S, WEEK: WEEK, DESC: D, members: members, donations: donations, unmatched: unmatched, joinReqs: joinReqs,
     yahrzeits: yahrzeits, dedications: dedications, hazkarot: hazkarot, mazal: mazal, announcements: announcements, kiddush: kiddush, shiurim: shiurim, rabbi: rabbi, prayers: prayers,
     holidays: holidays, notifications: notifications, activity: activity,
-    shul: { nameHe: "קהילת נועם", nameEn: "Kehillat Noam", tagHe: "קהילה ספרדית חמה · נוסדה בשנת 1998", tagEn: "A warm Sephardi congregation · founded 1998", rabbi: B("הרב יעקב בן עמי", "Rabbi Yaakov Ben Ami"),
-      address: "100 Example Avenue, Noam Heights", phone: "(555) 010-0100", email: "office@kehillat-noam.example", zelle: "zelle@kehillat-noam.example", logo: "arch" },
-    sales: { phone: "347-244-9382", tel: "+13472449382", email: "hanochhason@gmail.com" } };
+    shul: { nameHe: "קהילת נועם", nameEn: "Kehillat Noam", tagHe: "קהילה חמה ופתוחה · נוסדה בשנת 1998", tagEn: "A warm, open congregation · founded 1998", rabbi: B("הרב יעקב בן עמי", "Rabbi Yaakov Ben Ami"),
+      address: "212 Rimon Lane, Noam Heights", phone: "(555) 010-0100", email: "office@kehillatnoam.demo", zelle: "zelle@kehillatnoam.demo", logo: "arch" },
+    /* one campaign, no funds: every donation counts toward it. base = raised before this week's sample donations. */
+    campaign: { name: B("קמפיין הבניין", "The building campaign"), goal: 50000, base: 30861, baseDonors: 81, end: "2026-12-13" },
+    /* collected in the months before the sample ledger starts (September) */
+    history: [[B("יוני", "Jun"), 7400], [B("יולי", "Jul"), 6100], [B("אוג׳", "Aug"), 6800]],
+    /* video: the path of the 90-second tour video once it exists, e.g. "assets/tour.mp4". Empty = the slot stays hidden. */
+    sales: { phone: "347-244-9382", tel: "+13472449382", email: "hanochhason@gmail.com", video: "" } };
 })();
