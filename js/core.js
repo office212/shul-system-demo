@@ -75,6 +75,10 @@
     S.clock = p.id; clockBase = p.t; clockSet = Date.now(); KN.save();
     if (!quiet) { KN.renderBar(); KN.render(); }
   };
+  /* set the demo clock to any moment (the Shabbat autopilot's slider) */
+  KN.setClockAt = function (t) { clockBase = t; clockSet = Date.now(); if (KN.tvRefresh) KN.tvRefresh(); };
+  /* extra modules register themselves here; the command center, quick search and What's included list them */
+  KN.MODS = []; KN.mod = function (o) { KN.MODS.push(o); };
   KN.now = function () { return new Date(clockBase + (Date.now() - clockSet)); };
   KN.isShabbat = function (d) { var t = (d || KN.now()).getTime(); return t >= CANDLE && t < ENDS; };
   KN.CANDLE = CANDLE; KN.ENDS = ENDS;

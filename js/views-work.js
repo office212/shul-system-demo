@@ -4,7 +4,8 @@
 (function () {
   "use strict";
   var KN = window.KN, D = window.KN_DATA, S = KN.S, T = KN.T, L = KN.L, esc = KN.esc, ic = KN.ic, W = D.WEEK, B = D.B;
-  var METHODS = { card: B("כרטיס", "Card"), check: B("צ׳ק", "Check"), cash: B("מזומן", "Cash"), zelle: B("Zelle", "Zelle") };
+  var METHODS = { card: B("כרטיס", "Card"), check: B("צ׳ק", "Check"), cash: B("מזומן", "Cash"), zelle: B("Zelle", "Zelle"), bit: B("Bit", "Bit"), nedarim: B("נדרים פלוס", "Nedarim Plus") };
+  KN.METHODS = METHODS;
   function balChip(b) { return b > 0.004 ? '<span class="amt-pos">' + KN.money(b) + "</span>" : b < -0.004 ? '<span class="amt-neg">' + KN.money(b) + "</span>" : '<span class="amt-zero">' + KN.money(0) + " ✓</span>"; }
   function who(m, sub) { return '<span class="who"><span class="avatar">' + esc(KN.initials(m)) + "</span><span><b>" + esc(L(m.name)) + "</b><span>" + (sub || '<bdi class="ltr">' + esc(m.email) + "</bdi>") + "</span></span></span>"; }
   function ledgerRows(m, withRun) {
@@ -38,13 +39,13 @@
   KN.act.mPhone = function () { var m = KN.me(); m.phone = document.getElementById("mPhone").value.trim() || m.phone; KN.save(); KN.toast(T("הטלפון עודכן", "Phone updated")); };
   KN.act.mPay = function () {
     var m = KN.me(), b = KN.balance(m);
-    KN.modal("<h2>" + T("תשלום יתרה בכרטיס", "Pay your balance by card") + '</h2><div class="stack" style="margin-top:14px"><div class="field"><label for="mpAmt">' + T("סכום לתשלום ($)", "Amount to pay ($)") + '</label><input class="input num" id="mpAmt" inputmode="decimal" value="' + b + '"></div><div class="cardgrid"><div class="field"><label for="mpCard">' + T("מספר כרטיס", "Card number") + '</label><input class="input num" id="mpCard" value="4242 4242 4242 4242"></div><div class="field"><label for="mpExp">' + T("תוקף", "Expiry") + '</label><input class="input num" id="mpExp" value="12/28"></div><div class="field"><label for="mpCvv">CVV</label><input class="input num" id="mpCvv" value="123"></div></div><p class="note">' + T("הדמיה: פרטי כרטיס לדוגמה, שום דבר לא מחויב. במערכת האמיתית התשלום עובר דרך חברת סליקה מאובטחת.", "Simulation: sample card details, nothing is charged. In the real system the payment goes through a secure card processor.") + '</p><button class="btn lg" data-act="mPayGo">' + ic("lock") + T("לשלם", "Pay") + "</button></div>");
+    KN.modal("<h2>" + T("תשלום יתרה בכרטיס", "Pay your balance by card") + '</h2><div class="stack" style="margin-top:14px"><div class="field"><label for="mpAmt">' + T("סכום לתשלום ($)", "Amount to pay ($)") + '</label><input class="input num" id="mpAmt" inputmode="decimal" value="' + b + '"></div><div class="cardgrid"><div class="field"><label for="mpCard">' + T("מספר כרטיס", "Card number") + '</label><input class="input num" id="mpCard" value="4242 4242 4242 4242"></div><div class="field"><label for="mpExp">' + T("תוקף", "Expiry") + '</label><input class="input num" id="mpExp" value="12/28"></div><div class="field"><label for="mpCvv">CVV</label><input class="input num" id="mpCvv" value="123"></div></div><p class="note">' + T("הדמיה: פרטי כרטיס לדוגמה, שום דבר לא מחויב. במערכת האמיתית התשלום עובר דרך חברת סליקה מאובטחת.", "Simulation: sample card details, nothing is charged. In the real system the payment goes through a secure card processor.") + '</p><div class="row"><button class="btn lg" data-act="mPayGo">' + ic("lock") + T("לשלם בכרטיס", "Pay by card") + '</button>' + (S.give && S.give.il && !S.give.il.bit ? "" : '<button class="btn lg sec" data-act="mPayGo" data-m="bit"><span class="bitlogo">bit</span>' + T("לשלם ב־Bit", "Pay with Bit") + "</button>") + "</div></div>");
   };
-  KN.act.mPayGo = function () {
-    var m = KN.me(), a = Number(document.getElementById("mpAmt").value);
+  KN.act.mPayGo = function (el) {
+    var m = KN.me(), a = Number(document.getElementById("mpAmt").value), mth = el && el.dataset && el.dataset.m === "bit" ? "bit" : "card";
     if (!(a > 0) || a > KN.balance(m) + 0.004) { KN.toast(T("הסכום צריך להיות עד גובה היתרה", "The amount must be up to the balance")); return; }
     KN.modal('<div class="center" style="padding:20px 0"><div class="spinner"></div><h2 style="margin-top:14px">' + T("מעבדים את התשלום", "Processing the payment") + '</h2><p class="muted">' + T("הדמיה בלבד", "Simulation only") + "</p></div>");
-    setTimeout(function () { KN.closeModal(); KN.addEntry(m, "payment", a, D.DESC.pay, "card"); KN.render(); KN.toast(T("התשלום התקבל. היתרה עודכנה והגבאי קיבל התראה.", "Payment received. The balance is updated and the gabbai was notified.")); }, 1500);
+    setTimeout(function () { KN.closeModal(); KN.addEntry(m, "payment", a, D.DESC.pay, mth); KN.render(); KN.toast(T("התשלום התקבל. היתרה עודכנה והגבאי קיבל התראה.", "Payment received. The balance is updated and the gabbai was notified.")); }, 1500);
   };
   function statement(m) {
     return '<div class="print-sheet"><div class="row" style="justify-content:space-between"><div><h2>' + esc(KN.shulName()) + '</h2><p class="small">' + T("דף חשבון · ", "Account statement · ") + KN.date(KN.todayIso()) + " 2026</p></div><div style=\"text-align:end\"><b>" + esc(L(m.name)) + '</b><br><bdi class="ltr small">' + esc(m.email) + '</bdi></div></div><table class="t" style="margin-top:14px"><tr><th>' + T("תאריך", "Date") + "</th><th>" + T("סוג", "Type") + "</th><th>" + T("פירוט", "Details") + '</th><th style="text-align:end">' + T("סכום", "Amount") + '</th><th style="text-align:end">' + T("יתרה", "Balance") + "</th></tr>" + ledgerRows(m, true) + '</table><p style="margin-top:14px;font-size:19px"><b>' + T("יתרה לתשלום: ", "Balance due: ") + KN.money(KN.balance(m)) + '</b></p></div><div class="row no-print" style="margin-top:14px"><button class="btn" data-act="doPrint">' + ic("print") + T("הדפסה", "Print") + "</button></div>";
@@ -80,7 +81,7 @@
   function allEntries() {
     var out = [];
     S.members.forEach(function (m) { m.ledger.forEach(function (e) { out.push({ date: e.date, who: L(m.name), mid: m.id, type: e.type, desc: L(e.desc) + (e.method ? " · " + L(METHODS[e.method]) : ""), amount: e.amount, fresh: e.fresh, id: e.id }); }); });
-    S.donations.forEach(function (d) { out.push({ date: d.date, who: L(d.donor), type: "donation", desc: L(KN.DON) + " · " + d.ref, amount: d.amount, fresh: d.fresh, id: d.id }); });
+    S.donations.forEach(function (d) { out.push({ date: d.date, who: L(d.donor), type: "donation", desc: L(KN.DON) + (d.method && d.method !== "card" ? " · " + (METHODS[d.method] ? L(METHODS[d.method]) : d.method) : "") + " · " + d.ref, amount: d.amount, fresh: d.fresh, id: d.id }); });
     return out.sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : (b.fresh ? 1 : 0) - (a.fresh ? 1 : 0); });
   }
   function entryRows(list) { return list.map(function (e) { return '<tr class="' + (e.fresh ? "new " : "") + (e.mid ? "click" : "") + '"' + (e.mid ? ' data-go="finance/m/' + e.mid + '"' : "") + '><td class="num">' + KN.date(e.date) + "</td><td><b>" + esc(e.who) + "</b></td><td>" + (e.type === "charge" ? '<span class="chip warn">' + T("חיוב", "Charge") + "</span>" : e.type === "payment" ? '<span class="chip ok">' + T("תשלום", "Payment") + "</span>" : '<span class="chip gold">' + T("תרומה", "Donation") + "</span>") + "</td><td>" + esc(e.desc) + '</td><td style="text-align:end"><b>' + KN.money(e.amount) + "</b></td></tr>"; }).join(""); }

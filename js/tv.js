@@ -25,6 +25,7 @@
     add("announcements", T("הודעות", "Announcements"), S.announcements.map(function (a) { return { id: a.id, html: '<div class="tv-it' + (S.tvNew === a.id ? " new" : "") + '"><b>' + esc(L(a.title)) + "</b>" + esc(L(a.text)) + "</div>" }; }));
     add("kiddush", T("לוח הקידושים", "Kiddush sponsors"), S.kiddush.map(function (k) { return { id: k.id, html: it(L(k.what) + " · " + L(k.by), L(k.why), k.id) }; }));
     out.push({ kind: "rabbi", ids: [], html: "<h3>" + T("דבר הרב לפרשת ", "The Rabbi's word · ") + esc(L(W.parasha)) + '</h3><div class="orn"></div><div class="tv-list"><div class="tv-it" style="font-size:40px;line-height:1.5;padding:30px;font-family:var(--display)">' + esc(L(D.rabbi)) + "<small>" + esc(L(S.shul.rabbi)) + "</small></div></div>" });
+    if (KN.tvExtraSlides) KN.tvExtraSlides(out);
     return out;
   }
   function prayerRows(d, m) {

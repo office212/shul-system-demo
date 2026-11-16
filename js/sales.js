@@ -6,6 +6,8 @@
   "use strict";
   var KN = window.KN, D = window.KN_DATA, S = KN.S, T = KN.T, L = KN.L, esc = KN.esc, ic = KN.ic, B = D.B;
 
+  KN.mod({ id: "import", ic: "users", he: "ייבוא חברים מקובץ", en: "Import members from a file", dHe: "קובץ מהמערכת הישנה, התאמת עמודות, בדיקה, ייבוא.", dEn: "A file from the old system, column matching, a review, an import.", need: "staff" });
+
   /* ---------- landing blocks ---------- */
   KN.videoSection = function () {
     if (!D.sales.video) return "";
