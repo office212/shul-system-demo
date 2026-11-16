@@ -23,18 +23,29 @@ the whole demo re-brands as you type; press "לראות את השבת נכנסת
 screen enter Shabbat; move Friday's Mincha in the "update once" lab and see the
 site, the phone and the screen follow; and use the hours calculator and FAQ.
 
-The management layer (switch role to Admin, or press Ctrl+K anywhere):
+## What is in the demo
 
-- **Command center** (`#/hq`): KPIs with trends, a smart assistant that proposes
-  one-click actions (payment reminders, matching a payment, approving a
-  yahrzeit, offering an open kiddush), a campaign thermometer, today's schedule
-  and a live feed with an optional simulation of incoming sample donations.
-- **Aliyot board** (`#/aliyot`): auto-assigns honors by chiyuv (yahrzeit, Bar
-  Mitzvah, new baby) and rotation, prints a gabbai's sheet, and records
-  everything as nedarim on Saturday night.
-- **Seat map** (`#/seats`): High Holiday seating; click a seat to sell, hold or
-  release it, and the charge lands on the member's account.
-- **Quick search** (Ctrl+K): members, screens and actions.
+Everything is reachable from the command center (`#/hq`, "All modules"), from
+quick search (Ctrl+K) and from "What's included". Each module is a working
+demo on invented data; none of it is a promise about a shipped product.
+
+| Area | Screens |
+|---|---|
+| Core | landing, times (+ editor), TV screen, donate, join, member area, finance, admin, notifications |
+| Management | command center with the smart assistant (`#/hq`), aliyot board (`#/aliyot`), seat map (`#/seats`), family seat booking (`#/book`) |
+| Shabbat | the gabbai's Friday and the Shabbat sheet (`#/friday`), Shabbat autopilot (`#/autopilot`) |
+| Giving | matching campaign, embeddable widget, Bit, Section 46, Nedarim Plus, accounting export (`#/giving`), entrance kiosk (`#/kiosk`) |
+| Community | minyan sign-up (`#/minyan`), message center (`#/messages`), a neder from the bimah (`#/bimah`), events (`#/events`), the rabbi's workspace (`#/rabbi`), children, meals and chesed (`#/chesed`) |
+| Money | expenses and forecast (`#/expenses`) |
+| Tools | member import (`#/import`), screen builder and times import (`#/tvbuild`), public website (`#/site`), shul directory (`#/directory`) |
+| Selling | comparison (`#/compare`), ShulCloud alternative (`#/alt`) |
+
+Rules the demo keeps: no prices, no ethnic identity, Shabbat-only automatic
+switching, no recurring donations and no funds (every donation counts toward
+the one campaign), no numeric time promises, no invented testimonials.
+
+To add the 90-second tour video, put the file in `assets/` and set
+`sales.video` in `js/data.js`; the slot under the hero appears by itself.
 
 Try the TV screen: open "מסך בית הכנסת" (or "TV screen"), press "12 שניות
 לפני הדלקת נרות", and watch it switch to Shabbat Shalom with candles by

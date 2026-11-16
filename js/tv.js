@@ -62,7 +62,7 @@
     } else centre = '<div class="tv-centre"><div data-tv="slide" style="display:flex;flex-direction:column;flex:1;min-height:0"></div><div class="tv-dots" data-tv="dots"></div></div>';
     var sh = D.shiurim.map(function (s) { return "<span><b>" + esc(L(s.name)) + "</b> " + KN.time(s.t) + " · " + esc(L(s.who)) + "</span>"; }).join("");
     var strip = '<div class="tv-strip"><span class="lab">' + T("שיעורי תורה", "Shiurim") + '</span><div class="run"' + (shab ? ' style="animation:none"' : "") + ">" + sh + (shab ? "" : sh) + "</div></div>";
-    inst.stage.className = "tv tv-fade" + (shab ? " shabbat" : "");
+    inst.stage.className = "tv tv-fade" + (shab ? " shabbat" : "") + (KN.tvClass ? KN.tvClass(inst) : "");
     inst.stage.innerHTML = '<div class="tv-demo">' + T("הדגמה · DEMO", "DEMO") + "</div>" + (S.tvOffline ? '<div class="tv-net off">' + T("לא מקוון · ממשיך מהמטמון", "Offline · running from cache") + "</div>" : '<div class="tv-net">' + T("מוכן לא מקוון", "Offline-ready") + "</div>") + head + '<div class="tv-body">' + left + centre + right + "</div>" + strip;
     inst.mode = m; inst.slides = shab ? [] : slides(); inst.dayKey = day.iso;
     if (!shab) {
