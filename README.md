@@ -41,6 +41,14 @@ presentation, never the product:
 - **Request a proposal**: prepares the request and opens it in the visitor's own email app, addressed to the
   sales contact; the page also shows the email and phone for direct contact. The demo itself sends nothing.
 
+## Contact the seller from any page
+
+- A gold **Request a demo** button in the top bar of every page (overview, showcases, screen showroom, proposal,
+  shul website, member pages and administration). On phones it becomes a compact "Demo" button.
+- A slim contact bar at the bottom of every page: Request a demo, email and phone. Not on the screen itself (`#/tv`).
+- On the overview hero: Request a demo, Call, and the email address. Each showcase ends with a
+  "See this running in your shul" band, and the screen showroom has its own Request a demo button.
+
 ## Experience pages
 
 | Address | What |
