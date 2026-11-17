@@ -34,7 +34,7 @@
   }
 
   /* The member's own card, as production shows it (congregant/index.html renderCong):
-     balance, pay by card, card payments waiting for the gabbai, totals, the ledger with
+     balance, pay by card (recorded automatically), totals, the ledger with
      cancelled entries struck through, family yahrzeits and announcements. */
   function ledgerView(mid) {
     var voided = {}, rows = [], ch = 0, pay = 0;
@@ -46,6 +46,16 @@
     });
     rows.sort(function (x, y) { return x.date < y.date ? 1 : x.date > y.date ? -1 : 0; });
     return { rows: rows, voided: voided, charges: ch / 100, payments: pay / 100 };
+  }
+  /* A member paying their own balance by card from the member page: production records it
+     automatically (ledger payment, method card) and the balance updates at once.
+     Donations, which match no member page, still wait in the inbox for the gabbai. */
+  function recordBalancePayment(mid, amount, ref, rec) {
+    var m = S.memberById(mid);
+    S.db.ledger.push({ id: "card-" + ref, mid: mid, date: S.todayIso(), type: "payment", amount: amount, desc: "תשלום בכרטיס Ref #" + ref + "|Card payment Ref #" + ref, method: "card", by: "נרשם אוטומטית|Recorded automatically", source: "card" });
+    S.db.inbox.unshift(Object.assign({ id: S.uid("i"), ref: ref, name: m.en, email: m.email, amount: amount, type: "balance", date: S.todayIso(), note: "", last4: "4242", wallet: "" }, rec || {}, { memberId: mid, status: "recorded", auto: true }));
+    S.log("finance", "תשלום בכרטיס נרשם אוטומטית: " + m.he + ", " + S.money(amount), "Card payment recorded automatically: " + m.en + ", " + S.money(amount));
+    S.notify(mid, "התשלום שלך התקבל: " + S.money(amount) + ". תודה!", "Your payment was received: " + S.money(amount) + ". Thank you!");
   }
   function pendingFor(mid) { return S.db.inbox.filter(function (x) { return x.memberId === mid && x.status === "pending"; }); }
   function portalHtml(mid, opts) {
@@ -119,5 +129,5 @@
       S.save(); UI.toast(L("נשלח לגבאי לאישור", "Sent to the gabbai for approval")); UI.render();
     });
   }
-  window.SHUL_MEMBER = { portalHtml: portalHtml, ledgerView: ledgerView, pendingFor: pendingFor, balanceText: balanceText, method: method, METHOD: METHOD, statementHtml: statementHtml, csvFor: csvFor, yahrzeitForm: yahrzeitForm, yzStatus: yzStatus };
+  window.SHUL_MEMBER = { recordBalancePayment: recordBalancePayment, portalHtml: portalHtml, ledgerView: ledgerView, pendingFor: pendingFor, balanceText: balanceText, method: method, METHOD: METHOD, statementHtml: statementHtml, csvFor: csvFor, yahrzeitForm: yahrzeitForm, yzStatus: yzStatus };
 })();

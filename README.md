@@ -38,8 +38,8 @@ presentation, never the product:
 - **Time**: pin a moment of the demo week to see the TV's states (before Netz, night dimming, Friday, Shabbat).
 - **Language**: Hebrew or English.
 - **Reset**: restores the fictional data, the name, the design and the time.
-- **Request a proposal**: prepares a request to copy; the demo sends nothing. To enable a real
-  contact, set `window.SHUL_SALES_CONTACT = { email: "..." }` before `js/experience.js` loads.
+- **Request a proposal**: prepares the request and opens it in the visitor's own email app, addressed to the
+  sales contact; the page also shows the email and phone for direct contact. The demo itself sends nothing.
 
 ## Experience pages
 

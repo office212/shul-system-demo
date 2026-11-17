@@ -1,7 +1,7 @@
 # Feature-to-source map
 
 Every product capability shown in the demo, with where it lives in the production
-repository (`office212/or-hachaim`) and where the demo implements it.
+repository and where the demo implements it.
 Presentation-only tools are listed separately at the end.
 
 | Capability | Production source | Demo |
@@ -10,13 +10,13 @@ Presentation-only tools are listed separately at the end.
 | Shabbat and daily times on the landing page | `src/home/home-texts.js` (today/Shabbat keys), `PUBLIC_ZMANIM` switch (off on the reference site) | Shown on `#/site`; a configuration choice per shul |
 | Donation form: card, Apple Pay, Google Pay, fee cover, tax note | `src/donate/sola-form.js`, `donate/`, `thanks/` | `#/donate`, `#/thanks` (simulated, nothing charged) |
 | Join request, approve with role, decline, send again, welcome email | README "Join requests", `src/ui/oh-members.js`, `functions/sendWelcomeEmail` | `#/join`, `#/finance/members` |
-| Member account: balance, pay by card, card payments waiting for the gabbai, totals, ledger with cancellations | `congregant/index.html` (`renderCong`, `renderPending`) | `#/me`, `portalHtml` in `js/views-member.js` |
+| Member account: balance, pay by card (a balance payment records itself and updates the balance at once), totals, ledger with cancellations | `congregant/index.html` (`renderCong`), `functions/payments` | `#/me`, `portalHtml` in `js/views-member.js` |
 | Family yahrzeit requests, approval to the TV | `src/ui/oh-yahrzeit.js`, `gabbai/tv/content/` | `#/me`, `#/gabbai/content?type=yahrzeit` |
 | Member announcements (announcement and rabbi items) | `congregant/index.html` (`congNews`) | `#/me` |
 | Finance home, payment/charge, undo, receipt | `src/ui/oh-fin.js` | `#/finance/home`, `#/finance/pay` |
 | Shabbat nedarim with pledges | `src/ui/oh-fin.js` | `#/finance/nedarim` |
 | Who owes, member card, void as correction, edit details, statement, CSV | `src/ui/oh-fin.js`, `functions/sendStatementEmail` | `#/finance/owes`, `#/finance/m/<id>` |
-| Card payments inbox, match by email, record | `src/ui/oh-inbox.js`, `functions/payments` | `#/finance/inbox`, `#/showcase/ledger` |
+| Card payments inbox: donations match by email and wait for the gabbai to record them | `src/ui/oh-inbox.js`, `functions/payments` | `#/finance/inbox` |
 | Tax letters, annual report, recurring charges | README "Finance" | `#/finance/more` |
 | Davening times editor (weekday groups, specific weekdays) | `admin/prayer-times.js`, `src/ui/oh-times.js` | `#/gabbai/tv` |
 | TV texts editor | `admin/tv-texts-editor.js`, `src/tv/tv-texts.js` | `#/gabbai/tv` |
