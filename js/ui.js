@@ -192,10 +192,10 @@
 
   /* ---------- customization (presentation tools only) ---------- */
   var CUSTOM_ITEMS = [
-    [I.palette, "עיצוב ומיתוג", "Visual design and branding", "לוגו, צבעים, גופנים, צורת המסכים ומסך הטלוויזיה, בזהות של בית הכנסת שלכם.", "Logo, colors, fonts, the look of every screen and the TV, in your shul's identity."],
-    [I.edit, "שפה ותוכן כתוב", "Language and written content", "עברית, אנגלית או שתיהן, וכל מילה באתר, במסך, בדף השבת ובאימיילים, בסגנון שלכם.", "Hebrew, English or both, and every word on the site, the TV, the Shabbat sheet and the emails, in your style."],
+    [I.palette, "עיצוב ומיתוג", "Visual design and branding", "לוגו, צבעים, גופנים, צורת המסכים והמסך, בזהות של בית הכנסת שלכם.", "Logo, colors, fonts, the look of every screen and the screen, in your shul's identity."],
+    [I.edit, "שפה ותוכן כתוב", "Language and written content", "עברית, אנגלית או שתיהן, וכל מילה באתר, במסך, בדף השבת ובאימיילים, בסגנון שלכם.", "Hebrew, English or both, and every word on the site, the screen, the Shabbat sheet and the emails, in your style."],
     [I.map, "המידע של בית הכנסת", "Your shul's information", "שם, כתובת, זמני תפילה, מניינים, שיעורים, נוסח ומנהגים.", "Name, address, davening times, minyanim, shiurim, nusach and minhagim."],
-    [I.gear, "הגדרת היכולות הקיימות", "Configuration of existing features", "אילו מסכים פעילים, מה מוצג במסך, סוגי חיובים ונדרים, הרשאות לכל גבאי.", "Which screens are on, what the TV shows, charge and neder types, permissions for each gabbai."],
+    [I.gear, "הגדרת היכולות הקיימות", "Configuration of existing features", "אילו מסכים פעילים, מה מוצג במסך, סוגי חיובים ונדרים, הרשאות לכל גבאי.", "Which screens are on, what the screen shows, charge and neder types, permissions for each gabbai."],
     [I.users, "התאמת תהליכי העבודה", "Adapting existing workflows", "תהליכי התשלום, ההצטרפות, היארצייטים והתרומות מותאמים לדרך שבה בית הכנסת שלכם עובד.", "Payment, joining, yahrzeit and donation flows are set up the way your shul works."]
   ];
   function customItemsHtml() {
@@ -218,7 +218,7 @@
         e.preventDefault(); var he = f.he.value.trim(), en = f.en.value.trim();
         if (!he && !en) return;
         S.db.shul.he = he || en; S.db.shul.en = en || he; S.save(); closeModal(); renderChrome(); render();
-        toast(L("השם עודכן בכל המערכת: בכותרת, במסך, בדף השבת, בקבלות ובאימיילים.", "The name now appears across the system: header, TV, Shabbat sheet, receipts and emails."), L("לראות במסך", "See it on the TV"), function () { location.hash = "#/tv"; }, 6000);
+        toast(L("השם עודכן בכל המערכת: בכותרת, במסך, בדף השבת, בקבלות ובאימיילים.", "The name now appears across the system: header, screen, Shabbat sheet, receipts and emails."), L("לראות במסך", "See it on the screen"), function () { location.hash = "#/tv"; }, 6000);
       });
       f.querySelector("[data-rename-reset]").addEventListener("click", function () { var sd = window.SHUL_SEED().shul; S.db.shul.he = sd.he; S.db.shul.en = sd.en; S.save(); closeModal(); renderChrome(); render(); });
     });
@@ -236,7 +236,7 @@
     var head = document.getElementById("sitehead"), foot = document.getElementById("sitefoot");
     if (layout !== "site") { head.innerHTML = ""; foot.innerHTML = ""; renderBell(); return; }
     var r = S.role(), u = S.currentUser();
-    var links = [["#/site", L("ראשי", "Home")], ["#/times", L("זמני תפילה", "Davening Times")], ["#/tv", L("מסך הטלוויזיה", "TV Screen")], ["#/donate", L("תרומה", "Donate")]];
+    var links = [["#/site", L("ראשי", "Home")], ["#/times", L("זמני תפילה", "Davening Times")], ["#/tv", L("המסך", "Screen")], ["#/donate", L("תרומה", "Donate")]];
     if (r === "member") links.push(["#/me", L("החשבון שלי", "My Account")]);
     if (r === "applicant") links.push(["#/join", L("הצטרפות", "Join")]);
     if (r === "finance" || r === "content" || r === "super") links.push(["#/gabbai", L("מערכת הגבאים", "Gabbai System")]);
@@ -285,7 +285,7 @@
   var ADMIN_NAV = [
     { sec: ["סקירה", "Overview"], items: [["#/gabbai", "sparkle", "לוח בקרה", "Dashboard", "gabbai"]] },
     { sec: ["כספים", "Finance"], items: [["#/finance/home", "wallet", "כספים", "Finance", "finance"], ["#/finance/pay", "receipt", "תשלום / חיוב", "Payment / Charge", "finance"], ["#/finance/nedarim", "list", "נדרי שבת", "Shabbat nedarim", "finance"], ["#/finance/owes", "users", "מי חייב", "Who owes", "finance"], ["#/finance/members", "user", "מתפללים", "Members", "finance", "join"], ["#/finance/inbox", "inbox", "תשלומים בכרטיס", "Card payments", "finance", "inbox"], ["#/finance/more", "doc", "דוחות ומכתבי מס", "Reports and tax letters", "finance"]] },
-    { sec: ["תוכן ומסך", "Content and TV"], items: [["#/gabbai/content", "megaphone", "תוכן המסך", "Screen content", "content", "yz"], ["#/gabbai/tv", "clock", "זמני תפילה והמסך", "Davening times and TV", "content"], ["#/gabbai/shabbat", "candle", "דף השבת", "Shabbat sheet", "content"]] },
+    { sec: ["תוכן ומסך", "Content and screen"], items: [["#/gabbai/content", "megaphone", "תוכן המסך", "Screen content", "content", "yz"], ["#/gabbai/tv", "clock", "זמני תפילה והמסך", "Davening times and screen", "content"], ["#/gabbai/shabbat", "candle", "דף השבת", "Shabbat sheet", "content"]] },
     { sec: ["ניהול", "Administration"], items: [["#/admin", "shield", "גבאים והרשאות", "Gabbaim and permissions", "super"], ["#/gabbai/activity", "list", "יומן פעילות", "Activity log", "super"], ["#/gabbai/landing", "edit", "דף הנחיתה", "Landing page", "super"], ["#/backup", "cloud", "גיבוי", "Backup", "finance"], ["#/gabbai/settings", "gear", "הגדרות", "Settings", "gabbai"]] }
   ];
   function navAllowed(need) { return need === "super" ? S.role() === "super" : S.can(need); }
@@ -308,7 +308,7 @@
         return '<a href="' + it[0] + '" class="side-a' + (it[0] === best ? " on" : "") + '"' + (it[0] === best ? ' aria-current="page"' : "") + ">" + I[it[1]] + "<span>" + L(it[2], it[3]) + "</span>" + (it[5] ? badge(it[5]) : "") + "</a>";
       }).join("") + "</div>";
     }).join("");
-    app.innerHTML = '<div class="admin"><aside class="admin-side" id="adminSide"><a class="side-brand" href="#/gabbai">' + logo() + "<span><b>" + esc(S.N(S.db.shul)) + "</b><small>" + L("מערכת הגבאים", "Gabbai system") + "</small></span></a><nav>" + nav + '</nav><div class="side-foot"><a class="side-a" href="#/tv">' + I.tv + "<span>" + L("מסך הטלוויזיה", "TV screen") + '</span></a><a class="side-a" href="#/site">' + I.map + "<span>" + L("אתר בית הכנסת", "Shul website") + '</span></a><a class="side-a" href="#/me">' + I.user + "<span>" + L("החשבון שלי", "My account") + "</span></a></div></aside>" +
+    app.innerHTML = '<div class="admin"><aside class="admin-side" id="adminSide"><a class="side-brand" href="#/gabbai">' + logo() + "<span><b>" + esc(S.N(S.db.shul)) + "</b><small>" + L("מערכת הגבאים", "Gabbai system") + "</small></span></a><nav>" + nav + '</nav><div class="side-foot"><a class="side-a" href="#/tv">' + I.tv + "<span>" + L("המסך", "screen") + '</span></a><a class="side-a" href="#/site">' + I.map + "<span>" + L("אתר בית הכנסת", "Shul website") + '</span></a><a class="side-a" href="#/me">' + I.user + "<span>" + L("החשבון שלי", "My account") + "</span></a></div></aside>" +
       '<div class="admin-main"><header class="admin-top"><button class="icon-btn side-toggle" id="sideToggle" aria-label="' + L("תפריט", "Menu") + '">' + I.menu + '</button><div class="admin-title">' + esc(def.title ? (typeof def.title === "function" ? def.title() : def.title) : "") + "</div>" +
       (S.can("finance") ? '<div class="admin-search rel"><input id="admSearch" type="search" autocomplete="off" placeholder="' + L("חיפוש מתפלל", "Find a member") + '" aria-label="' + L("חיפוש מתפלל", "Find a member") + '"><div class="member-pick hidden" id="admRes"></div></div>' : '<span class="spacer"></span>') +
       '<div class="lang" role="group" aria-label="' + L("שפה", "Language") + '"><button aria-pressed="' + (S.prefs.lang === "he") + '" data-l="he">עב</button><button aria-pressed="' + (S.prefs.lang === "en") + '" data-l="en">EN</button></div>' +

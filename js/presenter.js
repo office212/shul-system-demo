@@ -8,7 +8,7 @@
   var open = null;
 
   var PERSP = [
-    { id: "visitor", ic: "map", dest: "#/site", he: "אורח באתר", en: "Website visitor", dhe: "האתר הציבורי, זמני השבת, תרומה ומסך הטלוויזיה", den: "Public website, Shabbat times, donations and the TV" },
+    { id: "visitor", ic: "map", dest: "#/site", he: "אורח באתר", en: "Website visitor", dhe: "האתר הציבורי, זמני השבת, תרומה והמסך", den: "Public website, Shabbat times, donations and the screen" },
     { id: "member", ic: "user", dest: "#/me", he: "מתפלל", en: "Member", dhe: "היתרה, החיובים והתשלומים, תשלום בכרטיס, יארצייטים", den: "Balance, charges and payments, pay by card, yahrzeits" },
     { id: "finance", ic: "wallet", dest: "#/gabbai", he: "גבאי כספים", en: "Finance gabbai", dhe: "מתפללים, יומן חשבונות, נדרים, מכתבי מס. בלי תוכן מסך", den: "Members, ledger, nedarim, tax letters. No screen content" },
     { id: "content", ic: "megaphone", dest: "#/gabbai", he: "גבאי תוכן וזמנים", en: "Content gabbai", dhe: "זמני תפילה, תוכן המסך, דף השבת. בלי נתונים כספיים", den: "Davening times, screen content, Shabbat sheet. No financial data" },
@@ -51,7 +51,7 @@
       return head(L("פרספקטיבה", "Perspective"), L("מחליף את התפקיד בהדגמה בלבד. במערכת האמיתית הכניסה היא עם Google והתפקיד נקבע על ידי המנהל.", "Changes the role in the demo only. In the real system sign-in is with Google and the administrator assigns roles.")) +
         '<div class="pop-list">' + PERSP.map(function (p) {
           return '<button class="pop-item" data-role="' + p.id + '" aria-pressed="' + (S.prefs.role === p.id) + '">' + ic(p.ic, 20) + "<span><b>" + esc(L(p.he, p.en)) + "</b><small>" + esc(L(p.dhe, p.den)) + "</small></span></button>";
-        }).join("") + '</div><div class="pop-links"><a href="#/">' + L("סקירת המערכת", "Platform overview") + '</a><a href="#/screen">' + L("אולם התצוגה של המסך", "TV showroom") + '</a><a href="#/showcase/roles">' + L("השוואת תפקידים", "Compare roles") + "</a></div>";
+        }).join("") + '</div><div class="pop-links"><a href="#/">' + L("סקירת המערכת", "Platform overview") + '</a><a href="#/screen">' + L("אולם התצוגה של המסך", "screen showroom") + '</a><a href="#/showcase/roles">' + L("השוואת תפקידים", "Compare roles") + "</a></div>";
     }
     if (kind === "design") {
       var brands = UI().BRANDS;
@@ -63,7 +63,7 @@
         '<div class="pop-links"><a href="#/showcase/design">' + L("סטודיו העיצוב", "Open the design studio") + "</a></div>";
     }
     if (kind === "time") {
-      return head(L("זמן ההדגמה", "Demo time"), L("מציג את המסך והאתר ברגע אחר בשבוע ההדגמה. לא משנה דבר במערכת.", "Shows the TV and site at another moment of the demo week. Changes nothing in the system.")) +
+      return head(L("זמן ההדגמה", "Demo time"), L("מציג את המסך והאתר ברגע אחר בשבוע ההדגמה. לא משנה דבר במערכת.", "Shows the screen and site at another moment of the demo week. Changes nothing in the system.")) +
         '<div class="pop-list">' + MOMENTS.map(function (m) { return '<button class="pop-item compact" data-moment="' + m[0] + '" aria-pressed="' + (momentKey() === m[0]) + '">' + ic("clock", 18) + "<span><b>" + esc(L(m[1], m[2])) + "</b></span></button>"; }).join("") + "</div>";
     }
     return head(L("פקדי הדגמה", "Demo controls"), L("משנים את ההצגה בלבד, לא את המוצר.", "These change the presentation, not the product.")) +

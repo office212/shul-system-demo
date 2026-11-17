@@ -28,7 +28,7 @@
     render: function (app) {
       var r = S.role(), z = S.zmanim(S.now());
       var quick = [
-        ["#/tv", I.tv, L("מסך הטלוויזיה", "TV Screen"), L("המסך שדולק כל הזמן בבית הכנסת", "The always-on screen in the shul")],
+        ["#/tv", I.tv, L("המסך", "Screen"), L("המסך שדולק כל הזמן בבית הכנסת", "The always-on screen in the shul")],
         ["#/times", I.clock, L("זמני תפילה", "Davening Times"), L("זמני היום, שבת והדלקת נרות", "Zmanim, Shabbat and candle lighting")],
         ["#/donate", I.heart, L("תרומה", "Donate"), L("כרטיס, Apple Pay או Google Pay", "Card, Apple Pay or Google Pay")]
       ];
@@ -88,7 +88,7 @@
         '<div class="timecard"><div class="eyebrow">' + L("שבת קודש", "Shabbat Kodesh") + '</div><h3 style="margin:4px 0">' + L("פרשת " + S.PARASHA.he, "Parashat " + S.PARASHA.en) + "</h3>" +
         '<div class="tline"><span>' + L("הדלקת נרות", "Candle Lighting") + '</span><b class="num">' + S.hm(st.candles, true) + '</b></div><div class="tline"><span>' + L("שקיעה, יום שישי", "Shkiah, Friday") + '</span><b class="num">' + S.hm(st.friShkiah, true) + "</b></div>" +
         '<div class="tline"><span>' + L("צאת השבת", "Shabbat Ends") + '</span><b class="num">' + S.hm(st.ends, true) + '</b></div><div class="tline"><span>' + L("רבינו תם", "Rabbeinu Tam") + '</span><b class="num">' + S.hm(st.rt, true) + "</b></div>" +
-        '<div class="row" style="margin-top:12px"><a class="btn soft sm" href="#/tv">' + L("לראות במסך", "See it on the TV") + "</a></div></div></div>" +
+        '<div class="row" style="margin-top:12px"><a class="btn soft sm" href="#/tv">' + L("לראות במסך", "See it on the screen") + "</a></div></div></div>" +
         '<h2 style="margin-top:34px">' + L("כל השבוע", "The whole week") + '</h2><div class="table-wrap"><table><thead><tr><th>' + L("זמן", "Zman") + "</th>" + [0, 1, 2, 3, 4, 5, 6].map(function (i) { return "<th>" + (S.prefs.lang === "en" ? S.DAY_EN_SHORT[i] : S.DAY_HE[i]) + "</th>"; }).join("") + "</tr></thead><tbody>" +
         S.ZLIST.map(function (zz) { return "<tr><td><b>" + L(zz[1], zz[2]) + "</b></td>" + [0, 1, 2, 3, 4, 5, 6].map(function (i) { return '<td class="num">' + S.hm(S.zmanim(S.weekDate(i))[zz[0]], false) + "</td>"; }).join("") + "</tr>"; }).join("") +
         "</tbody></table></div></div>";
