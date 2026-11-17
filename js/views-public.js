@@ -138,8 +138,8 @@
       function finish(wallet) {
         var t = total(), ref = String(10480000 + Math.floor(Math.random() * 90000));
         var rec = { id: S.uid("i"), ref: ref, name: f.name.value.trim() || (u ? u.en : "Donor"), email: (f.email.value.trim() || (u ? u.email : "")).toLowerCase(), amount: t, type: bal ? "balance" : "donation", date: S.todayIso(), note: f.note.value.trim(), last4: wallet ? "" : f.card.value.replace(/\D/g, "").slice(-4), wallet: wallet || "", status: "pending", fee: f.fee.checked };
-        if (bal && u && u.mid) rec.memberId = u.mid; /* production: waits in the inbox until the gabbai records it */
-        S.db.inbox.unshift(rec);
+        if (bal && u && u.mid) window.SHUL_MEMBER.recordBalancePayment(u.mid, t, ref, rec); /* production: recorded automatically */
+        else S.db.inbox.unshift(rec); /* a donation waits for the gabbai to record it */
         S.notify("finance", "תשלום בכרטיס התקבל: " + rec.name + ", " + S.money(t), "Card payment received: " + rec.name + ", " + S.money(t));
         S.save();
         location.hash = "#/thanks?type=" + rec.type + "&ref=" + ref;
@@ -177,7 +177,7 @@
       var rec = S.db.inbox.filter(function (x) { return x.ref === params.ref; })[0];
       var bal = params.type === "balance";
       app.innerHTML = '<div class="wrap page"><div class="card" style="max-width:600px;margin:20px auto;text-align:center"><div style="width:68px;height:68px;margin:0 auto 12px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center">' + I.check.replace("<svg", '<svg width="34" height="34"') + "</div>" +
-        "<h1>" + (bal ? L("התשלום התקבל", "Payment received") : L("תודה רבה על התרומה!", "Thank you for your donation!")) + '</h1><p class="muted">' + (bal ? L("היתרה שלך תתעדכן.", "Your balance will be updated.") : L("קבלה לצורכי מס נשלחה לאימייל שלך. אם אינה מופיעה, כדאי לבדוק בתיקיית הספאם.", "A tax receipt was emailed to you. If you don't see it, please check your spam folder.")) + "</p>" +
+        "<h1>" + (bal ? L("התשלום התקבל", "Payment received") : L("תודה רבה על התרומה!", "Thank you for your donation!")) + '</h1><p class="muted">' + (bal ? L("היתרה שלך עודכנה.", "Your balance has been updated.") : L("קבלה לצורכי מס נשלחה לאימייל שלך. אם אינה מופיעה, כדאי לבדוק בתיקיית הספאם.", "A tax receipt was emailed to you. If you don't see it, please check your spam folder.")) + "</p>" +
         (rec ? '<p class="small">' + L("אסמכתה: ", "Reference: ") + '<b class="num">' + esc(rec.ref) + "</b> · <b class=\"num\">" + S.money(rec.amount) + "</b></p>" : "") +
         '<div class="row" style="justify-content:center;margin-top:16px">' + (rec ? '<button class="btn" id="rcpt">' + I.receipt.replace("<svg", '<svg width="18" height="18"') + L("הצגת הקבלה שנשלחה", "View the emailed receipt") + "</button>" : "") +
         (bal ? '<a class="btn primary" href="#/me">' + L("לחשבון שלי", "To my account") + "</a>" : '<a class="btn primary" href="#/site">' + L("לדף הבית", "Back to home") + "</a>") + "</div></div></div>";
