@@ -155,7 +155,7 @@
       act(20, "join", "בקשת הצטרפות התקבלה: נועם ליבר", "Join request received: Noam Lieber", "נועם ליבר|Noam Lieber"),
       act(28, "finance", "נדרי שבת נשמרו: 9 שורות, $612.00", "Shabbat nedarim saved: 9 lines, $612.00", "יוסף אדלר|Yosef Adler"),
       act(50, "permissions", "מינה את יהודה שטרן לגבאי כספים ותוכן", "Granted Yehuda Stern finance and content", "ראובן הלפרן|Reuven Halpern"),
-      act(73, "sheet", "עדכן את דף השבת: שחרית 8:45", "Updated the Shabbat sheet: Shacharit 8:45", "מנחם רוט|Menachem Roth"),
+      act(73, "sheet", "עדכן את דף השבת: שחרית 8:45", "Updated the Shabbat bulletin: Shacharit 8:45", "מנחם רוט|Menachem Roth"),
       act(96, "backup", "גיבוי ידני הורד", "Manual backup downloaded", "ראובן הלפרן|Reuven Halpern")
     ];
     var backups = [];

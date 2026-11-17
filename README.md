@@ -75,7 +75,7 @@ presentation, never the product:
 | `#/gabbai` | Gabbaim | Gabbai home: tiles by role, alerts, live TV preview, recent actions |
 | `#/gabbai/tv` | Content gabbai, super admin | Davening times editor, TV texts, brightness and remote refresh (super admin) |
 | `#/gabbai/content` | Content gabbai, super admin | Announcements, mazal tov, flyers, dedications, hazkarot, yahrzeits, member yahrzeit requests, weekday and Shabbat preview |
-| `#/gabbai/shabbat` | Content gabbai, super admin | Printable Shabbat sheet, show on TV, Shabbat Shalom to the community (super admin) |
+| `#/gabbai/shabbat` | Content gabbai, super admin | Printable Shabbat bulletin, show on screen, Shabbat Shalom to the community (super admin) |
 | `#/finance/...` | Finance gabbai, super admin | Home, payment and charge, Shabbat nedarim, who owes, members and join requests, member card, card payments inbox, tax letters, annual report, recurring charges |
 | `#/backup` | Finance gabbai, super admin | Backup status, download, restore dry run (super admin) |
 | `#/admin` | Super admin | Users and roles, broadcast notification |
@@ -92,5 +92,5 @@ presentation, never the product:
 - `js/ui.js`: router and layouts (site, admin shell, experience, TV), header, modals, toasts, simulated push, bell
 - `js/presenter.js`: the presentation dock
 - `js/experience.js`, `css/experience.css`: the sales experience, showcases, admin shell and portal styles
-- `js/tv.js`, `js/sheet.js`: the TV screen and the Shabbat sheet
+- `js/tv.js`, `js/sheet.js`: the TV screen and the Shabbat bulletin
 - `js/views-*.js`: public pages, congregant, finance, gabbai and admin screens

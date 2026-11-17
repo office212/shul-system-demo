@@ -23,7 +23,7 @@ Presentation-only tools are listed separately at the end.
 | TV brightness (off, manual, automatic) and remote refresh | `admin/tv-brightness-editor.js`, `src/tv/tv-dim.js` | `#/gabbai/tv`, `#/screen` |
 | Screen content with dates, days and weekday/Shabbat preview | `gabbai/tv/content/`, `src/engines/display-engine.js` | `#/gabbai/content`, `#/showcase/tv` |
 | TV: zmanim, davening times, community board, Netz countdown, parasha line, Shabbat block, early Shabbat card, Shabbat mode | `tv/`, `screen/screen.js`, `src/tv/*` | `#/tv` (`js/tv.js`), `#/screen` |
-| Shabbat sheet: overrides, every week, print, show on TV, Shabbat Shalom to the community | `src/shabbat-sheet/*`, `gabbai/shabbat/` | `#/gabbai/shabbat` (`js/sheet.js`) |
+| Shabbat bulletin: overrides, every week, print, show on screen, Shabbat Shalom to the community | `src/shabbat-sheet/*`, `gabbai/shabbat/` | `#/gabbai/shabbat` (`js/sheet.js`) |
 | Roles: super admin, finance, content, both, member | README "Roles and permissions", `src/firebase/firestore.rules` | Admin sidebar, `#/admin`, `#/showcase/roles` |
 | Activity log | `gabbai/activity/` | `#/gabbai/activity` |
 | Backup download, restore dry run, nightly backup | `backup/`, `restore/`, `functions/dailybackup` | `#/backup` |
