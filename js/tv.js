@@ -1,7 +1,7 @@
 /* Shul system sales demo | the always-on TV screen (#/tv).
    A 16:9 board scaled to any screen: daily zmanim, davening times, the community board,
    Shabbat mode, the Netz countdown, the parasha line, brightness and remote refresh.
-   One fixed look: Hebrew with small English lines (the TV does not follow the site language). */
+   Bilingual look: the primary language follows the site language (Hebrew by default, English when the site is in English). */
 (function () {
   "use strict";
   var S = window.SHUL, UI = window.SHUL_UI, esc = S.esc;
@@ -210,7 +210,7 @@
     var ticker = S.db.items.filter(function (it) { return it.type === "ticker" && it.status === "published"; });
     var tt = titleFor(st, d);
     var dims = dimLevel(d);
-    root.className = "tv-stage" + (shabbat ? " is-shabbat" : "");
+    root.className = "tv-stage" + (shabbat ? " is-shabbat" : "") + (S.prefs.lang === "en" ? " lang-en" : "");
     root.innerHTML =
       '<header class="tv-head"><div class="tv-brand">' + UI.logo() + '<div><div class="he">' + esc(S.db.shul.he) + '</div><div class="en">' + esc(S.db.shul.en) + "</div></div></div>" +
       '<div class="tv-title"><div class="he">' + tt[0] + '</div><div class="sub">' + S.hebDate(d, "he") + " | " + S.DAY_EN[d.getDay()] + ", " + EN_MONTHS[d.getMonth()] + " " + d.getDate() + "</div></div>" +
