@@ -110,7 +110,7 @@
     }).join("");
   }
   function boardsFor(d, shabbat) {
-    var items = S.db.items.filter(function (it) { return visible(it, d, shabbat) && it.type !== "ticker"; });
+    var items = allItems().filter(function (it) { return visible(it, d, shabbat) && it.type !== "ticker"; });
     var by = function (t) { return items.filter(function (i) { return i.type === t; }); };
     var yz = yahrzeitsThisWeek();
     if (shabbat) {
@@ -134,6 +134,14 @@
     return '<div class="tv-bhead"><span class="he">' + l[0] + '</span><span class="en">' + l[1] + "</span></div>";
   }
 
+  /* an unsaved item previewed by the editor (production: the TV preview before publishing) */
+  var draft = null;
+  function allItems() {
+    if (!draft) return S.db.items;
+    var d = Object.assign({}, draft, { status: "published" }), found = false;
+    var list = S.db.items.map(function (it) { if (it.id === d.id) { found = true; return d; } return it; });
+    return found ? list : [d].concat(list);
+  }
   /* ---------- the screen ---------- */
   var state = { idx: 0, preview: false, shabbatPreview: false, stage: null, root: null, timers: [] };
   function titleFor(st, d) {
@@ -215,7 +223,7 @@
       '<section class="tv-col"><div class="tv-ch"><span class="he">' + esc(T("colPrayers", "he")) + '</span><span class="en">' + esc(T("colPrayers", "en")) + '</span></div><div class="tv-prayers">' + prow + '</div><div class="tv-slot">' + slot + "</div></section>" +
       "</div>" +
       '<footer class="tv-foot"><div class="tv-fname"><b>' + esc(S.db.shul.he) + "</b> · <bdi dir=\"ltr\">" + esc(S.db.shul.address) + '</bdi></div><div class="tv-ticker"><div class="tv-tick-in">' + ticker.concat(ticker).map(function (t) { return "<span>✦ " + esc(t.text.he) + " · " + esc(t.text.en) + "</span>"; }).join("") + "</div></div></footer>" +
-      '<div class="tv-dim" style="opacity:' + dims + '"></div>';
+      '<div class="tv-dim" style="opacity:' + dims + '"></div>' + (draft ? '<div class="tv-draft">תצוגה מקדימה · Preview, not published</div>' : "");
     state.lastBoards = shabbat ? 0 : bd.length;
   }
   function cd(mins, lang) {
@@ -271,10 +279,11 @@
     render: function (app, arg, params) {
       state.timers.forEach(clearInterval); state.timers = [];
       state.preview = params.preview === "1";
+      if (params.clock) { var cp = params.clock.split(":"); if (cp[0] === "live") S.pinClock(null); else { S.pinClock(+cp[0], +cp[1]); S.pinned().min0 = +cp[1]; } }
       state.shabbatPreview = params.shabbat === "1";
       try { if (!state.preview && !localStorage.getItem("shulDemo.tvReloadSeen")) localStorage.setItem("shulDemo.tvReloadSeen", String(S.db.tvDisplay.reloadAt || 0)); } catch (e) {}
       app.innerHTML = '<div class="tv-host"><div class="tv-stage" id="tvStage"></div>' + (state.preview ? "" :
-        '<div class="tv-ctl" id="tvCtl"><a class="btn sm" href="#/">' + S.L("חזרה להדגמה", "Back to demo") + '</a><button class="btn sm" id="tvSh">' + (state.shabbatPreview ? "צא מתצוגת שבת · Exit Shabbat preview" : "תצוגת שבת · Shabbat preview") + '</button><button class="btn sm" id="tvFs">' + S.L("מסך מלא", "Fullscreen") + "</button></div>") + "</div>";
+        '<div class="tv-ctl" id="tvCtl"><a class="btn sm" href="#/screen">' + S.L("חזרה להדגמה", "Back to demo") + '</a><button class="btn sm" id="tvSh">' + (state.shabbatPreview ? "צא מתצוגת שבת · Exit Shabbat preview" : "תצוגת שבת · Shabbat preview") + '</button><button class="btn sm" id="tvFs">' + S.L("מסך מלא", "Fullscreen") + "</button></div>") + "</div>";
       state.stage = app.querySelector("#tvStage");
       build(); fit(); checkReload();
       window.onresize = fit;
@@ -291,5 +300,8 @@
   });
   S.onChange(function () { if (state.stage) { build(); checkReload(); } });
   window.SHUL_TV_REFRESH = function () { if (state.stage) build(); };
+  function focusKind(kind) { if (!state.stage) return; var bd = boardsFor(S.now(), state.shabbatPreview || S.dayState(S.now()) === "shabbat"); if (!bd.length) return; for (var i = 0; i < bd.length; i++) if (bd[i].kind === kind) { state.idx = i; break; } build(); }
+  window.SHUL_TV_SETDRAFT = function (it) { draft = it ? JSON.parse(JSON.stringify(it)) : null; if (it) focusKind(it.type); else if (state.stage) build(); };
+  window.SHUL_TV_FOCUS = focusKind;
   window.SHUL_TV = { TV_TEXTS: TV_TEXTS, visible: visible, yahrzeitsThisWeek: yahrzeitsThisWeek, prayerTime: prayerTime, groupRows: groupRows };
 })();

@@ -11,7 +11,7 @@
     var pend = S.db.inbox.filter(function (x) { return x.status === "pending"; }).length;
     var jr = S.role() === "super" ? S.db.joinReqs.filter(function (j) { return j.status === "pending"; }).length : 0;
     var t = [["home", L("בית", "Home")], ["pay", L("תשלום / חיוב", "Payment / Charge")], ["nedarim", L("נדרי שבת", "Shabbat Nedarim")], ["owes", L("מי חייב", "Who Owes")], ["members", L("מתפללים", "Members") + (jr ? ' <span class="badge warn">' + jr + "</span>" : "")], ["inbox", L("תשלומים בכרטיס", "Card Payments") + (pend ? ' <span class="badge warn">' + pend + "</span>" : "")], ["more", L("עוד", "More")]];
-    return '<nav class="tabs">' + t.map(function (x) { return '<a href="#/finance/' + x[0] + '" class="' + (x[0] === on ? "on" : "") + '">' + x[1] + "</a>"; }).join("") + "</nav>";
+    return '<nav class="tabs fin-tabs">' + t.map(function (x) { return '<a href="#/finance/' + x[0] + '" class="' + (x[0] === on ? "on" : "") + '">' + x[1] + "</a>"; }).join("") + "</nav>";
   }
   function frame(app, on, inner) {
     app.innerHTML = '<div class="wrap page">' + UI.pageHead(L("כספים", "Finance"), "", UI.crumbGabbai()) + tabs(on) + inner + "</div>";
@@ -31,8 +31,8 @@
   function matches(m, q) { q = q.trim().toLowerCase(); if (!q) return true; return (m.he + " " + m.en + " " + m.phone + " " + m.email).toLowerCase().indexOf(q) >= 0 || m.phone.replace(/\D/g, "").indexOf(q.replace(/\D/g, "") || "x") >= 0; }
 
   /* ---------- home ---------- */
-  UI.route("/finance", { need: "finance", render: function (app) { location.replace("#/finance/home"); } });
-  UI.route("/finance/*", {
+  UI.route("/finance", { admin: true, need: "finance", render: function (app) { location.replace("#/finance/home"); } });
+  UI.route("/finance/*", { admin: true,
     need: "finance", title: function () { return L("כספים", "Finance"); },
     render: function (app, arg, params) {
       var V = { home: home, pay: pay, charge: pay, nedarim: nedarim, owes: owes, members: members, inbox: inbox, more: more };
@@ -40,7 +40,7 @@
       return home(app, params);
     }
   });
-  UI.route("/finance/m/*", { need: "finance", title: function () { return L("כרטיס מתפלל", "Member card"); }, render: function (app, id) { card(app, id); } });
+  UI.route("/finance/m/*", { admin: true, need: "finance", title: function () { return L("כרטיס מתפלל", "Member card"); }, render: function (app, id) { card(app, id); } });
 
   function home(app) {
     var pend = S.db.inbox.filter(function (x) { return x.status === "pending"; });

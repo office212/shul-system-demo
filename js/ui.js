@@ -166,16 +166,28 @@
     { id: "royal", he: "מלכותי", en: "Royal Elegant", c: "linear-gradient(135deg,#0a1526 50%,#d4b36a 50%)", dhe: "כחול עמוק וזהב מעודן, טיפוגרפיה אלגנטית.", den: "Deep navy and refined gold, elegant typography." },
     { id: "minimal", he: "מינימלי בהיר", en: "Minimal Light", c: "linear-gradient(135deg,#ffffff 50%,#161616 50%)", dhe: "בהיר, מרווח ושקט. עיצוב מודרני ומאופק.", den: "Bright, spacious and quiet. Understated modern design." }
   ];
+  var BRANDS = { navy: "#1b3a5c", emerald: "#1f5f4a", plum: "#4b2e5a", slate: "#334155", teal: "#0f5e6b" };
+  function curTheme() { return S.over.theme || S.prefs.theme; }
   function applyPrefs() {
-    var h = document.documentElement;
+    var h = document.documentElement, th = curTheme();
     h.lang = S.prefs.lang; h.dir = S.prefs.lang === "he" ? "rtl" : "ltr";
-    h.setAttribute("data-theme", S.prefs.theme);
+    h.setAttribute("data-theme", th);
+    ["--primary", "--primary-hover", "--title-ink", "--head-ink", "--tv-head", "--tv-hi"].forEach(function (v) { h.style.removeProperty(v); });
+    var c = BRANDS[S.prefs.brand];
+    if (c && th !== "royal") {
+      h.style.setProperty("--primary", c); h.style.setProperty("--primary-hover", "color-mix(in srgb, " + c + " 82%, #ffffff)");
+      h.style.setProperty("--title-ink", c); h.style.setProperty("--tv-head", c); h.style.setProperty("--tv-hi", c);
+      if (th !== "modern") h.style.setProperty("--head-ink", c);
+    }
   }
+  function setBrand(b) { S.prefs.brand = b || null; S.savePrefs(); applyPrefs(); }
   function setLang(l) { S.prefs.lang = l; S.savePrefs(); applyPrefs(); renderChrome(); render(); }
-  function setTheme(t, quiet) { var changed = S.prefs.theme !== t; S.prefs.theme = t; S.savePrefs(); applyPrefs(); renderChrome(); if (current && current.onTheme) current.onTheme(); if (changed && !quiet) { var th = THEMES.filter(function (x) { return x.id === t; })[0]; toast("<b>" + esc(S.N(th)) + "</b> · " + L("עיצוב לדוגמה אחד מתוך אינסוף. כל בית כנסת מקבל עיצוב משלו.", "One example out of endless possibilities. Every shul gets its own design."), null, null, 3200); } var f = document.querySelectorAll("iframe.tvpv"); f.forEach(function (x) { try { x.contentWindow.SHUL_TV_REFRESH && x.contentWindow.SHUL_TV_REFRESH(); } catch (e) {} }); }
-  function setRole(r, go) {
-    S.prefs.role = r; S.savePrefs(); renderChrome();
-    if (go !== false) { var h = S.ROLES[r].home; if (location.hash === h) render(); else location.hash = h; } else render();
+  function setTheme(t, quiet) { var changed = S.prefs.theme !== t; S.prefs.theme = t; S.savePrefs(); document.documentElement.classList.add("theming"); applyPrefs(); renderChrome(); setTimeout(function () { document.documentElement.classList.remove("theming"); }, 450); if (current && current.onTheme) current.onTheme(); if (changed && !quiet) { var th = THEMES.filter(function (x) { return x.id === t; })[0]; toast("<b>" + esc(S.N(th)) + "</b> · " + L("עיצוב לדוגמה. כל בית כנסת מקבל עיצוב משלו.", "An example design. Every shul gets its own."), null, null, 2600); } var f = document.querySelectorAll("iframe.tvpv"); f.forEach(function (x) { try { x.contentWindow.SHUL_TV_REFRESH && x.contentWindow.SHUL_TV_REFRESH(); } catch (e) {} }); }
+  function setRole(r, go, dest) {
+    var changed = S.prefs.role !== r;
+    S.prefs.role = r; S.savePrefs();
+    if (changed && window.SHUL_PRESENTER) window.SHUL_PRESENTER.roleCard(r);
+    if (go !== false) { var h = dest || S.ROLES[r].home; if (location.hash === h) render(); else location.hash = h; } else render();
   }
 
   /* ---------- customization (presentation tools only) ---------- */
@@ -218,40 +230,18 @@
       '<div class="actions"><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>", { wide: true });
     bindCustom(m);
   }
+  var layout = "site";
   function renderChrome() {
-    var bar = document.getElementById("demobar");
-    var pin = S.pinned();
-    bar.innerHTML = '<div class="wrap"><span class="tag">DEMO</span>' +
-      '<label><span class="hide-sm">' + L("צפייה בתור:", "View as:") + '</span><select id="roleSel" aria-label="' + L("תפקיד להדגמה", "Demo role") + '">' +
-      Object.keys(S.ROLES).map(function (k) { return '<option value="' + k + '"' + (S.role() === k ? " selected" : "") + ">" + esc(S.N(S.ROLES[k])) + "</option>"; }).join("") + "</select></label>" +
-      '<span class="swatches" role="group" aria-label="' + L("עיצוב", "Theme") + '">' + THEMES.map(function (t) { return '<button class="sw" title="' + esc(S.N(t)) + '" aria-label="' + esc(S.N(t)) + '" aria-pressed="' + (S.prefs.theme === t.id) + '" data-theme-id="' + t.id + '" style="background:' + t.c + '"></button>'; }).join("") + "</span>" +
-      '<span class="hide-sm theme-name">' + esc(S.N(THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0])) + '</span>' +
-      '<label class="hide-sm"><span>' + L("שעון להדגמה:", "Demo clock:") + '</span><select id="clockSel">' +
-      [["live", L("עכשיו", "Now")], ["5:375", L("שישי 6:15 בבוקר", "Friday 6:15 AM")], ["0:385", L("ראשון לפני הנץ", "Sunday before Netz")], ["5:940", L("שישי 3:40 אחה״צ", "Friday 3:40 PM")], ["5:1100", L("ליל שבת", "Friday night")], ["6:660", L("שבת בבוקר", "Shabbat morning")], ["2:1395", L("שלישי 11:15 בלילה", "Tuesday 11:15 PM")]]
-        .map(function (o) { var sel = pin ? (o[0] === pin.dow + ":" + Math.round(pin.min0)) : o[0] === "live"; return '<option value="' + o[0] + '"' + (sel ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") + "</select></label>" +
-      '<span class="spacer"></span><button class="custom" id="customBtn">✦ ' + L("בית הכנסת שלכם. המערכת שלכם.", "Your Shul. Your System.") + "</button>" +
-      '<button id="resetBtn" title="' + L("איפוס ההדגמה לנתונים המקוריים", "Reset the demo to its original data") + '">' + L("איפוס", "Reset") + "</button></div>";
-    bar.querySelector("#roleSel").addEventListener("change", function (e) { setRole(e.target.value); });
-    bar.querySelectorAll(".sw").forEach(function (b) { b.addEventListener("click", function () { setTheme(b.getAttribute("data-theme-id")); }); });
-    bar.querySelector("#customBtn").addEventListener("click", customModal);
-    var cs = bar.querySelector("#clockSel");
-    if (cs) cs.addEventListener("change", function () {
-      var v = cs.value; if (v === "live") S.pinClock(null); else { var p = v.split(":"); S.pinClock(+p[0], +p[1]); S.pinned().min0 = +p[1]; }
-      try { sessionStorage.setItem("shulDemo.clock", v); } catch (e) {}
-      render();
-    });
-    bar.querySelector("#resetBtn").addEventListener("click", function () {
-      confirmBox(L("לאפס את ההדגמה?", "Reset the demo?"), L("כל השינויים שעשיתם יימחקו והנתונים המדומים יחזרו למצבם המקורי.", "All your changes will be cleared and the fictional data returns to its original state."), L("איפוס", "Reset"), function () { S.reset(); toast(L("ההדגמה אופסה", "The demo was reset")); render(); });
-    });
-
-    var head = document.getElementById("sitehead");
+    if (window.SHUL_PRESENTER) window.SHUL_PRESENTER.render();
+    var head = document.getElementById("sitehead"), foot = document.getElementById("sitefoot");
+    if (layout !== "site") { head.innerHTML = ""; foot.innerHTML = ""; renderBell(); return; }
     var r = S.role(), u = S.currentUser();
-    var links = [["#/", L("ראשי", "Home")], ["#/times", L("זמני תפילה", "Davening Times")], ["#/tv", L("מסך הטלוויזיה", "TV Screen")], ["#/donate", L("תרומה", "Donate")]];
+    var links = [["#/site", L("ראשי", "Home")], ["#/times", L("זמני תפילה", "Davening Times")], ["#/tv", L("מסך הטלוויזיה", "TV Screen")], ["#/donate", L("תרומה", "Donate")]];
     if (r === "member") links.push(["#/me", L("החשבון שלי", "My Account")]);
     if (r === "applicant") links.push(["#/join", L("הצטרפות", "Join")]);
     if (r === "finance" || r === "content" || r === "super") links.push(["#/gabbai", L("מערכת הגבאים", "Gabbai System")]);
     var signed = r !== "visitor";
-    head.innerHTML = '<div class="wrap"><a class="brand" href="#/">' + logo() + "<span><b>" + esc(S.N(S.db.shul)) + "</b><small>" + esc(L(S.db.shul.en, S.db.shul.he)) + "</small></span></a>" +
+    head.innerHTML = '<div class="wrap"><a class="brand" href="#/site">' + logo() + "<span><b>" + esc(S.N(S.db.shul)) + "</b><small>" + esc(L(S.db.shul.en, S.db.shul.he)) + "</small></span></a>" +
       '<nav class="nav" id="nav">' + links.map(function (l) { return '<a href="' + l[0] + '">' + l[1] + "</a>"; }).join("") + "</nav>" +
       '<span class="spacer"></span><div class="lang" role="group" aria-label="' + L("שפה", "Language") + '"><button aria-pressed="' + (S.prefs.lang === "he") + '" data-l="he">עב</button><button aria-pressed="' + (S.prefs.lang === "en") + '" data-l="en">EN</button></div>' +
       (signed ? '<div class="rel" id="bellHost"><button class="icon-btn" id="bellBtn" aria-label="' + L("התראות", "Notifications") + '">' + I.bell + "</button></div>" : "") +
@@ -262,17 +252,16 @@
     head.querySelectorAll(".nav a").forEach(function (a) { a.addEventListener("click", function () { head.classList.remove("open"); }); });
     var bb = head.querySelector("#bellBtn"); if (bb) bb.addEventListener("click", openBell);
     var sb = head.querySelector("#signinBtn"); if (sb) sb.addEventListener("click", signInModal);
-    var ab = head.querySelector("#acctBtn"); if (ab) ab.addEventListener("click", function () { setRole("visitor"); toast(L("יצאת מהחשבון", "Signed out")); });
+    var ab = head.querySelector("#acctBtn"); if (ab) ab.addEventListener("click", function () { setRole("visitor", true, "#/site"); toast(L("יצאת מהחשבון", "Signed out")); });
     markNav(); renderBell();
-    var foot = document.getElementById("sitefoot");
     foot.innerHTML = '<div class="wrap"><div class="row">' + logo().replace("<svg", '<svg width="30" height="30" style="color:var(--primary)"') + "<span><b>" + esc(S.N(S.db.shul)) + "</b><br><bdi dir=\"ltr\">" + esc(S.db.shul.address) + "</bdi></span></div>" +
       '<div class="small">' + L("הדגמה: שם הקהילה, האנשים והנתונים בדויים. אין תשלומים אמיתיים.", "Demo: the congregation, people and data are fictional. No real payments.") + "<br>" +
-      L("בית הכנסת שלכם. המערכת שלכם. מותאם אישית במלואו: העיצוב, הטקסטים וכל השאר.", "Your Shul. Your System. Fully customized: design, texts and everything else.") + "</div></div>";
+      '<a href="#/">' + L("על המערכת", "About this platform") + "</a></div></div>";
   }
   function markNav() {
     var h = location.hash || "#/";
     document.querySelectorAll("#nav a").forEach(function (a) {
-      var t = a.getAttribute("href"); a.classList.toggle("on", t === "#/" ? h === "#/" || h === "" : h.indexOf(t) === 0);
+      var t = a.getAttribute("href"); a.classList.toggle("on", h.split("?")[0] === t || (t !== "#/site" && h.indexOf(t) === 0));
     });
   }
   function signInModal() {
@@ -293,32 +282,86 @@
     return S.can(need);
   }
   var NEED_ROLE = { finance: "finance", content: "content", gabbai: "finance", super: "super", member: "member", signed: "member" };
-  function render() {
+  var ADMIN_NAV = [
+    { sec: ["סקירה", "Overview"], items: [["#/gabbai", "sparkle", "לוח בקרה", "Dashboard", "gabbai"]] },
+    { sec: ["כספים", "Finance"], items: [["#/finance/home", "wallet", "כספים", "Finance", "finance"], ["#/finance/pay", "receipt", "תשלום / חיוב", "Payment / Charge", "finance"], ["#/finance/nedarim", "list", "נדרי שבת", "Shabbat nedarim", "finance"], ["#/finance/owes", "users", "מי חייב", "Who owes", "finance"], ["#/finance/members", "user", "מתפללים", "Members", "finance", "join"], ["#/finance/inbox", "inbox", "תשלומים בכרטיס", "Card payments", "finance", "inbox"], ["#/finance/more", "doc", "דוחות ומכתבי מס", "Reports and tax letters", "finance"]] },
+    { sec: ["תוכן ומסך", "Content and TV"], items: [["#/gabbai/content", "megaphone", "תוכן המסך", "Screen content", "content", "yz"], ["#/gabbai/tv", "clock", "זמני תפילה והמסך", "Davening times and TV", "content"], ["#/gabbai/shabbat", "candle", "דף השבת", "Shabbat sheet", "content"]] },
+    { sec: ["ניהול", "Administration"], items: [["#/admin", "shield", "גבאים והרשאות", "Gabbaim and permissions", "super"], ["#/gabbai/activity", "list", "יומן פעילות", "Activity log", "super"], ["#/gabbai/landing", "edit", "דף הנחיתה", "Landing page", "super"], ["#/backup", "cloud", "גיבוי", "Backup", "finance"], ["#/gabbai/settings", "gear", "הגדרות", "Settings", "gabbai"]] }
+  ];
+  function navAllowed(need) { return need === "super" ? S.role() === "super" : S.can(need); }
+  function badge(kind) {
+    var n = 0, r = S.role();
+    if (kind === "inbox") n = S.db.inbox.filter(function (x) { return x.status === "pending"; }).length;
+    if (kind === "join" && r === "super") n = S.db.joinReqs.filter(function (j) { return j.status === "pending"; }).length;
+    if (kind === "yz") n = S.db.yzRequests.filter(function (y) { return y.status === "pending"; }).length;
+    return n ? '<span class="nav-count">' + n + "</span>" : "";
+  }
+  function adminShell(app, def) {
+    var hsh = (location.hash || "").split("?")[0], best = "";
+    ADMIN_NAV.forEach(function (g) { g.items.forEach(function (it) { if ((hsh === it[0] || hsh.indexOf(it[0] + "/") === 0) && it[0].length > best.length) best = it[0]; }); });
+    if (!best && hsh.indexOf("#/finance/m/") === 0) best = "#/finance/members";
+    var u = S.currentUser(), r = S.role();
+    var nav = ADMIN_NAV.map(function (g) {
+      var items = g.items.filter(function (it) { return navAllowed(it[4]); });
+      if (!items.length) return "";
+      return '<div class="side-sec"><div class="side-h">' + L(g.sec[0], g.sec[1]) + "</div>" + items.map(function (it) {
+        return '<a href="' + it[0] + '" class="side-a' + (it[0] === best ? " on" : "") + '"' + (it[0] === best ? ' aria-current="page"' : "") + ">" + I[it[1]] + "<span>" + L(it[2], it[3]) + "</span>" + (it[5] ? badge(it[5]) : "") + "</a>";
+      }).join("") + "</div>";
+    }).join("");
+    app.innerHTML = '<div class="admin"><aside class="admin-side" id="adminSide"><a class="side-brand" href="#/gabbai">' + logo() + "<span><b>" + esc(S.N(S.db.shul)) + "</b><small>" + L("מערכת הגבאים", "Gabbai system") + "</small></span></a><nav>" + nav + '</nav><div class="side-foot"><a class="side-a" href="#/tv">' + I.tv + "<span>" + L("מסך הטלוויזיה", "TV screen") + '</span></a><a class="side-a" href="#/site">' + I.map + "<span>" + L("אתר בית הכנסת", "Shul website") + '</span></a><a class="side-a" href="#/me">' + I.user + "<span>" + L("החשבון שלי", "My account") + "</span></a></div></aside>" +
+      '<div class="admin-main"><header class="admin-top"><button class="icon-btn side-toggle" id="sideToggle" aria-label="' + L("תפריט", "Menu") + '">' + I.menu + '</button><div class="admin-title">' + esc(def.title ? (typeof def.title === "function" ? def.title() : def.title) : "") + "</div>" +
+      (S.can("finance") ? '<div class="admin-search rel"><input id="admSearch" type="search" autocomplete="off" placeholder="' + L("חיפוש מתפלל", "Find a member") + '" aria-label="' + L("חיפוש מתפלל", "Find a member") + '"><div class="member-pick hidden" id="admRes"></div></div>' : '<span class="spacer"></span>') +
+      '<div class="lang" role="group" aria-label="' + L("שפה", "Language") + '"><button aria-pressed="' + (S.prefs.lang === "he") + '" data-l="he">עב</button><button aria-pressed="' + (S.prefs.lang === "en") + '" data-l="en">EN</button></div>' +
+      '<div class="rel" id="bellHost"><button class="icon-btn" id="bellBtn" aria-label="' + L("התראות", "Notifications") + '">' + I.bell + "</button></div>" +
+      '<button class="user-chip" id="admUser" title="' + L("יציאה", "Sign out") + '"><span class="av">' + esc((u ? S.N(u) : "?").charAt(0)) + '</span><span class="uc-t"><b>' + esc(u ? S.N(u) : "") + "</b><small>" + esc(S.N(S.ROLES[r])) + '</small></span></button></header><div class="admin-content" id="adminContent"></div></div><div class="side-scrim" id="sideScrim"></div></div>';
+    var shell = app.querySelector(".admin");
+    var tog = function () { shell.classList.toggle("side-open"); };
+    app.querySelector("#sideToggle").addEventListener("click", tog); app.querySelector("#sideScrim").addEventListener("click", tog);
+    app.querySelectorAll(".admin-top .lang button").forEach(function (b) { b.addEventListener("click", function () { setLang(b.getAttribute("data-l")); }); });
+    app.querySelector("#bellBtn").addEventListener("click", openBell);
+    app.querySelector("#admUser").addEventListener("click", function () { confirmBox(L("לצאת מהחשבון?", "Sign out?"), L("תחזרו לאתר בית הכנסת.", "You will return to the shul website."), L("יציאה", "Sign out"), function () { setRole("visitor", true, "#/site"); }); });
+    var q = app.querySelector("#admSearch");
+    if (q) q.addEventListener("input", function () {
+      var res = app.querySelector("#admRes"), v = q.value.trim().toLowerCase();
+      res.classList.toggle("hidden", !v);
+      var list = S.db.members.filter(function (m) { return v && (m.he + " " + m.en + " " + m.phone).toLowerCase().indexOf(v) >= 0; }).slice(0, 7);
+      res.innerHTML = list.map(function (m) { var b = S.balance(m.id); return '<button data-id="' + m.id + '"><span>' + esc(S.N(m)) + '</span><span class="num small">' + (b > 0 ? S.money(b) : b < 0 ? L("זכות ", "Credit ") + S.money(-b) : "✓") + "</span></button>"; }).join("") || '<p class="muted small" style="padding:10px">' + L("לא נמצא", "Not found") + "</p>";
+      res.querySelectorAll("[data-id]").forEach(function (b) { b.addEventListener("click", function () { location.hash = "#/finance/m/" + b.getAttribute("data-id"); }); });
+    });
+    return app.querySelector("#adminContent");
+  }
+  function parseHash() {
     var h = (location.hash || "#/").replace(/^#/, "");
     var q = h.split("?"), path = q[0] || "/", params = {};
     (q[1] || "").split("&").forEach(function (kv) { if (kv) { var p = kv.split("="); params[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || ""); } });
+    return { path: path, params: params };
+  }
+  function render() {
+    var ph = parseHash(), path = ph.path, params = ph.params;
     var parts = path.split("/").filter(Boolean);
     var def = routes["/" + parts.join("/")], arg = null;
     if (!def && parts.length > 1) { def = routes["/" + parts.slice(0, -1).join("/") + "/*"]; arg = parts[parts.length - 1]; }
     if (!def) def = routes["/"];
-    var isTv = def.bare || params.embed === "1";
-    document.body.classList.toggle("bare", !!def.bare);
-    document.getElementById("demobar").style.display = isTv ? "none" : "";
-    document.getElementById("sitehead").style.display = isTv ? "none" : "";
-    document.getElementById("sitefoot").style.display = isTv ? "none" : "";
+    var framed = params.frame === "1" || params.embed === "1";
+    var ok = allowed(def.need);
+    layout = def.bare ? "bare" : def.layout === "xp" ? "xp" : (def.admin && ok) ? "admin" : (params.embed === "1" ? "bare-site" : "site");
+    var b = document.body;
+    b.classList.toggle("bare", layout === "bare"); b.classList.toggle("layout-xp", layout === "xp"); b.classList.toggle("layout-admin", layout === "admin"); b.classList.toggle("framed", framed);
     current = def;
-    if (!allowed(def.need)) {
+    renderChrome();
+    if (!ok) {
       var want = NEED_ROLE[def.need] || "super";
       app.innerHTML = '<div class="wrap page"><div class="card" style="max-width:560px;margin:40px auto;text-align:center"><div style="width:56px;height:56px;margin:0 auto 10px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center">' + I.lock + "</div><h2>" + L("אין הרשאה", "No permission") + '</h2><p class="muted">' +
         L("המסך הזה מיועד ל", "This screen is for ") + esc(S.N(S.ROLES[want])) + L(". כל אחד רואה רק את מה שמותר לו.", ". Everyone sees only what they may use.") + '</p><button class="btn primary" id="switchRole">' + L("הדגמה: צפייה בתור ", "Demo: view as ") + esc(S.N(S.ROLES[want])) + "</button></div></div>";
       app.querySelector("#switchRole").addEventListener("click", function () { setRole(want, false); });
       markNav(); return;
     }
-    if (!isTv) window.scrollTo(0, 0);
+    if (layout !== "bare") window.scrollTo(0, 0);
     app.innerHTML = "";
-    def.render(app, arg, params);
-    if (def.title) document.title = (typeof def.title === "function" ? def.title() : def.title) + " | " + S.N(S.db.shul);
-    else document.title = S.N(S.db.shul) + " | " + L("הדגמה", "Demo");
+    var target = layout === "admin" ? adminShell(app, def) : app;
+    def.render(target, arg, params);
+    var t = def.title ? (typeof def.title === "function" ? def.title() : def.title) : "";
+    document.title = layout === "xp" ? (t || L("מערכת לניהול בית הכנסת", "Synagogue management platform")) + " | Shul System" : (t ? t + " | " : "") + S.N(S.db.shul);
     markNav(); renderBell();
   }
   function rerender() { if (current && current.live !== false) render(); }
@@ -330,6 +373,7 @@
     return '<div class="page-head"><div>' + (crumbs ? '<div class="crumbs">' + crumbs + "</div>" : "") + "<h1>" + title + "</h1>" + (sub ? '<p class="muted" style="margin:6px 0 0">' + sub + "</p>" : "") + "</div>" + (right || "") + "</div>";
   }
   function crumbGabbai() { return '<a href="#/gabbai">' + L("מערכת הגבאים", "Gabbai System") + "</a>"; }
+  function flash(el) { if (!el) return; el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }
   function download(name, text, type) {
     var blob = new Blob([text], { type: type || "application/json" });
     var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
@@ -338,7 +382,11 @@
 
   function start() {
     S.load();
-    try { var c = sessionStorage.getItem("shulDemo.clock"); if (c && c !== "live") { var p = c.split(":"); S.pinClock(+p[0], +p[1]); S.pinned().min0 = +p[1]; } } catch (e) {}
+    var p0 = parseHash().params;
+    if (p0.as && S.ROLES[p0.as]) S.over.role = p0.as;
+    if (p0.theme) S.over.theme = p0.theme;
+    if (p0.clock) { var cp = p0.clock.split(":"); S.pinClock(+cp[0], +cp[1]); S.pinned().min0 = +cp[1]; }
+    try { var c = sessionStorage.getItem("shulDemo.clock"); if (!p0.clock && c && c !== "live") { var p = c.split(":"); S.pinClock(+p[0], +p[1]); S.pinned().min0 = +p[1]; } } catch (e) {}
     applyPrefs();
     app = document.getElementById("app");
     renderChrome();
@@ -352,6 +400,6 @@
     I: I, logo: logo, B: B, timeAgo: timeAgo, modal: modal, closeModal: closeModal, confirmBox: confirmBox,
     toast: toast, pushToast: pushToast, customItemsHtml: customItemsHtml, scopeNote: scopeNote, themePickerHtml: themePickerHtml, renameHtml: renameHtml, bindCustom: bindCustom, route: route, render: render, setRole: setRole, setLang: setLang, setTheme: setTheme,
     h: h, on: on, pageHead: pageHead, crumbGabbai: crumbGabbai, download: download, customModal: customModal, THEMES: THEMES,
-    start: start, renderChrome: renderChrome, signInModal: signInModal
+    start: start, renderChrome: renderChrome, signInModal: signInModal, setBrand: setBrand, BRANDS: BRANDS, flash: flash, applyPrefs: applyPrefs, curTheme: curTheme
   };
 })();

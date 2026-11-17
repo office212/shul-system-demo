@@ -23,18 +23,8 @@
       '<div class="tline"><span>' + L("צאת השבת", "Shabbat ends") + '</span><b class="num">' + S.hm(st.ends, true) + '</b></div><div class="tline"><span>' + L("רבינו תם", "Rabbeinu Tam") + '</span><b class="num">' + S.hm(st.rt, true) + "</b></div>" +
       '<a class="btn soft block" style="margin-top:12px" href="#/times">' + L("לכל זמני התפילה וזמני היום", "All davening times and zmanim") + "</a></div>";
   }
-  /* presentation layer above the shul's own site: the main selling message */
-  function brandBand() {
-    return '<section class="brand-band" aria-label="' + L("התאמה אישית", "Customization") + '"><div class="wrap"><div><span class="demo-chip">' + L("הדגמה", "Demo") + '</span><div class="tagline">' + L("בית הכנסת שלכם. המערכת שלכם.", "Your Shul. Your System.") + '</div><div class="tagline-2" dir="' + (S.prefs.lang === "he" ? "ltr" : "rtl") + '" style="text-align:' + (S.prefs.lang === "he" ? "right" : "left") + '">' + L("Your Shul. Your System.", "בית הכנסת שלכם. המערכת שלכם.") + "</div><p>" +
-      L("המערכת מותאמת אישית לבית הכנסת שלכם: העיצוב, השפה והטקסטים, המידע של הקהילה וההגדרות של כל מסך. כאן רואים קהילה לדוגמה, ואתם יכולים לשנות לה את השם ואת העיצוב ולראות איך הכל מתעדכן.", "Fully customized for your synagogue: the design, the language and texts, your community's information and how every screen is set up. This is a sample kehilla. Rename it and change its look, and watch everything update.") +
-      '</p><div class="row"><button class="btn primary" id="tryName">' + I.edit.replace("<svg", '<svg width="18" height="18"') + L("נסו עם השם של בית הכנסת שלכם", "Try it with your shul's name") + '</button><button class="btn ghost" id="customMore">' + L("מה אפשר להתאים?", "What can be customized?") + "</button></div></div>" +
-      "<div>" + UI.themePickerHtml() + '<p class="tiny muted" style="margin:8px 0 0">' + L("ארבעה עיצובים לדוגמה בלבד. העיצוב שלכם נבנה במיוחד עבורכם.", "Four examples only. Your design is created especially for you.") + "</p></div></div></section>";
-  }
-  function customSection() {
-    return '<section class="section"><div class="wrap"><div class="section-title"><div class="eyebrow">' + L("מותאם אישית", "Customized") + "</div><h2>" + L("המערכת מותאמת אישית לבית הכנסת שלכם", "Fully Customized for Your Synagogue") + '</h2><p class="muted" style="max-width:640px;margin:0 auto">' + L("לא תבנית קבועה: אותן יכולות מוכחות, בזהות ובדרך העבודה של הקהילה שלכם.", "Not a fixed template: the same proven features, in your community's identity and way of working.") + "</p></div>" + UI.customItemsHtml() + '<p class="tiny muted" style="text-align:center;margin-top:14px">' + UI.scopeNote() + "</p></div></section>";
-  }
-
-  UI.route("/", {
+  UI.route("/site", {
+    title: function () { return S.N(S.db.shul); },
     render: function (app) {
       var r = S.role(), z = S.zmanim(S.now());
       var quick = [
@@ -46,7 +36,7 @@
       else quick.push(["#/me", I.user, L("החשבון שלי", "My Account"), L("יתרה, תשלומים ויארצייטים", "Balance, payments and yahrzeits")]);
       if (r === "finance" || r === "content" || r === "super") quick.push(["#/gabbai", I.gear, L("מערכת הגבאים", "Gabbai System"), L("ניהול הכל במקום אחד", "Manage everything in one place")]);
       app.innerHTML =
-        brandBand() + '<section class="hero"><div class="wrap"><div><div class="eyebrow">' + esc(S.db.shul.en.toUpperCase()) + " · " + esc(S.db.shul.cityEn.toUpperCase()) + "</div><h1>" + esc(HT("heroTitle")) + '</h1><p class="lead">' + esc(HT("heroLead")) + "</p>" +
+        '<section class="hero"><div class="wrap"><div><div class="eyebrow">' + esc(S.db.shul.en.toUpperCase()) + " · " + esc(S.db.shul.cityEn.toUpperCase()) + "</div><h1>" + esc(HT("heroTitle")) + '</h1><p class="lead">' + esc(HT("heroLead")) + "</p>" +
         '<div class="row" style="margin-top:22px"><a class="btn primary lg" href="#/times">' + I.clock.replace("<svg", '<svg width="20" height="20"') + L("זמני תפילה וזמני היום", "Davening Times and Zmanim") + '</a><a class="btn lg" href="#/donate">' + L("תרמו עכשיו", "Donate Now") + '</a><button class="btn ghost lg" id="navBtn">' + L("ניווט לבית הכנסת", "Directions") + "</button></div>" +
         '<div class="row small hero-meta" style="margin-top:18px"><span>' + esc(S.hebDate(S.now())) + " · " + esc(S.fmtDateLong(S.now())) + "</span><span>·</span><span>" + L("נץ החמה ", "Netz ") + '<b class="num">' + S.hm(z.netz, true) + "</b></span><span>" + L("שקיעה ", "Shkiah ") + '<b class="num">' + S.hm(z.shkiah, true) + "</b></span></div></div>" +
         shabbatCard() + "</div></section>" +
@@ -55,16 +45,14 @@
         '<section class="section" id="about" style="background:var(--surface-2);border-block:1px solid var(--line)"><div class="wrap"><div class="section-title"><div class="eyebrow">' + L("אודות", "About") + "</div><h2>" + esc(HT("aboutTitle")) + '</h2><p class="muted" style="max-width:640px;margin:0 auto">' + esc(HT("aboutLead")) + '</p></div><div class="grid g3">' +
         [1, 2, 3].map(function (i) { return '<div class="card"><h3>' + esc(HT("card" + i + "T")) + '</h3><p class="muted" style="margin:0">' + esc(HT("card" + i)) + "</p></div>"; }).join("") +
         '</div><p class="display" style="text-align:center;font-size:22px;margin-top:26px;color:var(--gold)">' + esc(HT("closing")) + "</p></div></section>" +
-        customSection() + '<section class="section" id="contact" style="border-top:1px solid var(--line)"><div class="wrap grid g2"><div><div class="eyebrow">' + L("נשמח לשמוע", "We'd love to hear from you") + "</div><h2>" + L("צור קשר", "Contact") + '</h2><div class="stack" style="margin-top:14px">' +
+        '<section class="section" id="contact" style="border-top:1px solid var(--line)"><div class="wrap grid g2"><div><div class="eyebrow">' + L("נשמח לשמוע", "We'd love to hear from you") + "</div><h2>" + L("צור קשר", "Contact") + '</h2><div class="stack" style="margin-top:14px">' +
         '<div class="row">' + I.phone.replace("<svg", '<svg width="20" height="20"') + '<span class="num">' + esc(S.db.shul.phone) + "</span></div>" +
         '<div class="row">' + I.mail.replace("<svg", '<svg width="20" height="20"') + '<span class="num">' + esc(S.db.shul.email) + "</span></div>" +
         '<div class="row">' + I.map.replace("<svg", '<svg width="20" height="20"') + '<span dir="ltr">' + esc(S.db.shul.address) + "</span></div></div>" +
         '<div class="card flat" style="margin-top:16px;padding:0;overflow:hidden">' + mapArt() + '<div class="row" style="padding:12px"><button class="btn sm" data-nav="google">' + L("ניווט עם Google Maps", "Navigate with Google Maps") + '</button><button class="btn sm" data-nav="waze">' + L("ניווט עם Waze", "Navigate with Waze") + "</button></div></div></div>" +
         '<form class="card" id="contactForm"><h3>' + L("שלחו לנו הודעה", "Send us a message") + '</h3><div class="form-grid"><label class="field"><span>' + L("שם *", "Name *") + '</span><input name="name" required></label><label class="field"><span>' + L("טלפון *", "Phone *") + '</span><input name="phone" required inputmode="tel"></label></div>' +
         '<label class="field" style="margin-top:12px"><span>' + L("אימייל (לא חובה)", "Email (optional)") + '</span><input name="email" type="email"></label><label class="field" style="margin-top:12px"><span>' + L("הודעה *", "Message *") + '</span><textarea name="msg" required></textarea></label><button class="btn primary" style="margin-top:12px">' + L("שליחה", "Send") + "</button></form></div></section>";
-      app.querySelector("#customMore").addEventListener("click", UI.customModal);
-      app.querySelector("#tryName").addEventListener("click", UI.customModal);
-      UI.bindCustom(app);
+
       var navM = function (kind) {
         UI.modal("<h2>" + L("ניווט לבית הכנסת", "Directions to the shul") + "</h2><p>" + L("באתר האמיתי הכפתור פותח את ", "On the real site this button opens ") + (kind === "waze" ? "Waze" : "Google Maps") + L(" עם הכתובת של בית הכנסת, מוכן לנסיעה.", " with the shul's address, ready to go.") + '</p><p class="muted small">' + L("בהדגמה הכתובת בדויה, ולכן לא נפתחת מפה חיצונית.", "In the demo the address is fictional, so no outside map opens.") + '</p><div class="actions"><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>");
       };
@@ -150,12 +138,7 @@
       function finish(wallet) {
         var t = total(), ref = String(10480000 + Math.floor(Math.random() * 90000));
         var rec = { id: S.uid("i"), ref: ref, name: f.name.value.trim() || (u ? u.en : "Donor"), email: (f.email.value.trim() || (u ? u.email : "")).toLowerCase(), amount: t, type: bal ? "balance" : "donation", date: S.todayIso(), note: f.note.value.trim(), last4: wallet ? "" : f.card.value.replace(/\D/g, "").slice(-4), wallet: wallet || "", status: "pending", fee: f.fee.checked };
-        if (bal && u && u.mid) {
-          rec.memberId = u.mid; rec.status = "recorded";
-          S.db.ledger.push({ id: "card-" + ref, mid: u.mid, date: S.todayIso(), type: "payment", amount: t, desc: "תשלום בכרטיס Ref #" + ref + "|Card payment Ref #" + ref, method: "card", by: "מערכת|System", source: "card" });
-          S.log("finance", "תשלום בכרטיס נרשם אוטומטית: " + S.memberById(u.mid).he + ", " + S.money(t), "Card payment recorded automatically: " + S.memberById(u.mid).en + ", " + S.money(t));
-          S.notify(u.mid, "התשלום שלך התקבל: " + S.money(t) + ". תודה!", "Your payment was received: " + S.money(t) + ". Thank you!");
-        }
+        if (bal && u && u.mid) rec.memberId = u.mid; /* production: waits in the inbox until the gabbai records it */
         S.db.inbox.unshift(rec);
         S.notify("finance", "תשלום בכרטיס התקבל: " + rec.name + ", " + S.money(t), "Card payment received: " + rec.name + ", " + S.money(t));
         S.save();
@@ -194,10 +177,10 @@
       var rec = S.db.inbox.filter(function (x) { return x.ref === params.ref; })[0];
       var bal = params.type === "balance";
       app.innerHTML = '<div class="wrap page"><div class="card" style="max-width:600px;margin:20px auto;text-align:center"><div style="width:68px;height:68px;margin:0 auto 12px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center">' + I.check.replace("<svg", '<svg width="34" height="34"') + "</div>" +
-        "<h1>" + (bal ? L("התשלום התקבל", "Payment received") : L("תודה רבה על התרומה!", "Thank you for your donation!")) + '</h1><p class="muted">' + (bal ? L("היתרה שלך עודכנה.", "Your balance has been updated.") : L("קבלה לצורכי מס נשלחה לאימייל שלך. אם אינה מופיעה, כדאי לבדוק בתיקיית הספאם.", "A tax receipt was emailed to you. If you don't see it, please check your spam folder.")) + "</p>" +
+        "<h1>" + (bal ? L("התשלום התקבל", "Payment received") : L("תודה רבה על התרומה!", "Thank you for your donation!")) + '</h1><p class="muted">' + (bal ? L("היתרה שלך תתעדכן.", "Your balance will be updated.") : L("קבלה לצורכי מס נשלחה לאימייל שלך. אם אינה מופיעה, כדאי לבדוק בתיקיית הספאם.", "A tax receipt was emailed to you. If you don't see it, please check your spam folder.")) + "</p>" +
         (rec ? '<p class="small">' + L("אסמכתה: ", "Reference: ") + '<b class="num">' + esc(rec.ref) + "</b> · <b class=\"num\">" + S.money(rec.amount) + "</b></p>" : "") +
         '<div class="row" style="justify-content:center;margin-top:16px">' + (rec ? '<button class="btn" id="rcpt">' + I.receipt.replace("<svg", '<svg width="18" height="18"') + L("הצגת הקבלה שנשלחה", "View the emailed receipt") + "</button>" : "") +
-        (bal ? '<a class="btn primary" href="#/me">' + L("לחשבון שלי", "To my account") + "</a>" : '<a class="btn primary" href="#/">' + L("לדף הבית", "Back to home") + "</a>") + "</div></div></div>";
+        (bal ? '<a class="btn primary" href="#/me">' + L("לחשבון שלי", "To my account") + "</a>" : '<a class="btn primary" href="#/site">' + L("לדף הבית", "Back to home") + "</a>") + "</div></div></div>";
       var rb = app.querySelector("#rcpt");
       if (rb) rb.addEventListener("click", function () {
         var m = UI.modal("<h2>" + L("הקבלה כפי שנשלחה באימייל", "The receipt as emailed") + '</h2><p class="tiny muted">' + L("הדגמה: לא נשלח אימייל אמיתי.", "Demo: no real email was sent.") + "</p>" + receiptHtml(rec) + '<div class="actions"><button class="btn" id="pr">' + L("הדפסה", "Print") + '</button><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>", { wide: true });

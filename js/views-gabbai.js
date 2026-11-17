@@ -8,47 +8,51 @@
   function tvFrame(q) { return '<div class="tv-frame"><iframe class="tvpv" title="' + L("תצוגה מקדימה של המסך", "TV preview") + '" src="index.html#/tv?preview=1' + (q || "") + '" loading="lazy"></iframe></div>'; }
 
   /* ---------- gabbai home ---------- */
-  UI.route("/gabbai", {
-    need: "gabbai", title: function () { return L("מערכת הגבאים", "Gabbai System"); },
+  UI.route("/gabbai", { admin: true,
+    need: "gabbai", title: function () { return L("לוח בקרה", "Dashboard"); },
     render: function (app) {
       var r = S.role(), fin = S.can("finance"), con = S.can("content"), sup = r === "super";
       var jr = S.db.joinReqs.filter(function (j) { return j.status === "pending"; }).length;
       var yr = S.db.yzRequests.filter(function (y) { return y.status === "pending"; }).length;
-      var pend = S.db.inbox.filter(function (x) { return x.status === "pending"; }).length;
-      var alerts = [];
-      if (sup && jr) alerts.push('<a class="alert" href="#/finance/members">' + sv(I.users) + "<b>" + L("בקשות הצטרפות", "Join requests") + " (" + jr + ")</b></a>");
-      if (con && yr) alerts.push('<a class="alert" href="#/gabbai/content?type=yahrzeit">' + sv(I.candle) + "<b>" + L("בקשות יארצייט ממתפללים", "Yahrzeit requests from members") + " (" + yr + ")</b></a>");
-      if (fin && pend) alerts.push('<a class="alert warn" href="#/finance/inbox">' + sv(I.inbox) + "<b>" + L("תשלומים בכרטיס לרישום", "Card payments to record") + " (" + pend + ")</b></a>");
-      var tiles = [];
-      if (con) tiles.push(["#/gabbai/content", I.megaphone, L("תוכן המסך", "Screen content"), L("הודעות, מזל טוב, פליירים, הקדשות, יארצייטים", "Announcements, mazal tov, flyers, dedications, yahrzeits")],
-        ["#/gabbai/tv", I.clock, L("זמני תפילה והמסך", "Davening times and TV"), L("עריכת זמנים, טקסטים במסך" + (sup ? ", בהירות ורענון" : ""), "Edit times, screen texts" + (sup ? ", brightness and refresh" : ""))],
-        ["#/gabbai/shabbat", I.doc, L("דף השבת", "Shabbat sheet"), L("הדף השבועי להדפסה", "The printable weekly sheet")],
-        ["#/gabbai/content?type=yahrzeit", I.candle, L("יארצייטים", "Yahrzeits"), L("ניהול ואישור בקשות", "Manage and approve requests")]);
-      if (fin) tiles.push(["#/finance/home", I.wallet, L("כספים", "Finance"), L("תשלומים, חיובים, יתרות", "Payments, charges, balances")],
-        ["#/finance/nedarim", I.list, L("נדרי שבת", "Shabbat nedarim"), L("כל העליות בשמירה אחת", "All aliyot in one save")],
-        ["#/finance/members", I.users, L("ניהול מתפללים", "Members"), L("הוספה, עריכה, בקשות הצטרפות", "Add, edit, join requests")],
-        ["#/finance/inbox", I.inbox, L("תשלומים בכרטיס", "Card payments"), L("רישום בלחיצה אחת", "Record in one tap")],
-        ["#/finance/more", I.receipt, L("דוחות ומכתבי מס", "Reports and tax letters"), L("דוח שנתי, מכתבי מס, חיובים קבועים", "Annual report, tax letters, recurring charges")],
-        ["#/backup", I.cloud, L("גיבוי", "Backup"), L("גיבוי אוטומטי כל לילה", "Automatic backup every night")]);
-      if (sup) tiles.push(["#/admin", I.shield, L("גבאים והרשאות", "Gabbaim and permissions"), L("מי יכול לעשות מה, והודעה לכולם", "Who can do what, and a message to all")],
-        ["#/gabbai/activity", I.list, L("יומן פעילות", "Activity log"), L("כל פעולה: מתי ומי", "Every action: when and who")],
-        ["#/gabbai/landing", I.edit, L("דף הנחיתה", "Landing page"), L("כל מילה בדף הבית", "Every word on the home page")]);
-      tiles.push(["#/tv", I.tv, L("מסך הטלוויזיה", "TV screen"), L("פתיחת המסך החי", "Open the live screen")], ["#/gabbai/settings", I.gear, L("הגדרות", "Settings"), L("כל ההגדרות במקום אחד", "All settings in one place")], ["#/me", I.user, L("החשבון שלי", "My account"), L("היתרה והיארצייטים שלי", "My balance and yahrzeits")]);
+      var pend = S.db.inbox.filter(function (x) { return x.status === "pending"; });
       var d = S.now(), z = S.zmanim(d), m = d.getHours() * 60 + d.getMinutes(), nx = S.ZLIST.filter(function (x) { return z[x[0]] > m; })[0];
-      app.innerHTML = '<div class="wrap page">' + UI.pageHead(L("שלום, ", "Hello, ") + esc(S.N(S.currentUser()).split(" ")[0]), esc(S.N(S.ROLES[r])) + " · " + esc(S.hebDate(d)) + " · " + esc(S.fmtDateLong(d))) +
+      var hour = d.getHours(), greet = hour < 12 ? L("בוקר טוב", "Good morning") : hour < 18 ? L("צהריים טובים", "Good afternoon") : L("ערב טוב", "Good evening");
+      var alerts = [];
+      if (sup && jr) alerts.push('<a class="alert" href="#/finance/members">' + sv(I.users) + "<b>" + L("בקשות הצטרפות", "Join requests") + " (" + jr + ")</b><span>" + L("ממתינות לאישור", "waiting for approval") + "</span></a>");
+      if (con && yr) alerts.push('<a class="alert" href="#/gabbai/content?type=yahrzeit">' + sv(I.candle) + "<b>" + L("בקשות יארצייט ממתפללים", "Yahrzeit requests from members") + " (" + yr + ")</b></a>");
+      if (fin && pend.length) alerts.push('<a class="alert warn" href="#/finance/inbox">' + sv(I.inbox) + "<b>" + L("תשלומים בכרטיס לרישום", "Card payments to record") + " (" + pend.length + ")</b><span>" + L("לחיצה אחת לכל תשלום", "one tap each") + "</span></a>");
+      var kpi = function (icn, k, v, s) { return '<div class="kpi"><div class="k">' + I[icn] + k + '</div><div class="v">' + v + "</div>" + (s ? '<div class="s">' + s + "</div>" : "") + "</div>"; };
+      var kpis = [];
+      if (fin) {
+        var ym = S.todayIso().slice(0, 7), col = 0, open = 0, owing = 0;
+        S.db.ledger.forEach(function (e) { if (e.type === "payment" && e.date.slice(0, 7) === ym) col += S.cents(e.amount); });
+        S.db.members.forEach(function (mm) { var b = S.balance(mm.id); if (b > 0) { open += S.cents(b); owing++; } });
+        kpis.push(kpi("wallet", L("נגבה החודש", "Collected this month"), S.money(col / 100)), kpi("receipt", L("יתרה פתוחה", "Open balance"), S.money(open / 100), owing + L(" מתפללים עם יתרה", " members with a balance")), kpi("inbox", L("תשלומים בכרטיס", "Card payments"), pend.length, L("ממתינים לרישום", "waiting to be recorded")));
+      }
+      if (con) {
+        var pub = S.db.items.filter(function (i) { return i.status === "published" && window.SHUL_TV.visible(i, d, false); }).length;
+        kpis.push(kpi("tv", L("במסך היום", "On the screen today"), pub, L("פריטים מפורסמים", "published items")), kpi("candle", L("יארצייטים השבוע", "Yahrzeits this week"), window.SHUL_TV.yahrzeitsThisWeek().length, L("מוצגים במסך", "shown on the TV")));
+      }
+      var quick = [];
+      if (fin) quick.push(["#/finance/pay", "wallet", L("רישום תשלום", "Record a payment"), "primary"], ["#/finance/nedarim", "list", L("נדרי שבת", "Shabbat nedarim")], ["#/finance/owes", "users", L("מי חייב", "Who owes")]);
+      if (con) quick.push(["#/gabbai/content", "megaphone", L("הודעה למסך", "Post to the screen"), fin ? "" : "primary"], ["#/gabbai/tv", "clock", L("זמני תפילה", "Davening times")], ["#/gabbai/shabbat", "candle", L("דף השבת", "Shabbat sheet")]);
+      var right = "";
+      if (fin) {
+        right += '<div class="card"><div class="card-head"><h3>' + L("רישומים ב-7 הימים האחרונים", "Ledger, last 7 days") + '</h3><a class="btn sm" href="#/finance/home">' + L("לכספים", "Finance") + "</a></div>" + S.db.ledger.filter(function (e) { return e.date >= "2026-11-10"; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; }).slice(0, 7).map(function (e) { var mm = S.memberById(e.mid); return '<div class="list-row"><span><b>' + esc(mm ? S.N(mm) : "") + '</b> <span class="muted small">' + esc(B(e.desc)) + '</span></span><b class="num ' + (e.type === "payment" ? "amt-pos" : "") + '">' + (e.type === "payment" ? "-" : "") + S.money(e.amount) + "</b></div>"; }).join("") + "</div>";
+        var byM = {}, tot = 0; S.db.ledger.forEach(function (e) { if (e.type === "payment") { var k = e.method || "none"; byM[k] = (byM[k] || 0) + S.cents(e.amount); tot += S.cents(e.amount); } });
+        right += '<div class="card"><div class="card-head"><h3>' + L("תשלומים לפי אמצעי", "Payments by method") + '</h3><a class="btn sm" href="#/finance/more?s=report">' + L("לדוח השנתי", "Annual report") + "</a></div>" + Object.keys(byM).sort(function (a, b) { return byM[b] - byM[a]; }).map(function (k) { var pct = Math.round(byM[k] / tot * 100); return '<div style="margin:10px 0"><div class="row between small"><span>' + (window.SHUL_MEMBER.method(k) || L("לא צוין", "Not given")) + '</span><b class="num">' + S.money(byM[k] / 100) + '</b></div><div class="mbar"><i style="width:' + pct + '%"></i></div></div>'; }).join("") + "</div>";
+      }
+      if (con) right += '<div class="card"><div class="card-head"><h3>' + L("מפורסם עכשיו במסך", "Published on the TV now") + '</h3><a class="btn sm" href="#/gabbai/content">' + L("לתוכן המסך", "Screen content") + "</a></div>" + S.db.items.filter(function (i) { return i.status === "published" && i.type !== "ticker"; }).slice(0, 6).map(function (i) { return '<div class="list-row"><span><b>' + esc(S.N(i.title)) + '</b> <span class="muted small">' + esc(S.N(i.text)).slice(0, 56) + "</span></span></div>"; }).join("") + "</div>";
+      app.innerHTML = '<div class="wrap page"><div class="dash-hello"><div><h1>' + greet + ", " + esc(S.N(S.currentUser()).split(" ")[0]) + '</h1><p class="muted" style="margin:6px 0 0">' + esc(S.hebDate(d)) + " · " + esc(S.fmtDateLong(d)) + (nx ? " · " + L("הזמן הבא: ", "Next: ") + L(nx[1], nx[2]) + " " + S.hm(z[nx[0]], true) : "") + '</p></div><span class="badge accent">' + esc(S.N(S.ROLES[r])) + "</span></div>" +
         (alerts.length ? '<div class="stack" style="margin-bottom:16px">' + alerts.join("") + "</div>" : "") +
-        '<div class="grid g3">' + tiles.map(function (t) { return '<a class="tile" href="' + t[0] + '"><div class="ic">' + t[1] + "</div><div><b>" + t[2] + "</b><span>" + t[3] + "</span></div></a>"; }).join("") + "</div>" +
-        '<div class="grid g2" style="margin-top:18px;align-items:start"><div class="card"><div class="card-head"><h3>' + L("עכשיו במסך", "On the TV now") + '</h3><a class="btn sm" href="#/tv">' + L("פתיחה", "Open") + "</a></div>" + tvFrame() + (nx ? '<p class="small muted" style="margin:10px 0 0">' + L("הזמן הבא: ", "Next zman: ") + "<b>" + L(nx[1], nx[2]) + " " + S.hm(z[nx[0]], true) + "</b></p>" : "") + "</div>" +
-        '<div class="stack">' + (con ? '<div class="card"><div class="card-head"><h3>' + L("מפורסם עכשיו במסך", "Published on the TV now") + '</h3><a class="btn sm" href="#/gabbai/content">' + L("לתוכן המסך", "Screen content") + "</a></div>" + S.db.items.filter(function (i) { return i.status === "published" && i.type !== "ticker"; }).slice(0, 5).map(function (i) { return '<div class="row between small" style="padding:7px 0;border-bottom:1px solid var(--line)"><span><b>' + esc(S.N(i.title)) + '</b> <span class="muted">' + esc(S.N(i.text)).slice(0, 60) + '</span></span></div>'; }).join("") + "</div>" : "") +
-        (fin ? '<div class="card"><div class="card-head"><h3>' + L("רישומים ב-7 הימים האחרונים", "Ledger, last 7 days") + '</h3><a class="btn sm" href="#/finance/home">' + L("לכספים", "Finance") + "</a></div>" + S.db.ledger.filter(function (e) { return e.date >= "2026-11-10"; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; }).slice(0, 6).map(function (e) { var m = S.memberById(e.mid); return '<div class="row between small" style="padding:7px 0;border-bottom:1px solid var(--line)"><span>' + esc(m ? S.N(m) : "") + " · " + esc(B(e.desc)) + '</span><b class="num">' + (e.type === "payment" ? "-" : "") + S.money(e.amount) + "</b></div>"; }).join("") + "</div>" : "") + "</div></div>" +
-        '<div class="custom-note" style="margin-top:18px">' + I.sparkle + "<span>" + L("כל מסך, מילה וצבע במערכת הגבאים מותאמים לבית הכנסת שלכם ולדרך שבה הגבאים שלכם עובדים.", "Every screen, word and color in the gabbai system is customized for your shul and the way your gabbaim work.") + '</span><button class="btn sm" data-custom>' + L("מה אפשר להתאים?", "What can be customized?") + "</button></div></div>";
-      UI.on(app, "[data-custom]", "click", UI.customModal);
+        (kpis.length ? '<div class="kpis">' + kpis.join("") + "</div>" : "") +
+        '<div class="quick">' + quick.map(function (q) { return '<a href="' + q[0] + '" class="' + (q[3] || "") + '">' + I[q[1]] + q[2] + "</a>"; }).join("") + "</div>" +
+        '<div class="dash-grid"><div class="card"><div class="card-head"><h3>' + L("עכשיו במסך", "On the TV now") + '</h3><a class="btn sm" href="#/tv">' + L("פתיחה", "Open") + "</a></div>" + tvFrame() + "</div><div class=\"stack\">" + right + "</div></div></div>";
     }
   });
-
   /* ---------- davening times + TV settings ---------- */
   var GROUPS = [["weekday", "ימי חול (א׳-ה׳)", "Weekdays (Sun-Thu)"], ["friday", "ערב שבת", "Erev Shabbat"], ["shabbat", "שבת", "Shabbat"]];
-  UI.route("/gabbai/tv", {
+  UI.route("/gabbai/tv", { admin: true,
     need: "content", title: function () { return L("זמני תפילה והמסך", "Davening times and TV"); },
     render: function (app) {
       var sup = S.role() === "super", t = S.db.tvDisplay;
@@ -124,7 +128,7 @@
   var TYPES = [["announcement", "הודעה", "Announcement"], ["mazaltov", "מזל טוב", "Mazal Tov"], ["flyer", "פלייר", "Flyer"], ["sponsor", "נתרם על ידי (קידוש, סעודה)", "Donated by (Kiddush, Seudah)"], ["parnas", "פרנס היום ונר למאור", "Parnas Hayom and Ner Lamaor"], ["dedication", "הקדשה", "Dedication"], ["hazkara", "הזכרה ותנחומים", "Hazkara and condolences"], ["ticker", "הקדשה קבועה (שורה רצה)", "Permanent dedication (ticker)"], ["yahrzeit", "יארצייט", "Yahrzeit"]];
   function typeName(t) { var x = TYPES.filter(function (y) { return y[0] === t; })[0]; return x ? L(x[1], x[2]) : t; }
   var SHOW = [["all", "כל הימים", "Every day"], ["weekday", "יום חול בלבד", "Weekdays only"], ["shabbat", "שבת וחג בלבד", "Shabbat and Yom Tov only"], ["days", "ימים מסוימים", "Specific days"]];
-  UI.route("/gabbai/content", {
+  UI.route("/gabbai/content", { admin: true,
     need: "content", title: function () { return L("תוכן המסך", "Screen content"); },
     render: function (app, arg, params) {
       var type = params.type || "all", pv = params.pv || "weekday";
@@ -200,7 +204,7 @@
   }
 
   /* ---------- Shabbat sheet ---------- */
-  UI.route("/gabbai/shabbat", {
+  UI.route("/gabbai/shabbat", { admin: true,
     need: "content", title: function () { return L("דף השבת", "Shabbat sheet"); },
     render: function (app, arg, params) {
       var sh = S.db.sheet, SH = window.SHUL_SHEET, sup = S.role() === "super", clean = params.clean === "1";
@@ -271,7 +275,7 @@
   }
 
   /* ---------- settings ---------- */
-  UI.route("/gabbai/settings", {
+  UI.route("/gabbai/settings", { admin: true,
     need: "gabbai", title: function () { return L("הגדרות", "Settings"); },
     render: function (app) {
       var sup = S.role() === "super", con = S.can("content");
@@ -287,13 +291,13 @@
   });
 
   /* ---------- landing page texts (super admin) ---------- */
-  UI.route("/gabbai/landing", {
+  UI.route("/gabbai/landing", { admin: true,
     need: "super", title: function () { return L("דף הנחיתה", "Landing page"); },
     render: function (app) {
       var D = window.SHUL_PUBLIC.HOME_TEXTS, H = S.db.homeTexts;
       app.innerHTML = '<div class="wrap page">' + UI.pageHead(L("הטקסטים בדף הנחיתה", "Landing Page Texts"), L("כל מילה בדף הבית ניתנת לשינוי. שדה ריק חוזר לברירת המחדל.", "Every word on the home page can be changed. An empty field goes back to the default."), UI.crumbGabbai()) +
         '<div class="grid g2" style="align-items:start"><form class="card stack" id="ht">' + Object.keys(D).map(function (k) { var o = H[k] || {}, long = D[k].he.length > 60; var inp = function (lang) { var v = esc(o[lang] || ""), ph = esc(D[k][lang]); return long ? '<textarea name="' + lang + "_" + k + '" ' + (lang === "en" ? 'class="ltr"' : "") + ' placeholder="' + ph + '">' + v + "</textarea>" : '<input name="' + lang + "_" + k + '" ' + (lang === "en" ? 'class="ltr"' : "") + ' value="' + v + '" placeholder="' + ph + '">'; }; return '<div class="form-grid"><label class="field"><span class="small">' + L("עברית", "Hebrew") + '</span>' + inp("he") + '</label><label class="field"><span class="small">English</span>' + inp("en") + "</label></div>"; }).join("") +
-        '<div class="row"><button class="btn primary">' + L("שמירה", "Save") + '</button><button type="button" class="btn ghost" id="htReset">' + L("חזרה לברירת המחדל", "Back to defaults") + '</button></div></form><div class="card" style="position:sticky;top:120px"><div class="card-head"><h3>' + L("תצוגה חיה", "Live preview") + '</h3><a class="btn sm" href="#/">' + L("לדף הבית", "To the home page") + '</a></div><div class="tv-frame" style="aspect-ratio:4/5;border-width:4px"><iframe class="tvpv" src="index.html#/?embed=1" title="preview"></iframe></div></div></div></div>';
+        '<div class="row"><button class="btn primary">' + L("שמירה", "Save") + '</button><button type="button" class="btn ghost" id="htReset">' + L("חזרה לברירת המחדל", "Back to defaults") + '</button></div></form><div class="card" style="position:sticky;top:120px"><div class="card-head"><h3>' + L("תצוגה חיה", "Live preview") + '</h3><a class="btn sm" href="#/site">' + L("לדף הבית", "To the home page") + '</a></div><div class="tv-frame" style="aspect-ratio:4/5;border-width:4px"><iframe class="tvpv" src="index.html#/site?embed=1" title="preview"></iframe></div></div></div></div>';
       var f = app.querySelector("#ht");
       f.addEventListener("submit", function (e) { e.preventDefault(); Object.keys(D).forEach(function (k) { var he = f["he_" + k].value.trim(), en = f["en_" + k].value.trim(); if (he || en) H[k] = { he: he, en: en }; else delete H[k]; }); S.log("texts", "עדכן את דף הנחיתה", "Updated the landing page"); S.save(); UI.toast(L("נשמר. דף הבית התעדכן.", "Saved. The home page is updated.")); });
       app.querySelector("#htReset").addEventListener("click", function () { S.db.homeTexts = {}; S.save(); UI.render(); UI.toast(L("דף הנחיתה חזר לברירת המחדל", "The landing page is back to the defaults")); });
@@ -302,7 +306,7 @@
 
   /* ---------- admin: users and roles + broadcast ---------- */
   var ROLE_OPTS = [["member", "מתפלל", "Member"], ["content", "גבאי תוכן וזמנים", "Content and times gabbai"], ["finance", "גבאי כספים", "Finance gabbai"], ["both", "כספים ותוכן", "Finance and content"]];
-  UI.route("/admin", {
+  UI.route("/admin", { admin: true,
     need: "super", title: function () { return L("גבאים והרשאות", "Gabbaim and permissions"); },
     render: function (app) {
       app.innerHTML = '<div class="wrap page">' + UI.pageHead(L("גבאים והרשאות", "Gabbaim and Permissions"), L("כל אחד רואה רק את מה שמותר לו. שינוי תפקיד נכנס לתוקף בכניסה הבאה.", "Everyone sees only what they may use. A role change takes effect at the next sign-in."), UI.crumbGabbai()) +
@@ -321,7 +325,7 @@
   });
 
   /* ---------- backup ---------- */
-  UI.route("/backup", {
+  UI.route("/backup", { admin: true,
     need: "finance", title: function () { return L("גיבוי", "Backup"); },
     render: function (app) {
       var sup = S.role() === "super";
@@ -363,7 +367,7 @@
 
   /* ---------- activity log ---------- */
   var AREAS = [["all", "הכל", "All"], ["finance", "כספים", "Finance"], ["members", "מתפללים", "Members"], ["permissions", "הרשאות", "Permissions"], ["join", "בקשות הצטרפות", "Join requests"], ["screen", "מסך", "Screen"], ["times", "זמנים", "Times"], ["texts", "טקסטים", "Texts"], ["sheet", "דף השבת", "Shabbat sheet"], ["backup", "גיבוי", "Backup"]];
-  UI.route("/gabbai/activity", {
+  UI.route("/gabbai/activity", { admin: true,
     need: "super", title: function () { return L("יומן פעילות", "Activity log"); },
     render: function (app, arg, params) {
       var area = params.a || "all", n = +(params.n || 50);

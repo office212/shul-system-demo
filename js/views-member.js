@@ -33,36 +33,55 @@
     return thisWeek ? '<span class="badge ok">' + L("מוצג במסך השבוע", "On the TV this week") + "</span>" : '<span class="badge accent">' + L("יוצג במסך בשבוע שלו, כל שנה", "Shown on the TV in its week, every year") + "</span>";
   }
 
+  /* The member's own card, as production shows it (congregant/index.html renderCong):
+     balance, pay by card, card payments waiting for the gabbai, totals, the ledger with
+     cancelled entries struck through, family yahrzeits and announcements. */
+  function ledgerView(mid) {
+    var voided = {}, rows = [], ch = 0, pay = 0;
+    S.db.ledger.forEach(function (e) { if (e.mid === mid && e.voidOf) voided[e.voidOf] = true; });
+    S.db.ledger.forEach(function (e) {
+      if (e.mid !== mid || e.voidOf) return;
+      rows.push(e);
+      if (!voided[e.id]) { if (e.type === "payment") pay += S.cents(e.amount); else ch += S.cents(e.amount); }
+    });
+    rows.sort(function (x, y) { return x.date < y.date ? 1 : x.date > y.date ? -1 : 0; });
+    return { rows: rows, voided: voided, charges: ch / 100, payments: pay / 100 };
+  }
+  function pendingFor(mid) { return S.db.inbox.filter(function (x) { return x.memberId === mid && x.status === "pending"; }); }
+  function portalHtml(mid, opts) {
+    opts = opts || {};
+    var m = S.memberById(mid), b = S.balance(mid), lv = ledgerView(mid), pend = pendingFor(mid);
+    var kind = b > 0 ? "owe" : b < 0 ? "credit" : "zero";
+    var typeL = { charge: L("חיוב", "Charge"), payment: L("תשלום", "Payment"), correction: L("תיקון", "Correction") };
+    var limit = opts.limit || 999;
+    return '<section class="mp-card"><div class="mp-name">' + esc(S.N(m)) + '</div>' +
+      '<div class="mp-balance bh-' + kind + '" data-flash="bal"><span class="mp-bl">' + (kind === "owe" ? L("יתרה לתשלום", "Balance due") : kind === "credit" ? L("זכות", "Credit") : L("אין חוב ✓", "Nothing owed ✓")) + "</span>" +
+      (kind !== "zero" ? '<span class="mp-amt num">' + S.money(Math.abs(b)) + "</span>" : "") +
+      (kind === "owe" ? (opts.payButton || '<a class="btn primary mp-pay" href="#/donate?mode=balance">' + I.wallet.replace("<svg", '<svg width="18" height="18"') + L("תשלום בכרטיס", "Pay by card") + "</a>") : "") + "</div>" +
+      (pend.length ? '<div class="mp-pending" data-flash="pend"><h3>' + L("תשלומים שהתקבלו", "Payments received") + "</h3><ul>" + pend.map(function (x) { return '<li><b class="num">' + S.money(x.amount) + "</b> · " + esc(S.fmtDate(x.date)) + ' · <bdi dir="ltr">Ref #' + esc(x.ref) + "</bdi></li>"; }).join("") + "</ul><p>" + L("התקבל, ממתין לאישור הגבאי. היתרה תתעדכן אחרי שהגבאי ירשום את התשלום.", "Received, waiting for gabbai confirmation. Your balance updates once the gabbai records it.") + "</p></div>" : "") +
+      '<div class="mp-totals"><span>' + L("סך חיובים", "Total charges") + ' <b class="num">' + S.money(lv.charges) + "</b></span><span>" + L("סך תשלומים", "Total payments") + ' <b class="num">' + S.money(lv.payments) + "</b></span></div>" +
+      '<div class="table-wrap mp-table"><table><thead><tr><th>' + L("תאריך", "Date") + "</th><th>" + L("סוג", "Type") + "</th><th>" + L("סכום", "Amount") + "</th><th>" + L("תיאור", "Description") + "</th></tr></thead><tbody>" +
+      lv.rows.slice(0, limit).map(function (e) { var v = lv.voided[e.id]; return '<tr class="' + (v ? "voided-row" : "") + '" data-id="' + e.id + '"><td class="nowrap">' + esc(S.fmtDate(e.date)) + '</td><td><span class="type-pill t-' + e.type + '">' + typeL[e.type] + "</span>" + (v ? ' <span class="muted small">' + L("(בוטל)", "(cancelled)") + "</span>" : "") + '</td><td class="num' + (v ? " strike" : "") + '">' + S.money(e.amount) + "</td><td>" + esc(B(e.desc)) + "</td></tr>"; }).join("") +
+      "</tbody></table></div></section>";
+  }
+
   UI.route("/me", {
     need: "signed", title: function () { return L("החשבון שלי", "My Account"); },
     render: function (app) {
       var u = S.currentUser();
       if (!u || !u.mid) { location.hash = "#/join"; return; }
-      var mid = u.mid, m = S.memberById(mid), b = S.balance(mid), d = S.now();
-      var hist = S.db.ledger.filter(function (e) { return e.mid === mid; }).sort(function (a, c) { return a.date < c.date ? 1 : -1; });
+      var mid = u.mid, d = S.now();
       var myY = S.db.yahrzeits.filter(function (y) { return y.memberId === mid; }).concat(S.db.yzRequests.filter(function (y) { return y.memberId === mid && y.status !== "approved"; }));
-      var TV = window.SHUL_TV, z = S.zmanim(d), st = S.shabbatTimes();
-      var dow = d.getDay(), prayers = dow === 5 ? TV.groupRows("friday", 5) : dow === 6 ? TV.groupRows("shabbat", 6) : TV.groupRows("weekday", dow);
-      var ann = S.db.items.filter(function (it) { return it.status === "published" && ["announcement", "mazaltov", "flyer"].indexOf(it.type) >= 0; });
+      var ann = S.db.items.filter(function (it) { return (it.type === "announcement" || it.type === "rabbi") && window.SHUL_TV.visible(it, d, false); });
       var welcome = S.role() === "applicant";
-      app.innerHTML = '<div class="wrap page">' + UI.pageHead(L("שלום, ", "Hello, ") + esc(S.N(m).split(" ")[0]), esc(S.hebDate(d)) + " · " + esc(S.fmtDateLong(d))) +
+      app.innerHTML = '<div class="wrap page portal">' + UI.pageHead(L("החשבון שלי", "My Account"), L("מחובר: ", "Signed in: ") + '<bdi dir="ltr">' + esc(u.email) + "</bdi>") +
         (welcome ? '<div class="alert ok" style="margin-bottom:16px"><b>' + L("ברוכים הבאים לקהילה!", "Welcome to the community!") + "</b> " + L("זה החשבון האישי שלך.", "This is your personal account.") + "</div>" : "") +
-        '<div class="grid g3" style="align-items:start">' +
-        '<div class="card"><div class="eyebrow">' + L("היתרה שלי", "My balance") + '</div><div style="font-size:38px;font-weight:800;margin:6px 0 12px">' + balanceText(b) + "</div>" +
-        (b > 0 ? '<a class="btn primary lg block" href="#/donate?mode=balance">' + I.wallet.replace("<svg", '<svg width="20" height="20"') + L("תשלום בכרטיס", "Pay by card") + "</a>" : "") +
-        '<div class="row" style="margin-top:10px"><button class="btn sm" id="stmt">' + I.print.replace("<svg", '<svg width="16" height="16"') + L("דף חשבון", "Statement") + '</button><a class="btn sm ghost" href="#/donate">' + L("תרומה", "Donate") + "</a></div></div>" +
-        '<div class="card"><div class="card-head"><h3>' + L("זמני היום", "Today's times") + '</h3><a class="small" href="#/times">' + L("הכל", "All") + '</a></div><div class="timecard" style="padding:0;border:0;box-shadow:none">' +
-        prayers.slice(0, 5).map(function (p) { return '<div class="tline"><span>' + esc(S.N(p)) + '</span><b class="num">' + S.hm(p.time, true) + "</b></div>"; }).join("") +
-        '<div class="tline"><span>' + L("שקיעה", "Shkiah") + '</span><b class="num">' + S.hm(z.shkiah, true) + '</b></div><div class="tline"><span>' + L("הדלקת נרות שישי", "Candles, Friday") + '</span><b class="num">' + S.hm(st.candles, true) + "</b></div></div></div>" +
-        '<div class="card"><div class="card-head"><h3>' + L("הודעות הקהילה", "Community announcements") + '</h3></div><div class="stack">' +
-        ann.map(function (a) { return '<div style="border-inline-start:3px solid ' + (a.type === "mazaltov" ? "var(--gold)" : a.type === "flyer" ? "var(--primary)" : "var(--accent)") + ';padding-inline-start:10px"><b>' + esc(S.N(a.title)) + '</b> <span class="badge">' + (a.type === "mazaltov" ? L("מזל טוב", "Mazal Tov") : a.type === "flyer" ? L("פלייר", "Flyer") : L("הודעה", "Announcement")) + '</span><div class="small muted">' + esc(S.N(a.text)) + "</div></div>"; }).join("") + "</div></div></div>" +
-        '<div class="grid g2" style="margin-top:16px;align-items:start"><div class="card"><div class="card-head"><h3>' + L("התשלומים והחיובים שלי", "My payments and charges") + '</h3><button class="btn sm" id="csv">' + I.download.replace("<svg", '<svg width="16" height="16"') + 'CSV</button></div><div class="table-wrap"><table><thead><tr><th>' + L("תאריך", "Date") + "</th><th>" + L("תיאור", "Description") + "</th><th>" + L("סכום", "Amount") + "</th></tr></thead><tbody>" +
-        hist.map(function (e) { var p = e.type === "payment"; return '<tr class="' + (S.isVoided(e) ? "voided" : "") + '"><td class="nowrap">' + esc(S.fmtDate(e.date)) + "</td><td>" + esc(B(e.desc)) + (e.method ? ' <span class="badge">' + method(e.method) + "</span>" : "") + '</td><td class="num ' + (p ? "amt-pos" : "amt-neg") + '">' + (p ? "-" : "") + S.money(e.amount) + "</td></tr>"; }).join("") + "</tbody></table></div></div>" +
-        '<div class="card"><div class="card-head"><h3>' + L("יארצייטים של המשפחה", "Family yahrzeits") + '</h3><button class="btn soft sm" id="addY">' + I.plus.replace("<svg", '<svg width="16" height="16"') + L("הוספה", "Add") + '</button></div><div class="stack" id="yList">' +
-        (myY.length ? myY.map(function (y) { return '<div class="row between" style="border-bottom:1px solid var(--line);padding-bottom:10px"><div><b>' + esc(S.N(y.name)) + '</b><div class="small muted">' + esc(S.N(y.relation)) + " · " + S.hday(y.hday) + " " + esc(S.N(S.HEB_MONTHS[y.hmonth])) + "</div></div><div class=\"row\">" + yzStatus(y) + (y.status === "pending" ? '<button class="btn ghost sm" data-cancel="' + y.id + '">' + L("ביטול", "Cancel") + "</button>" : "") + "</div></div>"; }).join("") : '<p class="muted">' + L("עוד לא נוספו יארצייטים.", "No yahrzeits yet.") + "</p>") +
-        '</div><p class="tiny muted" style="margin-top:10px">' + L("יארצייט שמאושר על ידי הגבאי מוצג במסך בבית הכנסת בשבוע שלו, כל שנה, אוטומטית.", "Once the gabbai approves, a yahrzeit appears on the shul TV in its week, every year, automatically.") + "</p></div></div></div>";
-      app.querySelector("#stmt").addEventListener("click", function () { var md = UI.modal(statementHtml(mid) + '<div class="actions"><button class="btn" id="pr">' + L("הדפסה", "Print") + '</button><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>", { wide: true }); md.querySelector("#pr").addEventListener("click", function () { window.print(); }); });
-      app.querySelector("#csv").addEventListener("click", function () { UI.download("my-account.csv", csvFor(mid), "text/csv"); });
+        '<div class="portal-grid"><div>' + portalHtml(mid) + "</div>" +
+        '<div class="stack"><section class="card"><div class="card-head"><h3>' + L("יארצייטים של המשפחה", "Family yahrzeits") + '</h3><button class="btn soft sm" id="addY">' + I.plus.replace("<svg", '<svg width="16" height="16"') + L("הוספה", "Add") + "</button></div>" +
+        (myY.length ? myY.map(function (y) { return '<div class="yz-row"><div><b>' + esc(S.N(y.name)) + '</b><div class="small muted">' + esc(S.N(y.relation)) + " · " + S.hday(y.hday) + " " + esc(S.N(S.HEB_MONTHS[y.hmonth])) + '</div></div><div class="row">' + yzStatus(y) + (y.status === "pending" ? '<button class="btn ghost sm" data-cancel="' + y.id + '">' + L("ביטול", "Cancel") + "</button>" : "") + "</div></div>"; }).join("") : '<p class="muted">' + L("עוד לא נוספו יארצייטים.", "No yahrzeits yet.") + "</p>") +
+        '<p class="tiny muted" style="margin:10px 0 0">' + L("יארצייט שהגבאי מאשר מוצג במסך בבית הכנסת בשבוע שלו, כל שנה.", "Once the gabbai approves, a yahrzeit shows on the shul TV in its week, every year.") + "</p></section>" +
+        (ann.length ? '<section class="card"><h3>' + L("הודעות הקהילה", "Announcements") + "</h3>" + ann.map(function (a) { return '<div class="ann-row"><b>' + esc(S.N(a.title)) + '</b><div class="small muted">' + esc(S.N(a.text)) + "</div></div>"; }).join("") + "</section>" : "") +
+        "</div></div></div>";
       UI.on(app, "[data-cancel]", "click", function (e, bt) { S.db.yzRequests = S.db.yzRequests.filter(function (y) { return y.id !== bt.getAttribute("data-cancel"); }); S.save(); UI.toast(L("הבקשה בוטלה", "Request cancelled")); UI.render(); });
       app.querySelector("#addY").addEventListener("click", function () { yahrzeitForm(mid); });
     }
@@ -100,5 +119,5 @@
       S.save(); UI.toast(L("נשלח לגבאי לאישור", "Sent to the gabbai for approval")); UI.render();
     });
   }
-  window.SHUL_MEMBER = { balanceText: balanceText, method: method, METHOD: METHOD, statementHtml: statementHtml, csvFor: csvFor, yahrzeitForm: yahrzeitForm, yzStatus: yzStatus };
+  window.SHUL_MEMBER = { portalHtml: portalHtml, ledgerView: ledgerView, pendingFor: pendingFor, balanceText: balanceText, method: method, METHOD: METHOD, statementHtml: statementHtml, csvFor: csvFor, yahrzeitForm: yahrzeitForm, yzStatus: yzStatus };
 })();
