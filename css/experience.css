@@ -555,3 +555,12 @@ html.theming *, html.theming *::before, html.theming *::after { transition: back
 @media (prefers-reduced-motion: reduce) {
   .ly, .ly-tags span, .rv, .ps-grid, .studio-stage, #app > *, .flash, tr.flash td, .role-card, .dock-pop, .pz-live i { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; translate: none !important; }
 }
+@media (max-width: 560px) {
+  .dock-bar { gap: 2px; padding: 5px; }
+  .dock-btn { padding: 6px; gap: 6px; }
+  .dock-btn b { max-width: 78px; font-size: 12.5px; }
+  .dock-lang { margin: 0 2px; }
+  .dock-home { padding: 4px; }
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .kpi .v { font-size: 22px; }
+}
