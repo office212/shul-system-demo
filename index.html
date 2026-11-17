@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="he" dir="rtl" data-theme="classic">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shul System Demo</title>
+<meta name="description" content="Interactive demo of a synagogue management system: TV screen, davening times, Shabbat sheet, donations, finance, members. Fictional data.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="img/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300..800&family=Bellefair&family=Frank+Ruhl+Libre:wght@400..800&family=Heebo:wght@300..800&family=Rubik:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/tv.css">
+</head>
+<body>
+<div class="topstack">
+  <div class="demobar" id="demobar"></div>
+  <header class="site-head" id="sitehead"></header>
+</div>
+<main id="app"></main>
+<footer class="site-foot" id="sitefoot"></footer>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="pushes" id="pushes" aria-live="polite"></div>
+<script src="js/core.js"></script>
+<script src="js/seed.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/sheet.js"></script>
+<script src="js/tv.js"></script>
+<script src="js/views-public.js"></script>
+<script src="js/views-member.js"></script>
+<script src="js/views-finance.js"></script>
+<script src="js/views-gabbai.js"></script>
+<script>SHUL_UI.start();</script>
+</body>
+</html>
