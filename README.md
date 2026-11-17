@@ -47,7 +47,7 @@ presentation, never the product:
 |---|---|
 | `#/` | Platform overview: live composition, personalization, perspectives, five interactions, daily operations, customization tiers |
 | `#/showcase/ledger` | One ledger, two views: finance gabbai and member side by side |
-| `#/showcase/tv` | From editor to sanctuary: preview and publish to the TV |
+| `#/showcase/tv` | From editor to shul: preview and publish to the screen |
 | `#/showcase/roles` | Every role and what it can do, and entering as any of them |
 | `#/showcase/design` | Design studio: the same shul in different designs |
 | `#/screen` | TV showroom with moments of the week |

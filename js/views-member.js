@@ -30,7 +30,7 @@
     if (y.status === "pending") return '<span class="badge warn">' + L("ממתין לאישור הגבאי", "Waiting for the gabbai") + "</span>";
     if (y.status === "declined") return '<span class="badge bad">' + L("לא אושר", "Not approved") + "</span>";
     var thisWeek = y.hmonth === 2 && y.hday >= 5 && y.hday <= 11;
-    return thisWeek ? '<span class="badge ok">' + L("מוצג במסך השבוע", "On the TV this week") + "</span>" : '<span class="badge accent">' + L("יוצג במסך בשבוע שלו, כל שנה", "Shown on the TV in its week, every year") + "</span>";
+    return thisWeek ? '<span class="badge ok">' + L("מוצג במסך השבוע", "On the screen this week") + "</span>" : '<span class="badge accent">' + L("יוצג במסך בשבוע שלו, כל שנה", "Shown on the screen in its week, every year") + "</span>";
   }
 
   /* The member's own card, as production shows it (congregant/index.html renderCong):
@@ -89,7 +89,7 @@
         '<div class="portal-grid"><div>' + portalHtml(mid) + "</div>" +
         '<div class="stack"><section class="card"><div class="card-head"><h3>' + L("יארצייטים של המשפחה", "Family yahrzeits") + '</h3><button class="btn soft sm" id="addY">' + I.plus.replace("<svg", '<svg width="16" height="16"') + L("הוספה", "Add") + "</button></div>" +
         (myY.length ? myY.map(function (y) { return '<div class="yz-row"><div><b>' + esc(S.N(y.name)) + '</b><div class="small muted">' + esc(S.N(y.relation)) + " · " + S.hday(y.hday) + " " + esc(S.N(S.HEB_MONTHS[y.hmonth])) + '</div></div><div class="row">' + yzStatus(y) + (y.status === "pending" ? '<button class="btn ghost sm" data-cancel="' + y.id + '">' + L("ביטול", "Cancel") + "</button>" : "") + "</div></div>"; }).join("") : '<p class="muted">' + L("עוד לא נוספו יארצייטים.", "No yahrzeits yet.") + "</p>") +
-        '<p class="tiny muted" style="margin:10px 0 0">' + L("יארצייט שהגבאי מאשר מוצג במסך בבית הכנסת בשבוע שלו, כל שנה.", "Once the gabbai approves, a yahrzeit shows on the shul TV in its week, every year.") + "</p></section>" +
+        '<p class="tiny muted" style="margin:10px 0 0">' + L("יארצייט שהגבאי מאשר מוצג במסך בבית הכנסת בשבוע שלו, כל שנה.", "Once the gabbai approves, a yahrzeit shows on the shul screen in its week, every year.") + "</p></section>" +
         (ann.length ? '<section class="card"><h3>' + L("הודעות הקהילה", "Announcements") + "</h3>" + ann.map(function (a) { return '<div class="ann-row"><b>' + esc(S.N(a.title)) + '</b><div class="small muted">' + esc(S.N(a.text)) + "</div></div>"; }).join("") + "</section>" : "") +
         "</div></div></div>";
       UI.on(app, "[data-cancel]", "click", function (e, bt) { S.db.yzRequests = S.db.yzRequests.filter(function (y) { return y.id !== bt.getAttribute("data-cancel"); }); S.save(); UI.toast(L("הבקשה בוטלה", "Request cancelled")); UI.render(); });
@@ -106,7 +106,7 @@
     var m = UI.modal("<h2>" + L("הוספת יארצייט", "Add a yahrzeit") + '</h2><form id="yf"><div class="form-grid"><label class="field"><span>' + L("שם הנפטר/ת (כולל שם האב)", "Name of the departed (with father's name)") + '</span><input name="name" required placeholder="' + L("לדוגמה: שרה בת אברהם", "e.g. Sarah bat Avraham") + '"></label><label class="field"><span>' + L("קרבה", "Relation") + '</span><input name="rel" placeholder="' + L("אבא, אמא, סבא...", "Father, mother, grandfather...") + '"></label></div>' +
       '<div class="form-grid" style="margin-top:12px"><label class="field"><span>' + L("יום בחודש העברי", "Hebrew day") + '</span><select name="day">' + S.HEB_NUM.slice(1).map(function (n, i) { return '<option value="' + (i + 1) + '">' + n + " (" + (i + 1) + ")</option>"; }).join("") + '</select></label><label class="field"><span>' + L("חודש עברי", "Hebrew month") + '</span><select name="month">' + mopts + '</select></label><label class="field"><span>' + L("שנת פטירה (לא חובה)", "Year of passing (optional)") + '</span><input name="year" placeholder="5770" class="ltr"></label></div>' +
       '<div class="card flat" style="margin-top:12px;padding:12px"><b class="small">' + L("יש רק תאריך לועזי? נמיר אותו:", "Only have the English date? Convert it:") + '</b><div class="row" style="margin-top:8px"><input type="date" name="greg" style="max-width:190px"><label class="check small"><input type="checkbox" name="after"> ' + L("אחרי השקיעה", "After sunset") + '</label><button type="button" class="btn sm" id="conv">' + L("המרה לתאריך עברי", "Convert to Hebrew date") + "</button></div></div>" +
-      '<p class="err hidden" id="yErr"></p><div class="actions"><button type="button" class="btn" data-close>' + L("ביטול", "Cancel") + '</button><button class="btn primary">' + (asGabbai ? L("שמירה ופרסום במסך", "Save and show on the TV") : L("שליחה לגבאי", "Send to the gabbai")) + "</button></div></form>");
+      '<p class="err hidden" id="yErr"></p><div class="actions"><button type="button" class="btn" data-close>' + L("ביטול", "Cancel") + '</button><button class="btn primary">' + (asGabbai ? L("שמירה ופרסום במסך", "Save and show on the screen") : L("שליחה לגבאי", "Send to the gabbai")) + "</button></div></form>");
     var f = m.querySelector("#yf");
     m.querySelector("#conv").addEventListener("click", function () {
       if (!f.greg.value) return;
