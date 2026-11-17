@@ -224,7 +224,7 @@
     });
   }
   function customModal() {
-    var m = modal('<div class="eyebrow">' + L("בית הכנסת שלכם. המערכת שלכם.", "Your Shul. Your System.") + "</div><h2>" + L("המערכת מותאמת אישית לבית הכנסת שלכם", "Fully customized for your synagogue") + '</h2><p class="muted">' + L("זו לא תבנית קבועה. כל בית כנסת מקבל מערכת בזהות שלו. הנה מה שאפשר להתאים:", "This is not a fixed template. Every shul gets a system in its own identity. Here is what can be customized:") + "</p>" + customItemsHtml() +
+    var m = modal('<div class="eyebrow">' + L("בית הכנסת שלכם. המערכת שלכם.", "Your Shul. Your System.") + "</div><h2>" + L("המערכת מותאמת אישית לבית הכנסת שלכם", "Fully customized for your shul") + '</h2><p class="muted">' + L("זו לא תבנית קבועה. כל בית כנסת מקבל מערכת בזהות שלו. הנה מה שאפשר להתאים:", "This is not a fixed template. Every shul gets a system in its own identity. Here is what can be customized:") + "</p>" + customItemsHtml() +
       '<p class="tiny muted" style="margin-top:12px">' + scopeNote() + '</p><hr class="gold-line"><h3>' + L("נסו בעצמכם: שם בית הכנסת שלכם", "Try it: your shul's name") + "</h3>" + renameHtml() +
       '<h3 style="margin-top:18px">' + L("ארבעה עיצובים לדוגמה", "Four example designs") + '</h3><p class="small muted">' + L("אלה רק דוגמאות למה שאפשר. העיצוב שלכם ייבנה במיוחד עבורכם.", "These are only examples of what is possible. Your design is created especially for you.") + "</p>" + themePickerHtml() +
       '<div class="actions"><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>", { wide: true });
@@ -361,7 +361,7 @@
     var target = layout === "admin" ? adminShell(app, def) : app;
     def.render(target, arg, params);
     var t = def.title ? (typeof def.title === "function" ? def.title() : def.title) : "";
-    document.title = layout === "xp" ? (t || L("מערכת לניהול בית הכנסת", "Synagogue management platform")) + " | Shul System" : (t ? t + " | " : "") + S.N(S.db.shul);
+    document.title = layout === "xp" ? (t || L("מערכת לניהול בית הכנסת", "Shul management platform")) + " | Shul System" : (t ? t + " | " : "") + S.N(S.db.shul);
     markNav(); renderBell();
   }
   function rerender() { if (current && current.live !== false) render(); }

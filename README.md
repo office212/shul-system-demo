@@ -2,14 +2,14 @@
 
 **Your Shul. Your System. · בית הכנסת שלכם. המערכת שלכם.**
 
-An interactive sales experience for the synagogue management platform. It opens on a
+An interactive sales experience for the shul management platform. It opens on a
 platform overview (`#/`) with the real product running live inside it, lets a visitor
 personalize it with their shul's name and a design direction, and leads into the product
 itself: the shul website, the member portal, the administration and the TV.
 
 See `FEATURE-MAP.md` for how every capability maps to the production repository.
 
-An interactive sales demo of the synagogue management system, built for GitHub Pages.
+An interactive sales demo of the shul management system, built for GitHub Pages.
 It mirrors the live system screen for screen, using a fictional congregation
 ("Kehillat Nachalat HaEmek") with fictional members, times and amounts.
 
