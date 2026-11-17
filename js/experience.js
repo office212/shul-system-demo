@@ -73,10 +73,10 @@
     { id: "site", he: "אתר בית הכנסת", en: "Website", role: "visitor", dest: "#/site", kind: "browser", src: "#/site?frame=1&as=visitor", w: 1280, h: 860,
       ttl: ["הפנים של הקהילה, לכל מבקר", "Your shul's public face"], pts: [["זמני השבת והדלקת נרות", "Shabbat times and candle lighting"], ["תרומה בכרטיס, Apple Pay ו-Google Pay", "Donations by card, Apple Pay and Google Pay"], ["בקשת הצטרפות שהגבאי מאשר", "Join requests the gabbai approves"], ["כל מילה ניתנת לעריכה בעברית ובאנגלית", "Every word editable in Hebrew and English"]] },
     { id: "member", he: "פורטל המתפלל", en: "Member portal", role: "member", dest: "#/me", kind: "phone", src: "#/me?frame=1&as=member", w: 400, h: 860,
-      ttl: ["כל מתפלל, עם החשבון שלו", "Every member, their own account"], pts: [["יתרה והיסטוריה מלאה, מאותו יומן חשבונות", "Balance and full history from the same ledger"], ["תשלום היתרה בכרטיס, שנרשם מעצמו", "Pay the balance by card; it records itself"], ["יארצייטים של המשפחה, למסך אחרי אישור", "Family yahrzeits, on the TV after approval"], ["הודעות הקהילה", "Community announcements"]] },
+      ttl: ["כל מתפלל, עם החשבון שלו", "Every member, their own account"], pts: [["יתרה והיסטוריה מלאה, מאותו יומן חשבונות", "Balance and full history from the same ledger"], ["תשלום היתרה בכרטיס, שנרשם מעצמו", "Pay the balance by card; it records itself"], ["יארצייטים של המשפחה, למסך אחרי אישור", "Family yahrzeits, on the screen after approval"], ["הודעות הקהילה", "Community announcements"]] },
     { id: "admin", he: "מערכת הגבאים", en: "Administration", role: "super", dest: "#/gabbai", kind: "browser", src: "#/gabbai?frame=1&as=super", w: 1360, h: 860,
       ttl: ["מרכז הניהול של בית הכנסת", "The shul's command center"], pts: [["תשלומים, חיובים, נדרי שבת ומי חייב", "Payments, charges, Shabbat nedarim and who owes"], ["מתפללים ובקשות הצטרפות", "Members and join requests"], ["תוכן המסך, זמני תפילה ודף השבת", "Screen content, davening times and the Shabbat sheet"], ["הרשאות לכל גבאי, יומן פעילות וגיבוי לילי", "Permissions per gabbai, activity log, nightly backup"]] },
-    { id: "tv", he: "מסך בית הכנסת", en: "Synagogue TV", role: null, dest: "#/screen", kind: "tv", src: "#/tv?preview=1", w: 1920, h: 1080,
+    { id: "tv", he: "מסך בית הכנסת", en: "Synagogue screen", role: null, dest: "#/screen", kind: "tv", src: "#/tv?preview=1", w: 1920, h: 1080,
       ttl: ["המסך שדולק כל הזמן באולם", "The always-on screen in the shul"], pts: [["זמני היום וזמני התפילות, תמיד מעודכנים", "Zmanim and davening times, always current"], ["מצב שבת: נרות, הקדשות, הזכרות ויארצייטים", "Shabbat mode: candles, dedications, hazkarot, yahrzeits"], ["ספירה לנץ ושורת הפרשה", "Netz countdown and the parasha line"], ["עמעום לילי ורענון מרחוק", "Night dimming and remote refresh"]] }
   ];
   function perspStage(p) {
@@ -86,11 +86,11 @@
     return browser((p.id === "admin" ? "admin." : "www.") + slug() + ".org", f, "ps-win");
   }
   var SEE = [
-    { href: "#top", n: "A", ic: "edit", he: "הופכים אותה לשלכם", en: "Make it yours", dhe: "מקלידים את שם בית הכנסת ובוחרים כיוון עיצובי. האתר, הפורטל, מערכת הגבאים והמסך מתעדכנים מיד.", den: "Type your synagogue's name and choose a design direction. The website, portal, administration and TV update at once." },
+    { href: "#top", n: "A", ic: "edit", he: "הופכים אותה לשלכם", en: "Make it yours", dhe: "מקלידים את שם בית הכנסת ובוחרים כיוון עיצובי. האתר, הפורטל, מערכת הגבאים והמסך מתעדכנים מיד.", den: "Type your synagogue's name and choose a design direction. The website, portal, administration and screen update at once." },
     { href: "#/showcase/ledger", n: "B", ic: "wallet", he: "יומן אחד, שתי נקודות מבט", en: "One ledger, two views", dhe: "הגבאי רושם חיוב, המתפלל רואה אותו ומשלם בכרטיס, והתשלום נרשם מעצמו. היתרה מתעדכנת מיד בשני הצדדים.", den: "The gabbai records a charge, the member sees it and pays by card, and the payment records itself. Both sides update at once." },
     { href: "#/showcase/tv", n: "C", ic: "tv", he: "מהעורך אל האולם", en: "From editor to shul", dhe: "עורכים הודעה, רואים תצוגה מקדימה על המסך, ומפרסמים. בשבת ההודעות לא מוצגות, כמו במערכת האמיתית.", den: "Edit an announcement, preview it on the screen, publish. On Shabbat announcements step aside, exactly as in the real system." },
     { href: "#/showcase/roles", n: "D", ic: "shield", he: "לכל תפקיד, המערכת שלו", en: "Every role, its own system", dhe: "מתפלל, גבאי כספים, גבאי תוכן ומנהל ראשי. כל אחד רואה רק את מה שמותר לו.", den: "Member, finance gabbai, content gabbai and administrator. Each sees only what they may use." },
-    { href: "#/showcase/design", n: "E", ic: "palette", he: "אותו בית כנסת, עיצובים שונים", en: "Same shul, different designs", dhe: "משווים כיווני עיצוב על המוצר האמיתי, מהאתר ועד מסך הטלוויזיה.", den: "Compare design directions on the real product, from the website to the TV screen." }
+    { href: "#/showcase/design", n: "E", ic: "palette", he: "אותו בית כנסת, עיצובים שונים", en: "Same shul, different designs", dhe: "משווים כיווני עיצוב על המוצר האמיתי, מהאתר ועד המסך.", den: "Compare design directions on the real product, from the website to the screen." }
   ];
   var DAILY = [
     ["finance", "#/finance/pay", "wallet", "רישום תשלום", "Record a payment", "מתפלל, סכום ואמצעי תשלום. יתרה לפני ואחרי, ביטול מיידי וקבלה.", "Member, amount, method. Balance before and after, instant undo, a receipt."],
@@ -107,8 +107,8 @@
   function tiersHtml() {
     var col = function (tag, cls, he, en, items) { return '<div class="tier ' + cls + '"><span class="tier-tag">' + tag + "</span><h3>" + L(he, en) + "</h3><ul>" + items.map(function (i) { return "<li>" + (i[2] ? '<a href="' + i[2] + '" data-go-role="' + (i[3] || "") + '">' + L(i[0], i[1]) + "</a>" : L(i[0], i[1])) + "</li>"; }).join("") + "</ul></div>"; };
     return '<div class="tiers">' +
-      col(L("במערכת היום", "In the system today"), "t1", "מגדירים בעצמכם", "Configure it yourself", [["כל מילה במסך הטלוויזיה, בעברית ובאנגלית", "Every word on the TV, in Hebrew and English", "#/gabbai/tv", "content"], ["כל מילה בדף הבית של האתר", "Every word on the website's home page", "#/gabbai/landing", "super"], ["זמני תפילה, כולל ימים מסוימים", "Davening times, including specific weekdays", "#/gabbai/tv", "content"], ["מה מוצג במסך, מתי ובאילו ימים", "What the TV shows, when and on which days", "#/gabbai/content", "content"], ["בהירות המסך ורענון מרחוק", "Screen brightness and remote refresh", "#/gabbai/tv", "super"], ["שורות דף השבת", "The Shabbat sheet's rows", "#/gabbai/shabbat", "content"], ["תפקיד והרשאות לכל גבאי", "A role and permissions for each gabbai", "#/admin", "super"]]) +
-      col(L("בהתאמה אישית", "Made for you"), "t2", "מעוצב עבור בית הכנסת שלכם", "Designed for your shul", [["לוגו, צבעים וגופנים בזהות שלכם", "Your logo, colors and typography"], ["עיצוב האתר, הפורטל ומערכת הגבאים", "The design of the website, portal and administration"], ["מראה מסך הטלוויזיה באולם", "The look of the shul TV"], ["הטקסטים, הנוסח והמנהגים של הקהילה", "Your community's wording, nusach and minhagim"], ["התאמת התהליכים הקיימים לדרך העבודה שלכם", "Existing workflows set up the way you work"]]) +
+      col(L("במערכת היום", "In the system today"), "t1", "מגדירים בעצמכם", "Configure it yourself", [["כל מילה בהמסך, בעברית ובאנגלית", "Every word on the screen, in Hebrew and English", "#/gabbai/tv", "content"], ["כל מילה בדף הבית של האתר", "Every word on the website's home page", "#/gabbai/landing", "super"], ["זמני תפילה, כולל ימים מסוימים", "Davening times, including specific weekdays", "#/gabbai/tv", "content"], ["מה מוצג במסך, מתי ובאילו ימים", "What the screen shows, when and on which days", "#/gabbai/content", "content"], ["בהירות המסך ורענון מרחוק", "Screen brightness and remote refresh", "#/gabbai/tv", "super"], ["שורות דף השבת", "The Shabbat sheet's rows", "#/gabbai/shabbat", "content"], ["תפקיד והרשאות לכל גבאי", "A role and permissions for each gabbai", "#/admin", "super"]]) +
+      col(L("בהתאמה אישית", "Made for you"), "t2", "מעוצב עבור בית הכנסת שלכם", "Designed for your shul", [["לוגו, צבעים וגופנים בזהות שלכם", "Your logo, colors and typography"], ["עיצוב האתר, הפורטל ומערכת הגבאים", "The design of the website, portal and administration"], ["מראה המסך באולם", "The look of the shul screen"], ["הטקסטים, הנוסח והמנהגים של הקהילה", "Your community's wording, nusach and minhagim"], ["התאמת התהליכים הקיימים לדרך העבודה שלכם", "Existing workflows set up the way you work"]]) +
       col(L("בהדגמה בלבד", "Demo only"), "t3", "פקדי ההדגמה", "Presentation controls", [["החלפת פרספקטיבה ותפקיד", "Switching perspective and role"], ["ארבעת העיצובים לדוגמה וצבע המותג", "The four example designs and brand color"], ["הקלדת שם בית הכנסת", "Typing your shul's name"], ["זמן ההדגמה ואיפוס", "Demo time and reset"]]) +
       '</div><p class="tiers-note">' + UI.scopeNote() + "</p>";
   }
@@ -121,13 +121,13 @@
         '<section class="xp-hero"><div class="xp-glow"></div><div class="xp-wrap xp-hero-grid"><div class="xp-copy">' +
         '<div class="xp-eyebrow"><span></span>' + L("פלטפורמה לניהול בית הכנסת", "Synagogue management platform") + "</div>" +
         "<h1>" + L("כל בית הכנסת.<br><em>במערכת אחת.</em>", "The whole shul.<br><em>One system.</em>") + "</h1>" +
-        '<p class="xp-lead">' + L("מתפללים, חשבונות ותשלומים, מסך הטלוויזיה באולם, זמני התפילה, דף השבת והאתר. הכל מחובר, בעברית ובאנגלית, ומעוצב סביב בית הכנסת שלכם.", "Members, ledger and payments, the shul TV, davening times, the Shabbat sheet and your website. Connected, in Hebrew and English, and designed around your synagogue.") + "</p>" +
+        '<p class="xp-lead">' + L("מתפללים, חשבונות ותשלומים, המסך באולם, זמני התפילה, דף השבת והאתר. הכל מחובר, בעברית ובאנגלית, ומעוצב סביב בית הכנסת שלכם.", "Members, ledger and payments, the shul screen, davening times, the Shabbat sheet and your website. Connected, in Hebrew and English, and designed around your synagogue.") + "</p>" +
         '<div class="xp-ctas"><a class="xp-btn lg" href="#perspectives" data-scroll>' + L("לסיור במערכת", "Explore the platform") + ARROW + '</a><a class="xp-btn lg ghost" href="#/showcase/ledger">' + L("לראות אותה עובדת", "See it work") + "</a></div>" +
         personalHtml() + "</div>" +
         '<div class="xp-stage" id="stage" aria-label="' + L("תצוגה חיה של המערכת", "Live view of the platform") + '">' +
         '<a class="ly ly-admin" href="#/gabbai" data-go="super" aria-label="' + L("מערכת הגבאים", "Administration") + '"><span class="ly-tag">' + L("ניהול", "Administration") + '</span>' + browser("admin." + slug() + ".org", frame("#/gabbai?frame=1&as=super", 1360, 860, "", "Administration")) + "</a>" +
         '<a class="ly ly-site" href="#/site" data-go="visitor" aria-label="' + L("אתר בית הכנסת", "Website") + '"><span class="ly-tag">' + L("אתר", "Website") + '</span>' + browser("www." + slug() + ".org", frame("#/site?frame=1&as=visitor", 1280, 860, "", "Website")) + "</a>" +
-        '<a class="ly ly-tv" href="#/screen" aria-label="' + L("מסך הטלוויזיה", "TV screen") + '"><span class="ly-tag">' + L("מסך", "TV") + '</span>' + tvset(frame("#/tv?preview=1", 1920, 1080, "", "TV")) + "</a>" +
+        '<a class="ly ly-tv" href="#/screen" aria-label="' + L("המסך", "screen") + '"><span class="ly-tag">' + L("מסך", "screen") + '</span>' + tvset(frame("#/tv?preview=1", 1920, 1080, "", "screen")) + "</a>" +
         '<a class="ly ly-phone" href="#/me" data-go="member" aria-label="' + L("פורטל המתפלל", "Member portal") + '"><span class="ly-tag">' + L("פורטל המתפלל", "Member portal") + '</span>' + phone(frame("#/me?frame=1&as=member", 400, 860, "", "Member portal")) + "</a>" +
         "</div></div></section>" +
         '<section class="xp-band"><div class="xp-wrap"><p>' + L("ארבע פרספקטיבות. <b>רישום אחד משותף.</b> תשלום שהגבאי רושם מופיע בחשבון המתפלל, והודעה שמתפרסמת מופיעה במסך.", "Four perspectives. <b>One shared record.</b> A payment the gabbai records appears in the member's account; a published announcement appears on the screen.") + "</p></div></section>" +
@@ -266,7 +266,7 @@
       app.innerHTML = '<div class="xp light">' + xpNav(L("מהעורך אל האולם", "From editor to shul")) +
         '<div class="xp-wrap sc-head"><span class="xp-k">C</span><h1>' + L("כותבים כאן. מופיע באולם.", "Write it here. See it in the shul.") + "</h1><p>" + L("עורך התוכן של גבאי התוכן והמסך עצמו. תצוגה מקדימה לפני פרסום, ופרסום שמגיע למסך מיד. בשבת המסך מציג רק הקדשות, הזכרות ויארצייטים, כמו במערכת האמיתית.", "The content gabbai's editor and the screen itself. A preview before publishing, and publishing that reaches the screen at once. On Shabbat the screen shows only dedications, hazkarot and yahrzeits, as in the real system.") + "</p></div>" +
         '<div class="xp-wrap tvs-grid"><section class="sc-panel admin-look"><div class="sc-ph"><span class="sc-role">' + ic("megaphone", 16) + L("גבאי תוכן", "Content gabbai") + " · " + esc(S.N(con)) + '</span><button class="btn sm" id="tvNew">' + ic("plus", 16) + L("הודעה חדשה", "New announcement") + '</button></div><div id="tvEd"></div></section>' +
-        '<section class="tvs-screen"><div class="tvs-toolbar"><div class="seg" role="group" aria-label="' + L("יום", "Day") + '"><button data-mode="weekday" aria-pressed="true">' + L("יום חול", "Weekday") + '</button><button data-mode="shabbat" aria-pressed="false">' + L("שבת", "Shabbat") + '</button></div><a class="btn sm" href="#/screen">' + L("לאולם התצוגה", "TV showroom") + "</a></div>" + tvset(frame("#/tv?preview=1", 1920, 1080, "", "TV"), "tvs-set") + '<p class="tvs-note" id="tvNote"></p></section></div></div>';
+        '<section class="tvs-screen"><div class="tvs-toolbar"><div class="seg" role="group" aria-label="' + L("יום", "Day") + '"><button data-mode="weekday" aria-pressed="true">' + L("יום חול", "Weekday") + '</button><button data-mode="shabbat" aria-pressed="false">' + L("שבת", "Shabbat") + '</button></div><a class="btn sm" href="#/screen">' + L("לאולם התצוגה", "screen showroom") + "</a></div>" + tvset(frame("#/tv?preview=1", 1920, 1080, "", "screen"), "tvs-set") + '<p class="tvs-note" id="tvNote"></p></section></div></div>';
       bindNav(app); fitFrames(app);
       var ifr = app.querySelector(".tvs-set iframe");
       function tvw() { try { return ifr.contentWindow; } catch (e) { return null; } }
@@ -318,11 +318,11 @@
   /* ---------- D: every role, its own system ---------- */
   var RCOLS = ["visitor", "member", "content", "finance", "super"];
   var RROWS = [
-    ["האתר, מסך הטלוויזיה ותרומה", "Website, TV screen and donations", [1, 1, 1, 1, 1]],
+    ["האתר, המסך ותרומה", "Website, screen and donations", [1, 1, 1, 1, 1]],
     ["בקשת הצטרפות (אחרי כניסה עם Google)", "Join request (after Google sign-in)", [1, 0, 0, 0, 0]],
     ["החשבון שלי: יתרה, היסטוריה, תשלום בכרטיס", "My account: balance, history, pay by card", [0, 1, 1, 1, 1]],
     ["בקשות יארצייט למשפחה", "Family yahrzeit requests", [0, 1, 1, 1, 1]],
-    ["תוכן המסך, זמני תפילה וטקסטים במסך", "Screen content, davening times and TV texts", [0, 0, 1, 0, 1]],
+    ["תוכן המסך, זמני תפילה וטקסטים במסך", "Screen content, davening times and screen texts", [0, 0, 1, 0, 1]],
     ["דף השבת ואישור יארצייטים", "Shabbat sheet and yahrzeit approvals", [0, 0, 1, 0, 1]],
     ["מתפללים, יומן חשבונות, תשלומים ונדרים", "Members, ledger, payments and nedarim", [0, 0, 0, 1, 1]],
     ["תשלומים בכרטיס, מכתבי מס ודוח שנתי", "Card payments, tax letters and annual report", [0, 0, 0, 1, 1]],
@@ -350,7 +350,7 @@
 
   /* =================================================================== */
   /* ---------- E: same shul, different designs ---------- */
-  var DEV = [["site", "אתר", "Website", "#/site?frame=1&as=visitor", 1280, 860], ["me", "פורטל", "Member portal", "#/me?frame=1&as=member", 400, 860], ["admin", "ניהול", "Administration", "#/gabbai?frame=1&as=super", 1360, 860], ["tv", "מסך", "TV", "#/tv?preview=1", 1920, 1080]];
+  var DEV = [["site", "אתר", "Website", "#/site?frame=1&as=visitor", 1280, 860], ["me", "פורטל", "Member portal", "#/me?frame=1&as=member", 400, 860], ["admin", "ניהול", "Administration", "#/gabbai?frame=1&as=super", 1360, 860], ["tv", "מסך", "screen", "#/tv?preview=1", 1920, 1080]];
   var TYPO = { classic: "Frank Ruhl Libre · Assistant", modern: "Rubik", royal: "Bellefair · Assistant", minimal: "Heebo Light" };
   UI.route("/showcase/design", {
     layout: "xp", live: false, title: function () { return L("סטודיו העיצוב", "Design studio"); },
@@ -361,7 +361,7 @@
         '<div class="xp-wrap studio"><aside class="studio-side">' + personalHtml(true) +
         '<div class="studio-h">' + L("כיוון עיצובי", "Design direction") + '</div><div class="studio-themes">' + UI.THEMES.map(function (t) { return '<button class="st-card" data-st="' + t.id + '" aria-pressed="' + (S.prefs.theme === t.id) + '"><span class="st-sw" style="background:' + t.c + '"></span><span><b>' + esc(S.N(t)) + "</b><small>" + esc(L(t.dhe, t.den)) + '</small><small class="st-type">' + TYPO[t.id] + "</small></span></button>"; }).join("") + "</div>" +
         '<div class="studio-h">' + L("צבע מותג", "Brand color") + ' <span class="badge">' + L("תצוגה בלבד", "Preview only") + '</span></div><div class="pop-brands" id="stBrands"></div>' +
-        '<p class="tiny muted">' + L("מה שמשתנה: גופנים, צבעים, צורות, ניווט, כותרת האתר ומסך הטלוויזיה. מה שלא משתנה: הנתונים, התפקידים והיכולות.", "What changes: fonts, colors, shapes, navigation, the site header and the TV. What stays: the data, the roles and the features.") + '</p></aside>' +
+        '<p class="tiny muted">' + L("מה שמשתנה: גופנים, צבעים, צורות, ניווט, כותרת האתר והמסך. מה שלא משתנה: הנתונים, התפקידים והיכולות.", "What changes: fonts, colors, shapes, navigation, the site header and the screen. What stays: the data, the roles and the features.") + '</p></aside>' +
         '<section class="studio-main"><div class="seg studio-dev" role="tablist">' + DEV.map(function (d, i) { return '<button role="tab" data-dev="' + i + '" aria-pressed="' + (i === 0) + '">' + L(d[1], d[2]) + "</button>"; }).join("") + '</div><div class="studio-stage" id="stStage"></div></section></div>' +
         '<div class="xp-wrap"><div class="studio-h" style="margin-top:28px">' + L("השוואה", "Side by side") + '</div><div class="compare">' + UI.THEMES.map(function (t) { return '<button class="cmp" data-st="' + t.id + '">' + browser("www." + slug() + ".org", frame("#/site?frame=1&as=visitor&theme=" + t.id, 1280, 860, "", S.N(t))) + "<span>" + esc(S.N(t)) + "</span></button>"; }).join("") + "</div></div></div>";
       bindNav(app); fitFrames(app);
@@ -399,9 +399,9 @@
       var t = S.db.tvDisplay;
       app.innerHTML = '<div class="xp room">' + xpNav(L("מסך בית הכנסת", "The synagogue screen")) +
         '<div class="xp-wrap room-head"><h1>' + L("המסך שדולק כל הזמן באולם.", "The screen that never sleeps.") + "</h1><p>" + L("זמני היום, זמני התפילות ולוח הקהילה. בשבת הוא עובר לבד למצב שבת, בלילה הוא מתעמעם, ואפשר לרענן אותו מרחוק.", "Zmanim, davening times and the community board. On Shabbat it switches to Shabbat mode on its own, at night it dims, and it can be refreshed remotely.") + "</p></div>" +
-        '<div class="room-wall"><div class="xp-wrap">' + tvset(frame("#/tv?preview=1", 1920, 1080, "", "TV"), "room-tv") + "</div></div>" +
+        '<div class="room-wall"><div class="xp-wrap">' + tvset(frame("#/tv?preview=1", 1920, 1080, "", "screen"), "room-tv") + "</div></div>" +
         '<div class="xp-wrap room-ctl"><div class="room-moments" role="group" aria-label="' + L("רגע בשבוע", "Moment of the week") + '">' + M.map(function (m) { return '<button class="mom" data-m="' + m[0] + '" aria-pressed="' + (m[0] === cur) + '">' + esc(L(m[1], m[2])) + "</button>"; }).join("") + '</div><p class="room-note" id="roomNote"></p>' +
-        '<div class="room-facts">' + [["sun", "עמעום לילי", "Night dimming", "אוטומטי מ-" + t.from + " ועד " + t.alotBefore + " דקות לפני עלות השחר, ברמה " + t.level + "%. המנהל משנה זאת בהגדרות המסך.", "Automatic from " + t.from + " until " + t.alotBefore + " minutes before Alot, at " + t.level + "%. The administrator changes this in the TV settings."],
+        '<div class="room-facts">' + [["sun", "עמעום לילי", "Night dimming", "אוטומטי מ-" + t.from + " ועד " + t.alotBefore + " דקות לפני עלות השחר, ברמה " + t.level + "%. המנהל משנה זאת בהגדרות המסך.", "Automatic from " + t.from + " until " + t.alotBefore + " minutes before Alot, at " + t.level + "%. The administrator changes this in the screen settings."],
           ["candle", "מצב שבת", "Shabbat mode", "מהדלקת הנרות: כרטיס שבת שלום עם נרות, ההקדשות, ההזכרות והיארצייטים של השבוע. 45 דקות לפני, הכרטיס מופיע בפינה.", "From candle lighting: the Shabbat Shalom card with candles, dedications, hazkarot and this week's yahrzeits. 45 minutes before, the card appears in the corner."],
           ["refresh", "רענון מרחוק", "Remote refresh", "המנהל לוחץ פעם אחת וכל מסך פתוח נטען מחדש. לא בשבת ולא בחג.", "The administrator presses once and every open screen reloads. Never on Shabbat or Yom Tov."],
           ["clock", "תמיד מעודכן", "Always current", "שינוי בזמני התפילה או פרסום הודעה מגיעים למסך תוך שנייה.", "A changed davening time or a published announcement reaches the screen within a second."]].map(function (f) { return '<div class="fact">' + ic(f[0], 20) + "<b>" + L(f[1], f[2]) + "</b><span>" + L(f[3], f[4]) + "</span></div>"; }).join("") + "</div>" +
@@ -421,7 +421,7 @@
 
   /* =================================================================== */
   /* ---------- proposal ---------- */
-  var INTEREST = [["site", "אתר בית הכנסת", "The shul website"], ["members", "פורטל מתפללים", "Member portal"], ["finance", "ניהול כספים ונדרים", "Finance and nedarim"], ["content", "תוכן וזמני תפילה", "Content and davening times"], ["tv", "מסך הטלוויזיה באולם", "The shul TV"], ["donate", "תרומות בכרטיס ובארנק דיגיטלי", "Card and wallet donations"]];
+  var INTEREST = [["site", "אתר בית הכנסת", "The shul website"], ["members", "פורטל מתפללים", "Member portal"], ["finance", "ניהול כספים ונדרים", "Finance and nedarim"], ["content", "תוכן וזמני תפילה", "Content and davening times"], ["tv", "המסך באולם", "The shul screen"], ["donate", "תרומות בכרטיס ובארנק דיגיטלי", "Card and wallet donations"]];
   UI.route("/proposal", {
     layout: "xp", live: false, title: function () { return L("בקשת הצעה", "Request a proposal"); },
     render: function (app) {

@@ -275,7 +275,7 @@
   }
 
   UI.route("/tv", {
-    bare: true, live: false, title: function () { return S.L("מסך הטלוויזיה", "TV Screen"); },
+    bare: true, live: false, title: function () { return S.L("המסך", "Screen"); },
     render: function (app, arg, params) {
       state.timers.forEach(clearInterval); state.timers = [];
       state.preview = params.preview === "1";
