@@ -174,16 +174,18 @@
 
   /* ---------- roles (the role picker is a demo navigation tool only) ---------- */
   var ROLES = {
-    visitor: { he: "אורח (לא מחובר)", en: "Visitor (signed out)", home: "#/" },
+    visitor: { he: "אורח (לא מחובר)", en: "Visitor (signed out)", home: "#/site" },
     applicant: { he: "נרשם חדש (עוד לא חבר)", en: "New sign-in (not a member yet)", home: "#/join" },
     member: { he: "מתפלל", en: "Congregant", home: "#/me" },
     content: { he: "גבאי תוכן וזמנים", en: "Content and Times Gabbai", home: "#/gabbai" },
     finance: { he: "גבאי כספים", en: "Finance Gabbai", home: "#/gabbai" },
     super: { he: "מנהל ראשי", en: "Super Admin", home: "#/gabbai" }
   };
-  function role() { return prefs.role; }
+  /* a framed preview may show another perspective without changing the visitor's own choice */
+  var over = { role: null, theme: null };
+  function role() { return over.role || prefs.role; }
   function can(what) {
-    var r = prefs.role;
+    var r = role();
     if (r === "super") return true;
     if (what === "finance") return r === "finance";
     if (what === "content") return r === "content";
@@ -192,7 +194,7 @@
     return false;
   }
   function currentUser() {
-    var r = prefs.role, u = DB && DB.demoUsers[r];
+    var r = role(), u = DB && DB.demoUsers[r];
     return u || null;
   }
   function currentUserName() { var u = currentUser(); return u ? N(u) : L("מערכת", "System"); }
@@ -208,6 +210,6 @@
     dayState: dayState, money: money, cents: cents,
     get db() { return DB; }, load: load, save: save, reset: reset, onChange: onChange, uid: uid,
     balance: balance, memberById: memberById, isVoided: isVoided, log: log, notify: notify,
-    ROLES: ROLES, role: role, can: can, currentUser: currentUser, currentUserName: currentUserName
+    ROLES: ROLES, role: role, over: over, can: can, currentUser: currentUser, currentUserName: currentUserName
   };
 })();

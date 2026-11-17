@@ -147,3 +147,4 @@ body.bare { background: #000; overflow: hidden; }
 .tv-next { gap: 16px; overflow: hidden; }
 .tv-next .en { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .tv-col, .tv-center { min-width: 0; }
+.tv-draft { position: absolute !important; top: 158px; left: 50%; transform: translateX(-50%); z-index: 6; background: #f2c14e; color: #1d1a12; font-weight: 800; font-size: 22px; padding: 6px 22px; border-radius: 999px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
