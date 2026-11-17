@@ -230,10 +230,19 @@
       '<div class="actions"><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>", { wide: true });
     bindCustom(m);
   }
+  /* ---------- sales contact: verified by the owner, shown on every page except the screen itself ---------- */
+  var SALES = window.SHUL_SALES_CONTACT || { email: "hanochhason@gmail.com", phone: "347-244-9382", tel: "+13472449382" };
+  function ctaDemo(cls) {
+    return '<a class="cta-demo' + (cls ? " " + cls : "") + '" href="#/proposal" aria-label="' + L("בקשת הדגמה", "Request a demo") + '">' + I.sparkle.replace("<svg", '<svg width="16" height="16"') + "<span class=\"cta-l\">" + L("בקשת הדגמה", "Request a demo") + '</span><span class="cta-s">' + L("הדגמה", "Demo") + "</span></a>";
+  }
+  function salesbarHtml() {
+    return '<div class="sb-in"><span class="sb-brand">Shul System</span><span class="sb-dot" aria-hidden="true">·</span><a href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + '</a><span class="sb-dot" aria-hidden="true">·</span><a href="mailto:' + SALES.email + '">' + I.mail.replace("<svg", '<svg width="14" height="14"') + '<bdi dir="ltr">' + esc(SALES.email) + '</bdi></a><span class="sb-dot" aria-hidden="true">·</span><a href="tel:' + SALES.tel + '">' + I.phone.replace("<svg", '<svg width="14" height="14"') + '<bdi dir="ltr">' + esc(SALES.phone) + "</bdi></a></div>";
+  }
   var layout = "site";
   function renderChrome() {
     if (window.SHUL_PRESENTER) window.SHUL_PRESENTER.render();
-    var head = document.getElementById("sitehead"), foot = document.getElementById("sitefoot");
+    var head = document.getElementById("sitehead"), foot = document.getElementById("sitefoot"), sb = document.getElementById("salesbar");
+    if (sb) sb.innerHTML = layout === "bare" ? "" : salesbarHtml();
     if (layout !== "site") { head.innerHTML = ""; foot.innerHTML = ""; renderBell(); return; }
     var r = S.role(), u = S.currentUser();
     var links = [["#/site", L("ראשי", "Home")], ["#/times", L("זמני תפילה", "Davening Times")], ["#/tv", L("המסך", "Screen")], ["#/donate", L("תרומה", "Donate")]];
@@ -246,7 +255,7 @@
       '<span class="spacer"></span><div class="lang" role="group" aria-label="' + L("שפה", "Language") + '"><button aria-pressed="' + (S.prefs.lang === "he") + '" data-l="he">עב</button><button aria-pressed="' + (S.prefs.lang === "en") + '" data-l="en">EN</button></div>' +
       (signed ? '<div class="rel" id="bellHost"><button class="icon-btn" id="bellBtn" aria-label="' + L("התראות", "Notifications") + '">' + I.bell + "</button></div>" : "") +
       (signed ? '<button class="btn sm" id="acctBtn"><span class="nm">' + esc(u ? S.N(u).split(" ")[0] : "") + " · </span>" + L("יציאה", "Sign out") + "</button>" : '<button class="btn primary sm" id="signinBtn">' + L("כניסה", "Sign in") + "</button>") +
-      '<button class="icon-btn menu-btn" id="menuBtn" aria-label="' + L("תפריט", "Menu") + '">' + I.menu + "</button></div>";
+      ctaDemo("site-cta") + '<button class="icon-btn menu-btn" id="menuBtn" aria-label="' + L("תפריט", "Menu") + '">' + I.menu + "</button></div>";
     head.querySelectorAll(".lang button").forEach(function (b) { b.addEventListener("click", function () { setLang(b.getAttribute("data-l")); }); });
     var mb = head.querySelector("#menuBtn"); mb.addEventListener("click", function () { head.classList.toggle("open"); });
     head.querySelectorAll(".nav a").forEach(function (a) { a.addEventListener("click", function () { head.classList.remove("open"); }); });
@@ -312,7 +321,7 @@
       '<div class="admin-main"><header class="admin-top"><button class="icon-btn side-toggle" id="sideToggle" aria-label="' + L("תפריט", "Menu") + '">' + I.menu + '</button><div class="admin-title">' + esc(def.title ? (typeof def.title === "function" ? def.title() : def.title) : "") + "</div>" +
       (S.can("finance") ? '<div class="admin-search rel"><input id="admSearch" type="search" autocomplete="off" placeholder="' + L("חיפוש מתפלל", "Find a member") + '" aria-label="' + L("חיפוש מתפלל", "Find a member") + '"><div class="member-pick hidden" id="admRes"></div></div>' : '<span class="spacer"></span>') +
       '<div class="lang" role="group" aria-label="' + L("שפה", "Language") + '"><button aria-pressed="' + (S.prefs.lang === "he") + '" data-l="he">עב</button><button aria-pressed="' + (S.prefs.lang === "en") + '" data-l="en">EN</button></div>' +
-      '<div class="rel" id="bellHost"><button class="icon-btn" id="bellBtn" aria-label="' + L("התראות", "Notifications") + '">' + I.bell + "</button></div>" +
+      ctaDemo("adm-cta") + '<div class="rel" id="bellHost"><button class="icon-btn" id="bellBtn" aria-label="' + L("התראות", "Notifications") + '">' + I.bell + "</button></div>" +
       '<button class="user-chip" id="admUser" title="' + L("יציאה", "Sign out") + '"><span class="av">' + esc((u ? S.N(u) : "?").charAt(0)) + '</span><span class="uc-t"><b>' + esc(u ? S.N(u) : "") + "</b><small>" + esc(S.N(S.ROLES[r])) + '</small></span></button></header><div class="admin-content" id="adminContent"></div></div><div class="side-scrim" id="sideScrim"></div></div>';
     var shell = app.querySelector(".admin");
     var tog = function () { shell.classList.toggle("side-open"); };
@@ -400,6 +409,6 @@
     I: I, logo: logo, B: B, timeAgo: timeAgo, modal: modal, closeModal: closeModal, confirmBox: confirmBox,
     toast: toast, pushToast: pushToast, customItemsHtml: customItemsHtml, scopeNote: scopeNote, themePickerHtml: themePickerHtml, renameHtml: renameHtml, bindCustom: bindCustom, route: route, render: render, setRole: setRole, setLang: setLang, setTheme: setTheme,
     h: h, on: on, pageHead: pageHead, crumbGabbai: crumbGabbai, download: download, customModal: customModal, THEMES: THEMES,
-    start: start, renderChrome: renderChrome, signInModal: signInModal, setBrand: setBrand, BRANDS: BRANDS, flash: flash, applyPrefs: applyPrefs, curTheme: curTheme
+    start: start, renderChrome: renderChrome, SALES: SALES, ctaDemo: ctaDemo, signInModal: signInModal, setBrand: setBrand, BRANDS: BRANDS, flash: flash, applyPrefs: applyPrefs, curTheme: curTheme
   };
 })();

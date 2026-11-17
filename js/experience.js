@@ -12,7 +12,12 @@
   var S = window.SHUL, UI = window.SHUL_UI, L = S.L, esc = S.esc, I = UI.I;
   /* The sales contact, verified by the owner. The proposal opens the visitor's own email app;
      the demo itself sends nothing. */
-  var SALES = window.SHUL_SALES_CONTACT || { email: "hanochhason@gmail.com", phone: "347-244-9382", tel: "+13472449382" };
+  var SALES = UI.SALES;
+  function telBtn(cls) { return '<a class="xp-btn ' + (cls || "") + '" href="tel:' + SALES.tel + '">' + ic("phone", 17) + L("התקשרו ", "Call ") + '<bdi dir="ltr">' + esc(SALES.phone) + "</bdi></a>"; }
+  /* the same closing band on every showcase */
+  function ctaBand() {
+    return '<section class="cta-band"><div class="xp-wrap"><div class="cb-in"><div class="cb-copy"><span class="xp-k">' + L("הצעד הבא", "Next step") + "</span><h2>" + L("לראות את זה עובד בבית הכנסת שלכם", "See this running in your shul") + '</h2></div><div class="cb-act"><a class="cta-demo lg" href="#/proposal">' + I.sparkle.replace("<svg", '<svg width="18" height="18"') + "<span>" + L("בקשת הדגמה", "Request a demo") + "</span></a>" + telBtn("ghost cb-tel") + "</div></div></div></section>";
+  }
 
   function ic(n, s) { return I[n].replace("<svg", '<svg width="' + (s || 20) + '" height="' + (s || 20) + '"'); }
   var ARROW = '<svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
@@ -36,7 +41,7 @@
     return '<header class="xp-nav' + (sub ? " sub" : "") + '"><div class="xp-wrap"><a class="xp-mark" href="#/"><span class="xp-logo">' + UI.logo() + "</span><span>Shul System</span></a>" +
       (sub ? '<span class="xp-crumb">' + sub + "</span>" : '<nav class="xp-links"><a href="#perspectives">' + L("פרספקטיבות", "Perspectives") + '</a><a href="#see">' + L("לראות בפעולה", "See it work") + '</a><a href="#daily">' + L("עבודה שוטפת", "Daily operations") + '</a><a href="#custom">' + L("התאמה אישית", "Customization") + "</a></nav>") +
       '<span class="xp-sp"></span><div class="xp-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-xl="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-xl="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></div>' +
-      (sub ? '<a class="xp-btn ghost" href="#/">' + L("סקירת המערכת", "Platform overview") + "</a>" : '<a class="xp-btn" href="#/proposal">' + L("בקשת הצעה", "Request a proposal") + "</a>") + "</div></header>";
+      (sub ? '<a class="xp-btn ghost" href="#/">' + L("סקירת המערכת", "Platform overview") + "</a>" : "") + UI.ctaDemo("xp-cta") + "</div></header>";
   }
   function bindNav(app) {
     app.querySelectorAll("[data-xl]").forEach(function (b) { b.addEventListener("click", function () { UI.setLang(b.getAttribute("data-xl")); }); });
@@ -122,6 +127,7 @@
         '<div class="xp-eyebrow"><span></span>' + L("פלטפורמה לניהול בית הכנסת", "Shul management platform") + "</div>" +
         "<h1>" + L("כל בית הכנסת.<br><em>במערכת אחת.</em>", "The whole shul.<br><em>One system.</em>") + "</h1>" +
         '<p class="xp-lead">' + L("מתפללים, חשבונות ותשלומים, המסך באולם, זמני התפילה, דף השבת והאתר. הכל מחובר, בעברית ובאנגלית, ומעוצב סביב בית הכנסת שלכם.", "Members, ledger and payments, the shul screen, davening times, the Shabbat sheet and your website. Connected, in Hebrew and English, and designed around your shul.") + "</p>" +
+        '<div class="hero-cta"><div class="hc-row"><a class="cta-demo lg" href="#/proposal">' + I.sparkle.replace("<svg", '<svg width="18" height="18"') + "<span>" + L("בקשת הדגמה", "Request a demo") + "</span></a>" + telBtn("lg ghost") + '</div><p class="hc-mail">' + L("שאלות? כתבו אל ", "Questions? Email ") + '<a href="mailto:' + SALES.email + '"><bdi dir="ltr">' + esc(SALES.email) + "</bdi></a></p></div>" +
         '<div class="xp-ctas"><a class="xp-btn lg" href="#perspectives" data-scroll>' + L("לסיור במערכת", "Explore the platform") + ARROW + '</a><a class="xp-btn lg ghost" href="#/showcase/ledger">' + L("לראות אותה עובדת", "See it work") + "</a></div>" +
         personalHtml() + "</div>" +
         '<div class="xp-stage" id="stage" aria-label="' + L("תצוגה חיה של המערכת", "Live view of the platform") + '">' +
@@ -193,7 +199,7 @@
         '<div class="sc-link" aria-hidden="true"><span></span>' + ic("refresh", 18) + "<span></span></div>" +
         '<section class="sc-panel phone-side" aria-label="' + L("מתפלל", "Member") + '"><div class="sc-ph"><span class="sc-role">' + ic("user", 16) + L("המתפלל, בטלפון", "The member, on their phone") + "</span></div>" + '<div class="phone big"><div class="phone-notch"></div><div class="phone-app" id="lgPhone"></div></div></section></div>' +
         '<div class="xp-wrap"><section class="sc-log"><h3>' + L("מה קרה", "What happened") + '</h3><ol id="lgLog"></ol></section></div>' + "</div>";
-      bindNav(app);
+      app.querySelector(".xp").insertAdjacentHTML("beforeend", ctaBand()); bindNav(app);
       function log(he, en, kind) { events.unshift({ t: new Date(), he: he, en: en, k: kind }); drawLog(); }
       function drawLog() {
         app.querySelector("#lgLog").innerHTML = events.length ? events.map(function (e) { return '<li class="k-' + e.k + '"><time>' + e.t.toLocaleTimeString(S.prefs.lang === "he" ? "he-IL" : "en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" }) + "</time>" + esc(L(e.he, e.en)) + "</li>"; }).join("") : '<li class="empty">' + L("כאן יופיע כל צעד: רישום חיוב ותשלום בכרטיס שנרשם מעצמו.", "Every step appears here: a charge recorded, and a card payment that records itself.") + "</li>";
@@ -267,7 +273,7 @@
         '<div class="xp-wrap sc-head"><span class="xp-k">C</span><h1>' + L("כותבים כאן. מופיע באולם.", "Write it here. See it in the shul.") + "</h1><p>" + L("עורך התוכן של גבאי התוכן והמסך עצמו. תצוגה מקדימה לפני פרסום, ופרסום שמגיע למסך מיד. בשבת המסך מציג רק הקדשות, הזכרות ויארצייטים, כמו במערכת האמיתית.", "The content gabbai's editor and the screen itself. A preview before publishing, and publishing that reaches the screen at once. On Shabbat the screen shows only dedications, hazkarot and yahrzeits, as in the real system.") + "</p></div>" +
         '<div class="xp-wrap tvs-grid"><section class="sc-panel admin-look"><div class="sc-ph"><span class="sc-role">' + ic("megaphone", 16) + L("גבאי תוכן", "Content gabbai") + " · " + esc(S.N(con)) + '</span><button class="btn sm" id="tvNew">' + ic("plus", 16) + L("הודעה חדשה", "New announcement") + '</button></div><div id="tvEd"></div></section>' +
         '<section class="tvs-screen"><div class="tvs-toolbar"><div class="seg" role="group" aria-label="' + L("יום", "Day") + '"><button data-mode="weekday" aria-pressed="true">' + L("יום חול", "Weekday") + '</button><button data-mode="shabbat" aria-pressed="false">' + L("שבת", "Shabbat") + '</button></div><a class="btn sm" href="#/screen">' + L("לאולם התצוגה", "screen showroom") + "</a></div>" + tvset(frame("#/tv?preview=1", 1920, 1080, "", "screen"), "tvs-set") + '<p class="tvs-note" id="tvNote"></p></section></div></div>';
-      bindNav(app); fitFrames(app);
+      app.querySelector(".xp").insertAdjacentHTML("beforeend", ctaBand()); bindNav(app); fitFrames(app);
       var ifr = app.querySelector(".tvs-set iframe");
       function tvw() { try { return ifr.contentWindow; } catch (e) { return null; } }
       function note(he, en) { app.querySelector("#tvNote").innerHTML = ic("tv", 16) + " " + esc(L(he, en)); }
@@ -343,7 +349,7 @@
         '<div class="table-wrap matrix"><table><thead><tr><th>' + L("יכולת", "Capability") + "</th>" + RCOLS.map(function (r) { return "<th>" + esc(L(pp(r).he, pp(r).en)) + "</th>"; }).join("") + "</tr></thead><tbody>" +
         RROWS.map(function (row) { return "<tr><td>" + L(row[0], row[1]) + "</td>" + row[2].map(function (v) { return '<td class="mx">' + (v ? '<span class="yes" aria-label="' + L("כן", "Yes") + '">' + ic("check", 16) + "</span>" : '<span class="no" aria-label="' + L("לא", "No") + '">·</span>') + "</td>"; }).join("") + "</tr>"; }).join("") +
         '</tbody></table></div><p class="tiers-note">' + L("בהדגמה עוברים בין תפקידים בלחיצה. במערכת האמיתית הכניסה היא עם חשבון Google, והמנהל הראשי קובע מי מקבל איזה תפקיד.", "In the demo you switch roles with a click. In the real system people sign in with Google, and the administrator decides who gets which role.") + "</p></div></div>";
-      bindNav(app);
+      app.querySelector(".xp").insertAdjacentHTML("beforeend", ctaBand()); bindNav(app);
       app.querySelectorAll("[data-enter]").forEach(function (b) { b.addEventListener("click", function () { var r = b.getAttribute("data-enter"); go(r, pp(r).dest); }); });
     }
   });
@@ -364,7 +370,7 @@
         '<p class="tiny muted">' + L("מה שמשתנה: גופנים, צבעים, צורות, ניווט, כותרת האתר והמסך. מה שלא משתנה: הנתונים, התפקידים והיכולות.", "What changes: fonts, colors, shapes, navigation, the site header and the screen. What stays: the data, the roles and the features.") + '</p></aside>' +
         '<section class="studio-main"><div class="seg studio-dev" role="tablist">' + DEV.map(function (d, i) { return '<button role="tab" data-dev="' + i + '" aria-pressed="' + (i === 0) + '">' + L(d[1], d[2]) + "</button>"; }).join("") + '</div><div class="studio-stage" id="stStage"></div></section></div>' +
         '<div class="xp-wrap"><div class="studio-h" style="margin-top:28px">' + L("השוואה", "Side by side") + '</div><div class="compare">' + UI.THEMES.map(function (t) { return '<button class="cmp" data-st="' + t.id + '">' + browser("www." + slug() + ".org", frame("#/site?frame=1&as=visitor&theme=" + t.id, 1280, 860, "", S.N(t))) + "<span>" + esc(S.N(t)) + "</span></button>"; }).join("") + "</div></div></div>";
-      bindNav(app); fitFrames(app);
+      app.querySelector(".xp").insertAdjacentHTML("beforeend", ctaBand()); bindNav(app); fitFrames(app);
       bindPersonal(app, function () { app.querySelectorAll(".win-bar span").forEach(function (x) { x.textContent = "www." + slug() + ".org"; }); });
       function drawBrands() {
         var bx = app.querySelector("#stBrands");
@@ -406,7 +412,7 @@
           ["refresh", "רענון מרחוק", "Remote refresh", "המנהל לוחץ פעם אחת וכל מסך פתוח נטען מחדש. לא בשבת ולא בחג.", "The administrator presses once and every open screen reloads. Never on Shabbat or Yom Tov."],
           ["clock", "תמיד מעודכן", "Always current", "שינוי בזמני התפילה או פרסום הודעה מגיעים למסך תוך שנייה.", "A changed davening time or a published announcement reaches the screen within a second."]].map(function (f) { return '<div class="fact">' + ic(f[0], 20) + "<b>" + L(f[1], f[2]) + "</b><span>" + L(f[3], f[4]) + "</span></div>"; }).join("") + "</div>" +
         '<div class="xp-center"><a class="xp-btn" href="#/tv">' + L("פתיחה במסך מלא", "Open full screen") + ARROW + '</a> <a class="xp-btn ghost dark" href="#/showcase/tv">' + L("לפרסם הודעה למסך", "Publish to the screen") + "</a></div></div></div>";
-      bindNav(app); fitFrames(app);
+      app.querySelector(".room-wall").insertAdjacentHTML("afterend", '<div class="xp-wrap room-cta"><p>' + L("רוצים את המסך הזה בבית הכנסת שלכם?", "Want this screen in your shul?") + '</p><a class="cta-demo" href="#/proposal">' + I.sparkle.replace("<svg", '<svg width="16" height="16"') + "<span>" + L("בקשת הדגמה", "Request a demo") + "</span></a></div>"); bindNav(app); fitFrames(app);
       var ifr = app.querySelector(".room-tv iframe");
       var NOTES = { "live": ["המסך כפי שהוא עכשיו בשבוע ההדגמה.", "The screen as it is right now in the demo week."], "0:385": ["לפני הנץ: הפס העליון סופר את הדקות לנץ החמה.", "Before Netz: the top strip counts down the minutes to sunrise."], "2:1425": ["בלילה: המסך מתעמעם אוטומטית, ובבוקר חוזר לבהירות מלאה.", "At night: the screen dims on its own and returns to full brightness by morning."], "5:375": ["יום שישי: זמני ערב שבת ואחריהם כל זמני השבת. בלוק השבת מוצג בצד.", "Friday: Erev Shabbat times followed by the whole Shabbat schedule. The Shabbat block shows at the side."], "5:940": ["לפני הדלקת נרות: ספירה לאחור, וכרטיס השבת מופיע במקום הקוד לתרומה.", "Before candle lighting: a countdown, and the Shabbat card takes the donation code's place."], "5:1100": ["שבת: המסך לא מתחלף. כרטיס שבת שלום, ההקדשות, ההזכרות והיארצייטים.", "Shabbat: the screen stops rotating. The Shabbat Shalom card, dedications, hazkarot and yahrzeits."], "6:660": ["שבת בבוקר: זמני השבת, וכרטיס השבת נשאר במקומו.", "Shabbat morning: the Shabbat times, with the Shabbat card in place."] };
       function setM(v) {
