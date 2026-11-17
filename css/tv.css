@@ -148,3 +148,37 @@ body.bare { background: #000; overflow: hidden; }
 .tv-next .en { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .tv-col, .tv-center { min-width: 0; }
 .tv-draft { position: absolute !important; top: 158px; left: 50%; transform: translateX(-50%); z-index: 6; background: #f2c14e; color: #1d1a12; font-weight: 800; font-size: 22px; padding: 6px 22px; border-radius: 999px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+
+/* English-primary mode: when the site language is English, the screen shows English large and Hebrew small. */
+.tv-stage.lang-en .tv-brand .he { font-size: 22px; font-weight: 400; opacity: .75; font-family: var(--font-body); }
+.tv-stage.lang-en .tv-brand .en { font-size: 46px; font-weight: 700; opacity: 1; font-family: var(--tv-font-head); text-align: left; letter-spacing: 0; }
+.tv-stage.lang-en .tv-ch .he { font-size: 20px; font-weight: 400; opacity: .65; text-transform: uppercase; letter-spacing: .12em; font-family: var(--font-body); }
+.tv-stage.lang-en .tv-ch .en { font-size: 36px; font-weight: 700; opacity: 1; text-transform: none; letter-spacing: 0; font-family: var(--tv-font-head); }
+.tv-stage.lang-en .tv-zrow .he { font-size: 14px; font-weight: 400; opacity: .6; }
+.tv-stage.lang-en .tv-zrow .en { font-size: 25px; font-weight: 700; opacity: 1; }
+.tv-stage.lang-en .compact .tv-zrow .he { font-size: 12px; }
+.tv-stage.lang-en .compact .tv-zrow .en { font-size: 22px; }
+.tv-stage.lang-en .tv-sbt .he { font-size: 16px; font-weight: 400; opacity: .65; font-family: var(--font-body); }
+.tv-stage.lang-en .tv-sbt .en { font-size: 28px; font-weight: 700; opacity: 1; font-family: var(--tv-font-head); }
+.tv-stage.lang-en .tv-parline .he { font-size: 16px; font-weight: 400; opacity: .65; }
+.tv-stage.lang-en .tv-parline .en { font-size: 26px; font-weight: 700; opacity: 1; }
+.tv-stage.lang-en .tv-pgroup .he { font-size: 15px; text-transform: uppercase; letter-spacing: .1em; }
+.tv-stage.lang-en .tv-pgroup .en { font-size: 24px; text-transform: none; letter-spacing: 0; }
+.tv-stage.lang-en .tv-qrcard .he { font-size: 16px; font-weight: 400; opacity: .7; font-family: var(--font-body); }
+.tv-stage.lang-en .tv-qrcard .en { font-size: 26px; font-weight: 800; opacity: 1; font-family: var(--tv-font-head); }
+.tv-stage.lang-en .tv-next .he { font-size: 17px; font-weight: 400; opacity: .85; }
+.tv-stage.lang-en .tv-next .en { font-size: 25px; font-weight: 800; opacity: 1; }
+.tv-stage.lang-en .tv-bhead .he { font-size: 20px; font-weight: 400; opacity: .6; text-transform: uppercase; letter-spacing: .1em; font-family: var(--font-body); }
+.tv-stage.lang-en .tv-bhead .en { font-size: 40px; font-weight: 700; opacity: 1; text-transform: none; letter-spacing: 0; font-family: var(--tv-font-head); }
+.tv-stage.lang-en .tv-li .he { font-size: 19px; font-weight: 400; opacity: .7; }
+.tv-stage.lang-en .tv-li .en { font-size: 31px; font-weight: 600; opacity: 1; }
+.tv-stage.lang-en .tv-welcome .he { font-size: 30px; font-weight: 400; opacity: .65; letter-spacing: .12em; text-transform: uppercase; font-family: var(--font-body); }
+.tv-stage.lang-en .tv-welcome .en { font-size: 92px; font-weight: 700; opacity: 1; letter-spacing: 0; text-transform: none; font-family: var(--tv-font-head); margin-bottom: 0; }
+.tv-stage.lang-en .tv-donate .he { font-size: 26px; font-weight: 400; opacity: .65; font-family: var(--font-body); }
+.tv-stage.lang-en .tv-donate .en { font-size: 60px; font-weight: 700; opacity: 1; font-family: var(--tv-font-head); margin-bottom: 0; }
+.tv-stage.lang-en .tv-shcard .he { font-size: 34px; font-weight: 400; opacity: .75; letter-spacing: .14em; text-transform: uppercase; font-family: var(--font-body); }
+.tv-stage.lang-en .tv-shcard .en { font-size: 110px; font-weight: 700; opacity: 1; letter-spacing: 0; text-transform: none; font-family: var(--tv-font-head); }
+.tv-stage.lang-en .tv-shcard.small .he { font-size: 18px; }
+.tv-stage.lang-en .tv-shcard.small .en { font-size: 54px; }
+.tv-stage.lang-en .tv-board.shabbat .tv-li .he { font-size: 17px; }
+.tv-stage.lang-en .tv-board.shabbat .tv-li .en { font-size: 27px; }
