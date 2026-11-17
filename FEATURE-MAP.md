@@ -34,7 +34,7 @@ Presentation-only tools are listed separately at the end.
 
 Perspective switcher, example designs and brand color, the shul-name field, the demo clock,
 reset, the platform overview, the showcases, the TV showroom and the proposal request.
-These exist to present the product and add no synagogue management capability.
+These exist to present the product and add no shul management capability.
 
 ## Known deviations
 

@@ -48,7 +48,7 @@
   var sample = window.SHUL_SEED().shul;
   function personalHtml(compact) {
     var custom = S.db.shul.en !== sample.en;
-    return '<div class="pz' + (compact ? " compact" : "") + '" id="pz"><div class="pz-row"><label class="pz-field"><span>' + L("שם בית הכנסת שלכם", "Your synagogue's name") + '</span><input id="pzName" maxlength="48" autocomplete="off" placeholder="' + L("לדוגמה: קהילת בית שלום", "e.g. Congregation Beth Shalom") + '" value="' + (custom ? esc(S.db.shul.en) : "") + '"></label></div>' +
+    return '<div class="pz' + (compact ? " compact" : "") + '" id="pz"><div class="pz-row"><label class="pz-field"><span>' + L("שם בית הכנסת שלכם", "Your shul's name") + '</span><input id="pzName" maxlength="48" autocomplete="off" placeholder="' + L("לדוגמה: קהילת בית שלום", "e.g. Congregation Beth Shalom") + '" value="' + (custom ? esc(S.db.shul.en) : "") + '"></label></div>' +
       '<div class="pz-designs" role="group" aria-label="' + L("כיוון עיצובי", "Design direction") + '">' + UI.THEMES.map(function (t) { return '<button type="button" class="pz-d" data-pz-theme="' + t.id + '" aria-pressed="' + (S.prefs.theme === t.id) + '"><span class="pz-sw" style="background:' + t.c + '"></span><span>' + esc(S.N(t)) + "</span></button>"; }).join("") + "</div>" +
       '<div class="pz-foot"><span class="pz-live"><i></i>' + L("כל מסך מתעדכן בזמן אמת", "Every screen updates live") + '</span><button type="button" class="pz-reset" id="pzReset"' + (custom ? "" : " hidden") + ">" + L("חזרה לשם לדוגמה", "Back to the sample name") + "</button></div></div>";
   }
@@ -76,7 +76,7 @@
       ttl: ["כל מתפלל, עם החשבון שלו", "Every member, their own account"], pts: [["יתרה והיסטוריה מלאה, מאותו יומן חשבונות", "Balance and full history from the same ledger"], ["תשלום היתרה בכרטיס, שנרשם מעצמו", "Pay the balance by card; it records itself"], ["יארצייטים של המשפחה, למסך אחרי אישור", "Family yahrzeits, on the screen after approval"], ["הודעות הקהילה", "Community announcements"]] },
     { id: "admin", he: "מערכת הגבאים", en: "Administration", role: "super", dest: "#/gabbai", kind: "browser", src: "#/gabbai?frame=1&as=super", w: 1360, h: 860,
       ttl: ["מרכז הניהול של בית הכנסת", "The shul's command center"], pts: [["תשלומים, חיובים, נדרי שבת ומי חייב", "Payments, charges, Shabbat nedarim and who owes"], ["מתפללים ובקשות הצטרפות", "Members and join requests"], ["תוכן המסך, זמני תפילה ודף השבת", "Screen content, davening times and the Shabbat sheet"], ["הרשאות לכל גבאי, יומן פעילות וגיבוי לילי", "Permissions per gabbai, activity log, nightly backup"]] },
-    { id: "tv", he: "מסך בית הכנסת", en: "Synagogue screen", role: null, dest: "#/screen", kind: "tv", src: "#/tv?preview=1", w: 1920, h: 1080,
+    { id: "tv", he: "מסך בית הכנסת", en: "Shul screen", role: null, dest: "#/screen", kind: "tv", src: "#/tv?preview=1", w: 1920, h: 1080,
       ttl: ["המסך שדולק כל הזמן באולם", "The always-on screen in the shul"], pts: [["זמני היום וזמני התפילות, תמיד מעודכנים", "Zmanim and davening times, always current"], ["מצב שבת: נרות, הקדשות, הזכרות ויארצייטים", "Shabbat mode: candles, dedications, hazkarot, yahrzeits"], ["ספירה לנץ ושורת הפרשה", "Netz countdown and the parasha line"], ["עמעום לילי ורענון מרחוק", "Night dimming and remote refresh"]] }
   ];
   function perspStage(p) {
@@ -86,7 +86,7 @@
     return browser((p.id === "admin" ? "admin." : "www.") + slug() + ".org", f, "ps-win");
   }
   var SEE = [
-    { href: "#top", n: "A", ic: "edit", he: "הופכים אותה לשלכם", en: "Make it yours", dhe: "מקלידים את שם בית הכנסת ובוחרים כיוון עיצובי. האתר, הפורטל, מערכת הגבאים והמסך מתעדכנים מיד.", den: "Type your synagogue's name and choose a design direction. The website, portal, administration and screen update at once." },
+    { href: "#top", n: "A", ic: "edit", he: "הופכים אותה לשלכם", en: "Make it yours", dhe: "מקלידים את שם בית הכנסת ובוחרים כיוון עיצובי. האתר, הפורטל, מערכת הגבאים והמסך מתעדכנים מיד.", den: "Type your shul's name and choose a design direction. The website, portal, administration and screen update at once." },
     { href: "#/showcase/ledger", n: "B", ic: "wallet", he: "יומן אחד, שתי נקודות מבט", en: "One ledger, two views", dhe: "הגבאי רושם חיוב, המתפלל רואה אותו ומשלם בכרטיס, והתשלום נרשם מעצמו. היתרה מתעדכנת מיד בשני הצדדים.", den: "The gabbai records a charge, the member sees it and pays by card, and the payment records itself. Both sides update at once." },
     { href: "#/showcase/tv", n: "C", ic: "tv", he: "מהעורך אל האולם", en: "From editor to shul", dhe: "עורכים הודעה, רואים תצוגה מקדימה על המסך, ומפרסמים. בשבת ההודעות לא מוצגות, כמו במערכת האמיתית.", den: "Edit an announcement, preview it on the screen, publish. On Shabbat announcements step aside, exactly as in the real system." },
     { href: "#/showcase/roles", n: "D", ic: "shield", he: "לכל תפקיד, המערכת שלו", en: "Every role, its own system", dhe: "מתפלל, גבאי כספים, גבאי תוכן ומנהל ראשי. כל אחד רואה רק את מה שמותר לו.", den: "Member, finance gabbai, content gabbai and administrator. Each sees only what they may use." },
@@ -114,14 +114,14 @@
   }
 
   UI.route("/", {
-    layout: "xp", live: false, title: function () { return L("מערכת לניהול בית הכנסת", "Synagogue management platform"); },
+    layout: "xp", live: false, title: function () { return L("מערכת לניהול בית הכנסת", "Shul management platform"); },
     render: function (app) {
       var pTab = 0;
       app.innerHTML = '<div class="xp" id="top">' + xpNav() +
         '<section class="xp-hero"><div class="xp-glow"></div><div class="xp-wrap xp-hero-grid"><div class="xp-copy">' +
-        '<div class="xp-eyebrow"><span></span>' + L("פלטפורמה לניהול בית הכנסת", "Synagogue management platform") + "</div>" +
+        '<div class="xp-eyebrow"><span></span>' + L("פלטפורמה לניהול בית הכנסת", "Shul management platform") + "</div>" +
         "<h1>" + L("כל בית הכנסת.<br><em>במערכת אחת.</em>", "The whole shul.<br><em>One system.</em>") + "</h1>" +
-        '<p class="xp-lead">' + L("מתפללים, חשבונות ותשלומים, המסך באולם, זמני התפילה, דף השבת והאתר. הכל מחובר, בעברית ובאנגלית, ומעוצב סביב בית הכנסת שלכם.", "Members, ledger and payments, the shul screen, davening times, the Shabbat sheet and your website. Connected, in Hebrew and English, and designed around your synagogue.") + "</p>" +
+        '<p class="xp-lead">' + L("מתפללים, חשבונות ותשלומים, המסך באולם, זמני התפילה, דף השבת והאתר. הכל מחובר, בעברית ובאנגלית, ומעוצב סביב בית הכנסת שלכם.", "Members, ledger and payments, the shul screen, davening times, the Shabbat sheet and your website. Connected, in Hebrew and English, and designed around your shul.") + "</p>" +
         '<div class="xp-ctas"><a class="xp-btn lg" href="#perspectives" data-scroll>' + L("לסיור במערכת", "Explore the platform") + ARROW + '</a><a class="xp-btn lg ghost" href="#/showcase/ledger">' + L("לראות אותה עובדת", "See it work") + "</a></div>" +
         personalHtml() + "</div>" +
         '<div class="xp-stage" id="stage" aria-label="' + L("תצוגה חיה של המערכת", "Live view of the platform") + '">' +
@@ -393,11 +393,11 @@
   /* =================================================================== */
   /* ---------- the TV showroom ---------- */
   UI.route("/screen", {
-    layout: "xp", live: false, title: function () { return L("מסך בית הכנסת", "The synagogue screen"); },
+    layout: "xp", live: false, title: function () { return L("מסך בית הכנסת", "The shul screen"); },
     render: function (app) {
       var M = window.SHUL_PRESENTER.MOMENTS, cur = "live";
       var t = S.db.tvDisplay;
-      app.innerHTML = '<div class="xp room">' + xpNav(L("מסך בית הכנסת", "The synagogue screen")) +
+      app.innerHTML = '<div class="xp room">' + xpNav(L("מסך בית הכנסת", "The shul screen")) +
         '<div class="xp-wrap room-head"><h1>' + L("המסך שדולק כל הזמן באולם.", "The screen that never sleeps.") + "</h1><p>" + L("זמני היום, זמני התפילות ולוח הקהילה. בשבת הוא עובר לבד למצב שבת, בלילה הוא מתעמעם, ואפשר לרענן אותו מרחוק.", "Zmanim, davening times and the community board. On Shabbat it switches to Shabbat mode on its own, at night it dims, and it can be refreshed remotely.") + "</p></div>" +
         '<div class="room-wall"><div class="xp-wrap">' + tvset(frame("#/tv?preview=1", 1920, 1080, "", "screen"), "room-tv") + "</div></div>" +
         '<div class="xp-wrap room-ctl"><div class="room-moments" role="group" aria-label="' + L("רגע בשבוע", "Moment of the week") + '">' + M.map(function (m) { return '<button class="mom" data-m="' + m[0] + '" aria-pressed="' + (m[0] === cur) + '">' + esc(L(m[1], m[2])) + "</button>"; }).join("") + '</div><p class="room-note" id="roomNote"></p>' +
@@ -431,14 +431,14 @@
         '<div class="prop-sum"><div class="ps-swatch" style="background:' + th.c + '"></div><div><small>' + L("ההדגמה שלכם", "Your demo") + "</small><b>" + esc(S.N(S.db.shul)) + "</b><span>" + esc(S.N(th)) + (S.prefs.brand ? " · " + esc(S.prefs.brand) : "") + " · " + (S.prefs.lang === "he" ? "עברית ואנגלית" : "English and Hebrew") + '</span></div><a class="xp-btn ghost dark sm" href="#/showcase/design">' + L("שינוי", "Change") + "</a></div>" +
         '<div class="prop-contact"><span class="pc-k">' + L("אפשר גם לפנות ישירות", "Or reach out directly") + '</span><a href="mailto:' + SALES.email + '?subject=' + encodeURIComponent("Shul System: " + S.db.shul.en) + '">' + ic("mail", 18) + '<span dir="ltr">' + esc(SALES.email) + '</span></a><a href="tel:' + SALES.tel + '">' + ic("phone", 18) + '<span dir="ltr">' + esc(SALES.phone) + "</span></a></div></div>" +
         '<form class="prop-f card" id="propF"><div class="form-grid"><label class="field"><span>' + L("שם מלא", "Full name") + '</span><input name="name" required></label><label class="field"><span>' + L("תפקיד בבית הכנסת", "Role at the shul") + '</span><select name="role"><option>' + L("נשיא", "President") + "</option><option>" + L("גבאי", "Gabbai") + "</option><option>" + L("רב", "Rabbi") + "</option><option>" + L("חבר הנהלה", "Board member") + "</option><option>" + L("אחר", "Other") + '</option></select></label><label class="field"><span>' + L("אימייל", "Email") + '</span><input name="email" type="email" class="ltr" required></label><label class="field"><span>' + L("טלפון", "Phone") + '</span><input name="phone" class="ltr"></label></div>' +
-        '<label class="field"><span>' + L("שם בית הכנסת", "Synagogue name") + '</span><input name="shul" value="' + esc(S.N(S.db.shul)) + '"></label><div class="field"><span>' + L("מה חשוב לכם", "What matters to you") + '</span><div class="prop-int">' + INTEREST.map(function (x, i) { return '<label class="check"><input type="checkbox" name="int" value="' + i + '"' + (i < 4 ? " checked" : "") + "> " + L(x[1], x[2]) + "</label>"; }).join("") + '</div></div><label class="field"><span>' + L("הערות (לא חובה)", "Notes (optional)") + '</span><textarea name="notes"></textarea></label>' +
+        '<label class="field"><span>' + L("שם בית הכנסת", "Shul name") + '</span><input name="shul" value="' + esc(S.N(S.db.shul)) + '"></label><div class="field"><span>' + L("מה חשוב לכם", "What matters to you") + '</span><div class="prop-int">' + INTEREST.map(function (x, i) { return '<label class="check"><input type="checkbox" name="int" value="' + i + '"' + (i < 4 ? " checked" : "") + "> " + L(x[1], x[2]) + "</label>"; }).join("") + '</div></div><label class="field"><span>' + L("הערות (לא חובה)", "Notes (optional)") + '</span><textarea name="notes"></textarea></label>' +
         '<button class="btn primary lg block">' + L("שליחת הבקשה באימייל", "Send the request by email") + '</button><p class="tiny muted">' + L("הבקשה נפתחת באפליקציית האימייל שלכם, מוכנה לשליחה אל ", "The request opens in your email app, ready to send to ") + '<bdi dir="ltr">' + esc(SALES.email) + "</bdi>" + L(". ההדגמה עצמה לא שולחת דבר.", ". The demo itself sends nothing.") + '</p><div id="propOut"></div></form></div></div>';
       bindNav(app);
       app.querySelector("#propF").addEventListener("submit", function (e) {
         e.preventDefault(); var f = e.target;
         if (!f.name.value.trim() || !/^\S+@\S+\.\S+$/.test(f.email.value.trim())) { UI.toast(L("נא למלא שם ואימייל", "Please fill in name and email")); return; }
         var ints = Array.prototype.slice.call(f.querySelectorAll("[name=int]:checked")).map(function (c) { return INTEREST[+c.value][2]; });
-        var txt = "Shul System: request for a personal demonstration and subscription proposal\n\nSynagogue: " + f.shul.value.trim() + "\nContact: " + f.name.value.trim() + " (" + f.role.value + ")\nEmail: " + f.email.value.trim() + (f.phone.value.trim() ? "\nPhone: " + f.phone.value.trim() : "") +
+        var txt = "Shul System: request for a personal demonstration and subscription proposal\n\nShul: " + f.shul.value.trim() + "\nContact: " + f.name.value.trim() + " (" + f.role.value + ")\nEmail: " + f.email.value.trim() + (f.phone.value.trim() ? "\nPhone: " + f.phone.value.trim() : "") +
           "\nDesign direction: " + th.en + (S.prefs.brand ? ", brand color " + S.prefs.brand : "") + "\nInterested in: " + (ints.join(", ") || "Not specified") + (f.notes.value.trim() ? "\nNotes: " + f.notes.value.trim() : "");
         var out = app.querySelector("#propOut");
         var mail = "mailto:" + SALES.email + "?subject=" + encodeURIComponent("Proposal request: " + f.shul.value.trim()) + "&body=" + encodeURIComponent(txt);
