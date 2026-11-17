@@ -11,7 +11,7 @@
     { id: "visitor", ic: "map", dest: "#/site", he: "אורח באתר", en: "Website visitor", dhe: "האתר הציבורי, זמני השבת, תרומה והמסך", den: "Public website, Shabbat times, donations and the screen" },
     { id: "member", ic: "user", dest: "#/me", he: "מתפלל", en: "Member", dhe: "היתרה, החיובים והתשלומים, תשלום בכרטיס, יארצייטים", den: "Balance, charges and payments, pay by card, yahrzeits" },
     { id: "finance", ic: "wallet", dest: "#/gabbai", he: "גבאי כספים", en: "Finance gabbai", dhe: "מתפללים, יומן חשבונות, נדרים, מכתבי מס. בלי תוכן מסך", den: "Members, ledger, nedarim, tax letters. No screen content" },
-    { id: "content", ic: "megaphone", dest: "#/gabbai", he: "גבאי תוכן וזמנים", en: "Content gabbai", dhe: "זמני תפילה, תוכן המסך, דף השבת. בלי נתונים כספיים", den: "Davening times, screen content, Shabbat sheet. No financial data" },
+    { id: "content", ic: "megaphone", dest: "#/gabbai", he: "גבאי תוכן וזמנים", en: "Content gabbai", dhe: "זמני תפילה, תוכן המסך, דף השבת. בלי נתונים כספיים", den: "Davening times, screen content, Shabbat bulletin. No financial data" },
     { id: "super", ic: "shield", dest: "#/gabbai", he: "מנהל ראשי", en: "Administrator", dhe: "הכל, כולל הרשאות, בקשות הצטרפות, יומן פעילות וגיבוי", den: "Everything, including permissions, join requests, activity log and backup" },
     { id: "applicant", ic: "users", dest: "#/join", he: "נרשם חדש", en: "New sign-in", dhe: "נכנס עם Google ושולח בקשת הצטרפות", den: "Signed in with Google, sends a join request" }
   ];

@@ -193,7 +193,7 @@
   /* ---------- customization (presentation tools only) ---------- */
   var CUSTOM_ITEMS = [
     [I.palette, "עיצוב ומיתוג", "Visual design and branding", "לוגו, צבעים, גופנים, צורת המסכים והמסך, בזהות של בית הכנסת שלכם.", "Logo, colors, fonts, the look of every screen and the screen, in your shul's identity."],
-    [I.edit, "שפה ותוכן כתוב", "Language and written content", "עברית, אנגלית או שתיהן, וכל מילה באתר, במסך, בדף השבת ובאימיילים, בסגנון שלכם.", "Hebrew, English or both, and every word on the site, the screen, the Shabbat sheet and the emails, in your style."],
+    [I.edit, "שפה ותוכן כתוב", "Language and written content", "עברית, אנגלית או שתיהן, וכל מילה באתר, במסך, בדף השבת ובאימיילים, בסגנון שלכם.", "Hebrew, English or both, and every word on the site, the screen, the Shabbat bulletin and the emails, in your style."],
     [I.map, "המידע של בית הכנסת", "Your shul's information", "שם, כתובת, זמני תפילה, מניינים, שיעורים, נוסח ומנהגים.", "Name, address, davening times, minyanim, shiurim, nusach and minhagim."],
     [I.gear, "הגדרת היכולות הקיימות", "Configuration of existing features", "אילו מסכים פעילים, מה מוצג במסך, סוגי חיובים ונדרים, הרשאות לכל גבאי.", "Which screens are on, what the screen shows, charge and neder types, permissions for each gabbai."],
     [I.users, "התאמת תהליכי העבודה", "Adapting existing workflows", "תהליכי התשלום, ההצטרפות, היארצייטים והתרומות מותאמים לדרך שבה בית הכנסת שלכם עובד.", "Payment, joining, yahrzeit and donation flows are set up the way your shul works."]
@@ -218,7 +218,7 @@
         e.preventDefault(); var he = f.he.value.trim(), en = f.en.value.trim();
         if (!he && !en) return;
         S.db.shul.he = he || en; S.db.shul.en = en || he; S.save(); closeModal(); renderChrome(); render();
-        toast(L("השם עודכן בכל המערכת: בכותרת, במסך, בדף השבת, בקבלות ובאימיילים.", "The name now appears across the system: header, screen, Shabbat sheet, receipts and emails."), L("לראות במסך", "See it on the screen"), function () { location.hash = "#/tv"; }, 6000);
+        toast(L("השם עודכן בכל המערכת: בכותרת, במסך, בדף השבת, בקבלות ובאימיילים.", "The name now appears across the system: header, screen, Shabbat bulletin, receipts and emails."), L("לראות במסך", "See it on the screen"), function () { location.hash = "#/tv"; }, 6000);
       });
       f.querySelector("[data-rename-reset]").addEventListener("click", function () { var sd = window.SHUL_SEED().shul; S.db.shul.he = sd.he; S.db.shul.en = sd.en; S.save(); closeModal(); renderChrome(); render(); });
     });
@@ -294,7 +294,7 @@
   var ADMIN_NAV = [
     { sec: ["סקירה", "Overview"], items: [["#/gabbai", "sparkle", "לוח בקרה", "Dashboard", "gabbai"]] },
     { sec: ["כספים", "Finance"], items: [["#/finance/home", "wallet", "כספים", "Finance", "finance"], ["#/finance/pay", "receipt", "תשלום / חיוב", "Payment / Charge", "finance"], ["#/finance/nedarim", "list", "נדרי שבת", "Shabbat nedarim", "finance"], ["#/finance/owes", "users", "מי חייב", "Who owes", "finance"], ["#/finance/members", "user", "מתפללים", "Members", "finance", "join"], ["#/finance/inbox", "inbox", "תשלומים בכרטיס", "Card payments", "finance", "inbox"], ["#/finance/more", "doc", "דוחות ומכתבי מס", "Reports and tax letters", "finance"]] },
-    { sec: ["תוכן ומסך", "Content and screen"], items: [["#/gabbai/content", "megaphone", "תוכן המסך", "Screen content", "content", "yz"], ["#/gabbai/tv", "clock", "זמני תפילה והמסך", "Davening times and screen", "content"], ["#/gabbai/shabbat", "candle", "דף השבת", "Shabbat sheet", "content"]] },
+    { sec: ["תוכן ומסך", "Content and screen"], items: [["#/gabbai/content", "megaphone", "תוכן המסך", "Screen content", "content", "yz"], ["#/gabbai/tv", "clock", "זמני תפילה והמסך", "Davening times and screen", "content"], ["#/gabbai/shabbat", "candle", "דף השבת", "Shabbat bulletin", "content"]] },
     { sec: ["ניהול", "Administration"], items: [["#/admin", "shield", "גבאים והרשאות", "Gabbaim and permissions", "super"], ["#/gabbai/activity", "list", "יומן פעילות", "Activity log", "super"], ["#/gabbai/landing", "edit", "דף הנחיתה", "Landing page", "super"], ["#/backup", "cloud", "גיבוי", "Backup", "finance"], ["#/gabbai/settings", "gear", "הגדרות", "Settings", "gabbai"]] }
   ];
   function navAllowed(need) { return need === "super" ? S.role() === "super" : S.can(need); }
