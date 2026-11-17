@@ -281,7 +281,7 @@
       state.timers.push(setInterval(tick, 1000), setInterval(rotate, 9000), setInterval(function () { state.stage.style.marginLeft = (Math.round(Math.random() * 6) - 3) + "px"; }, 300000));
       var ctl = app.querySelector("#tvCtl");
       if (ctl) {
-        var hideT; var show = function () { ctl.classList.add("show"); clearTimeout(hideT); hideT = setTimeout(function () { ctl.classList.remove("show"); }, 3500); };
+        var hideT; var host = app.querySelector(".tv-host"); var show = function () { ctl.classList.add("show"); host.classList.remove("nocursor"); clearTimeout(hideT); hideT = setTimeout(function () { ctl.classList.remove("show"); host.classList.add("nocursor"); }, 3500); };
         app.addEventListener("mousemove", show); app.addEventListener("touchstart", show); show();
         ctl.querySelector("#tvSh").addEventListener("click", function () { location.hash = state.shabbatPreview ? "#/tv" : "#/tv?shabbat=1"; });
         ctl.querySelector("#tvFs").addEventListener("click", function () { var el = document.documentElement; if (document.fullscreenElement) document.exitFullscreen(); else if (el.requestFullscreen) el.requestFullscreen().catch(function () {}); });

@@ -161,10 +161,10 @@
 
   /* ---------- demo bar + header ---------- */
   var THEMES = [
-    { id: "stone", he: "אבן ירושלמית", en: "Jerusalem Stone", c: "linear-gradient(135deg,#efe3cc 50%,#0e2c4c 50%)" },
-    { id: "marble", he: "שיש לבן", en: "White Marble", c: "linear-gradient(135deg,#ffffff 50%,#4aa3e0 50%)" },
-    { id: "night", he: "תכלת לילה", en: "Night Tchelet", c: "linear-gradient(135deg,#0c1928 50%,#8cc4ee 50%)" },
-    { id: "olive", he: "גליל וזית", en: "Galilee Olive", c: "linear-gradient(135deg,#e1e6d0 50%,#3d5a3a 50%)" }
+    { id: "classic", he: "ירושלמי קלאסי", en: "Jerusalem Classic", c: "linear-gradient(135deg,#e6d6b8 50%,#0e2c4c 50%)", dhe: "אבן ירושלמית, שיש ונגיעות זהב. אווירה מסורתית ומכובדת.", den: "Jerusalem stone, marble and gold. Traditional and dignified." },
+    { id: "modern", he: "כחול מודרני", en: "Modern Blue", c: "linear-gradient(135deg,#ffffff 50%,#1f86e0 50%)", dhe: "נקי ועכשווי, תכלת ולבן, פינות מעוגלות.", den: "Clean and contemporary, sky blue and white, soft rounded shapes." },
+    { id: "royal", he: "מלכותי", en: "Royal Elegant", c: "linear-gradient(135deg,#0a1526 50%,#d4b36a 50%)", dhe: "כחול עמוק וזהב מעודן, טיפוגרפיה אלגנטית.", den: "Deep navy and refined gold, elegant typography." },
+    { id: "minimal", he: "מינימלי בהיר", en: "Minimal Light", c: "linear-gradient(135deg,#ffffff 50%,#161616 50%)", dhe: "בהיר, מרווח ושקט. עיצוב מודרני ומאופק.", den: "Bright, spacious and quiet. Understated modern design." }
   ];
   function applyPrefs() {
     var h = document.documentElement;
@@ -172,19 +172,52 @@
     h.setAttribute("data-theme", S.prefs.theme);
   }
   function setLang(l) { S.prefs.lang = l; S.savePrefs(); applyPrefs(); renderChrome(); render(); }
-  function setTheme(t) { S.prefs.theme = t; S.savePrefs(); applyPrefs(); renderChrome(); var f = document.querySelectorAll("iframe.tvpv"); f.forEach(function (x) { try { x.contentWindow.SHUL_TV_REFRESH && x.contentWindow.SHUL_TV_REFRESH(); } catch (e) {} }); }
+  function setTheme(t, quiet) { var changed = S.prefs.theme !== t; S.prefs.theme = t; S.savePrefs(); applyPrefs(); renderChrome(); if (current && current.onTheme) current.onTheme(); if (changed && !quiet) { var th = THEMES.filter(function (x) { return x.id === t; })[0]; toast("<b>" + esc(S.N(th)) + "</b> · " + L("עיצוב לדוגמה אחד מתוך אינסוף. כל בית כנסת מקבל עיצוב משלו.", "One example out of endless possibilities. Every shul gets its own design."), null, null, 3200); } var f = document.querySelectorAll("iframe.tvpv"); f.forEach(function (x) { try { x.contentWindow.SHUL_TV_REFRESH && x.contentWindow.SHUL_TV_REFRESH(); } catch (e) {} }); }
   function setRole(r, go) {
     S.prefs.role = r; S.savePrefs(); renderChrome();
     if (go !== false) { var h = S.ROLES[r].home; if (location.hash === h) render(); else location.hash = h; } else render();
   }
 
-  function customModal() {
-    modal('<div class="eyebrow">' + L("מותאם אישית במלואו", "Fully customizable") + "</div><h2>" + L("המערכת נבנית בדיוק כמו שבית הכנסת שלכם רוצה", "The system is built exactly the way your shul wants it") + "</h2>" +
-      "<p>" + L("כל מה שרואים בהדגמה מותאם אישית לכל לקוח: העיצוב, הצבעים, הלוגו, הגופנים, כל הטקסטים בעברית ובאנגלית, מסך הטלוויזיה, זמני התפילה, דף השבת, טופס התרומה, התפקידים וההרשאות, וכל השאר.", "Everything in this demo is customized for each customer: the design, colors, logo, fonts, every text in Hebrew and English, the TV screen, the davening times, the Shabbat sheet, the donation form, the roles and permissions, and everything else.") + "</p>" +
-      '<p class="muted">' + L("The system is fully customized exactly as the customer wants: design, texts, and everything else.", "המערכת מותאמת במלואה בדיוק כפי שהלקוח רוצה: העיצוב, הטקסטים וכל השאר.") + "</p>" +
-      '<p class="small muted">' + L("ארבעת העיצובים בסרגל ההדגמה הם רק דוגמה. כל בית כנסת מקבל עיצוב משלו.", "The four looks in the demo bar are only examples. Every shul gets its own design.") + '</p><div class="actions"><button class="btn primary" data-close>' + L("הבנתי", "Got it") + "</button></div>");
+  /* ---------- customization (presentation tools only) ---------- */
+  var CUSTOM_ITEMS = [
+    [I.palette, "עיצוב ומיתוג", "Visual design and branding", "לוגו, צבעים, גופנים, צורת המסכים ומסך הטלוויזיה, בזהות של בית הכנסת שלכם.", "Logo, colors, fonts, the look of every screen and the TV, in your shul's identity."],
+    [I.edit, "שפה ותוכן כתוב", "Language and written content", "עברית, אנגלית או שתיהן, וכל מילה באתר, במסך, בדף השבת ובאימיילים, בסגנון שלכם.", "Hebrew, English or both, and every word on the site, the TV, the Shabbat sheet and the emails, in your style."],
+    [I.map, "המידע של בית הכנסת", "Your shul's information", "שם, כתובת, זמני תפילה, מניינים, שיעורים, נוסח ומנהגים.", "Name, address, davening times, minyanim, shiurim, nusach and minhagim."],
+    [I.gear, "הגדרת היכולות הקיימות", "Configuration of existing features", "אילו מסכים פעילים, מה מוצג במסך, סוגי חיובים ונדרים, הרשאות לכל גבאי.", "Which screens are on, what the TV shows, charge and neder types, permissions for each gabbai."],
+    [I.users, "התאמת תהליכי העבודה", "Adapting existing workflows", "תהליכי התשלום, ההצטרפות, היארצייטים והתרומות מותאמים לדרך שבה בית הכנסת שלכם עובד.", "Payment, joining, yahrzeit and donation flows are set up the way your shul works."]
+  ];
+  function customItemsHtml() {
+    return '<div class="custom-grid">' + CUSTOM_ITEMS.map(function (c) { return '<div class="custom-item"><div class="ic">' + c[0] + "</div><div><b>" + L(c[1], c[2]) + "</b><span>" + L(c[3], c[4]) + "</span></div></div>"; }).join("") + "</div>";
   }
-
+  function scopeNote() { return L("היקף ההתאמה נקבע יחד עם כל בית כנסת לפני תחילת העבודה. פיתוח של יכולות חדשות לגמרי אינו כלול אוטומטית.", "The scope of customization is agreed with each shul before work begins. Developing entirely new capabilities is not automatically included."); }
+  function themePickerHtml() {
+    return '<div class="theme-pick" role="group" aria-label="' + L("עיצוב לדוגמה", "Example design") + '">' + THEMES.map(function (t) {
+      return '<button type="button" class="theme-card" data-pick-theme="' + t.id + '" aria-pressed="' + (S.prefs.theme === t.id) + '"><span class="sw-big" style="background:' + t.c + '"></span><b>' + esc(S.N(t)) + "</b><small>" + esc(L(t.dhe, t.den)) + "</small></button>";
+    }).join("") + "</div>";
+  }
+  function renameHtml() {
+    var sh = S.db.shul;
+    return '<form class="rename" data-rename><div class="form-grid"><label class="field"><span>' + L("שם בית הכנסת בעברית", "Shul name in Hebrew") + '</span><input name="he" maxlength="40" value="' + esc(sh.he) + '"></label><label class="field"><span>' + L("שם בית הכנסת באנגלית", "Shul name in English") + '</span><input name="en" maxlength="48" class="ltr" value="' + esc(sh.en) + '"></label></div><div class="row" style="margin-top:10px"><button class="btn primary">' + L("הצג את השם בכל המערכת", "Show it across the system") + '</button><button type="button" class="btn ghost" data-rename-reset>' + L("חזרה לשם לדוגמה", "Back to the sample name") + "</button></div></form>";
+  }
+  function bindCustom(root) {
+    root.querySelectorAll("[data-pick-theme]").forEach(function (b) { b.addEventListener("click", function () { setTheme(b.getAttribute("data-pick-theme")); root.querySelectorAll("[data-pick-theme]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); }); }); });
+    root.querySelectorAll("[data-rename]").forEach(function (f) {
+      f.addEventListener("submit", function (e) {
+        e.preventDefault(); var he = f.he.value.trim(), en = f.en.value.trim();
+        if (!he && !en) return;
+        S.db.shul.he = he || en; S.db.shul.en = en || he; S.save(); closeModal(); renderChrome(); render();
+        toast(L("השם עודכן בכל המערכת: בכותרת, במסך, בדף השבת, בקבלות ובאימיילים.", "The name now appears across the system: header, TV, Shabbat sheet, receipts and emails."), L("לראות במסך", "See it on the TV"), function () { location.hash = "#/tv"; }, 6000);
+      });
+      f.querySelector("[data-rename-reset]").addEventListener("click", function () { var sd = window.SHUL_SEED().shul; S.db.shul.he = sd.he; S.db.shul.en = sd.en; S.save(); closeModal(); renderChrome(); render(); });
+    });
+  }
+  function customModal() {
+    var m = modal('<div class="eyebrow">' + L("בית הכנסת שלכם. המערכת שלכם.", "Your Shul. Your System.") + "</div><h2>" + L("המערכת מותאמת אישית לבית הכנסת שלכם", "Fully customized for your synagogue") + '</h2><p class="muted">' + L("זו לא תבנית קבועה. כל בית כנסת מקבל מערכת בזהות שלו. הנה מה שאפשר להתאים:", "This is not a fixed template. Every shul gets a system in its own identity. Here is what can be customized:") + "</p>" + customItemsHtml() +
+      '<p class="tiny muted" style="margin-top:12px">' + scopeNote() + '</p><hr class="gold-line"><h3>' + L("נסו בעצמכם: שם בית הכנסת שלכם", "Try it: your shul's name") + "</h3>" + renameHtml() +
+      '<h3 style="margin-top:18px">' + L("ארבעה עיצובים לדוגמה", "Four example designs") + '</h3><p class="small muted">' + L("אלה רק דוגמאות למה שאפשר. העיצוב שלכם ייבנה במיוחד עבורכם.", "These are only examples of what is possible. Your design is created especially for you.") + "</p>" + themePickerHtml() +
+      '<div class="actions"><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>", { wide: true });
+    bindCustom(m);
+  }
   function renderChrome() {
     var bar = document.getElementById("demobar");
     var pin = S.pinned();
@@ -192,10 +225,11 @@
       '<label><span class="hide-sm">' + L("צפייה בתור:", "View as:") + '</span><select id="roleSel" aria-label="' + L("תפקיד להדגמה", "Demo role") + '">' +
       Object.keys(S.ROLES).map(function (k) { return '<option value="' + k + '"' + (S.role() === k ? " selected" : "") + ">" + esc(S.N(S.ROLES[k])) + "</option>"; }).join("") + "</select></label>" +
       '<span class="swatches" role="group" aria-label="' + L("עיצוב", "Theme") + '">' + THEMES.map(function (t) { return '<button class="sw" title="' + esc(S.N(t)) + '" aria-label="' + esc(S.N(t)) + '" aria-pressed="' + (S.prefs.theme === t.id) + '" data-theme-id="' + t.id + '" style="background:' + t.c + '"></button>'; }).join("") + "</span>" +
-      '<label class="hide-sm"><span>' + L("שעון:", "Clock:") + '</span><select id="clockSel">' +
+      '<span class="hide-sm theme-name">' + esc(S.N(THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0])) + '</span>' +
+      '<label class="hide-sm"><span>' + L("שעון להדגמה:", "Demo clock:") + '</span><select id="clockSel">' +
       [["live", L("עכשיו", "Now")], ["5:375", L("שישי 6:15 בבוקר", "Friday 6:15 AM")], ["0:385", L("ראשון לפני הנץ", "Sunday before Netz")], ["5:940", L("שישי 3:40 אחה״צ", "Friday 3:40 PM")], ["5:1100", L("ליל שבת", "Friday night")], ["6:660", L("שבת בבוקר", "Shabbat morning")], ["2:1395", L("שלישי 11:15 בלילה", "Tuesday 11:15 PM")]]
         .map(function (o) { var sel = pin ? (o[0] === pin.dow + ":" + Math.round(pin.min0)) : o[0] === "live"; return '<option value="' + o[0] + '"' + (sel ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") + "</select></label>" +
-      '<span class="spacer"></span><button class="custom" id="customBtn">' + L("מותאם אישית במלואו", "Fully customizable") + "</button>" +
+      '<span class="spacer"></span><button class="custom" id="customBtn">✦ ' + L("בית הכנסת שלכם. המערכת שלכם.", "Your Shul. Your System.") + "</button>" +
       '<button id="resetBtn" title="' + L("איפוס ההדגמה לנתונים המקוריים", "Reset the demo to its original data") + '">' + L("איפוס", "Reset") + "</button></div>";
     bar.querySelector("#roleSel").addEventListener("change", function (e) { setRole(e.target.value); });
     bar.querySelectorAll(".sw").forEach(function (b) { b.addEventListener("click", function () { setTheme(b.getAttribute("data-theme-id")); }); });
@@ -221,7 +255,7 @@
       '<nav class="nav" id="nav">' + links.map(function (l) { return '<a href="' + l[0] + '">' + l[1] + "</a>"; }).join("") + "</nav>" +
       '<span class="spacer"></span><div class="lang" role="group" aria-label="' + L("שפה", "Language") + '"><button aria-pressed="' + (S.prefs.lang === "he") + '" data-l="he">עב</button><button aria-pressed="' + (S.prefs.lang === "en") + '" data-l="en">EN</button></div>' +
       (signed ? '<div class="rel" id="bellHost"><button class="icon-btn" id="bellBtn" aria-label="' + L("התראות", "Notifications") + '">' + I.bell + "</button></div>" : "") +
-      (signed ? '<button class="btn sm" id="acctBtn">' + esc(u ? S.N(u).split(" ")[0] : "") + " · " + L("יציאה", "Sign out") + "</button>" : '<button class="btn primary sm" id="signinBtn">' + L("כניסה", "Sign in") + "</button>") +
+      (signed ? '<button class="btn sm" id="acctBtn"><span class="nm">' + esc(u ? S.N(u).split(" ")[0] : "") + " · </span>" + L("יציאה", "Sign out") + "</button>" : '<button class="btn primary sm" id="signinBtn">' + L("כניסה", "Sign in") + "</button>") +
       '<button class="icon-btn menu-btn" id="menuBtn" aria-label="' + L("תפריט", "Menu") + '">' + I.menu + "</button></div>";
     head.querySelectorAll(".lang button").forEach(function (b) { b.addEventListener("click", function () { setLang(b.getAttribute("data-l")); }); });
     var mb = head.querySelector("#menuBtn"); mb.addEventListener("click", function () { head.classList.toggle("open"); });
@@ -233,7 +267,7 @@
     var foot = document.getElementById("sitefoot");
     foot.innerHTML = '<div class="wrap"><div class="row">' + logo().replace("<svg", '<svg width="30" height="30" style="color:var(--primary)"') + "<span><b>" + esc(S.N(S.db.shul)) + "</b><br><bdi dir=\"ltr\">" + esc(S.db.shul.address) + "</bdi></span></div>" +
       '<div class="small">' + L("הדגמה: שם הקהילה, האנשים והנתונים בדויים. אין תשלומים אמיתיים.", "Demo: the congregation, people and data are fictional. No real payments.") + "<br>" +
-      L("מותאם אישית במלואו: העיצוב, הטקסטים וכל השאר.", "Fully customizable: design, texts and everything else.") + "</div></div>";
+      L("בית הכנסת שלכם. המערכת שלכם. מותאם אישית במלואו: העיצוב, הטקסטים וכל השאר.", "Your Shul. Your System. Fully customized: design, texts and everything else.") + "</div></div>";
   }
   function markNav() {
     var h = location.hash || "#/";
@@ -316,7 +350,7 @@
 
   window.SHUL_UI = {
     I: I, logo: logo, B: B, timeAgo: timeAgo, modal: modal, closeModal: closeModal, confirmBox: confirmBox,
-    toast: toast, pushToast: pushToast, route: route, render: render, setRole: setRole, setLang: setLang, setTheme: setTheme,
+    toast: toast, pushToast: pushToast, customItemsHtml: customItemsHtml, scopeNote: scopeNote, themePickerHtml: themePickerHtml, renameHtml: renameHtml, bindCustom: bindCustom, route: route, render: render, setRole: setRole, setLang: setLang, setTheme: setTheme,
     h: h, on: on, pageHead: pageHead, crumbGabbai: crumbGabbai, download: download, customModal: customModal, THEMES: THEMES,
     start: start, renderChrome: renderChrome, signInModal: signInModal
   };

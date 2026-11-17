@@ -23,10 +23,15 @@
       '<div class="tline"><span>' + L("צאת השבת", "Shabbat ends") + '</span><b class="num">' + S.hm(st.ends, true) + '</b></div><div class="tline"><span>' + L("רבינו תם", "Rabbeinu Tam") + '</span><b class="num">' + S.hm(st.rt, true) + "</b></div>" +
       '<a class="btn soft block" style="margin-top:12px" href="#/times">' + L("לכל זמני התפילה וזמני היום", "All davening times and zmanim") + "</a></div>";
   }
-  function customBand() {
-    return '<div class="custom-band"><div class="ic">' + I.palette + "</div><div><h2>" + L("מותאם אישית במלואו, בדיוק כמו שאתם רוצים", "Fully customized, exactly the way you want it") + "</h2><p>" +
-      L("המערכת נבנית במלואה לפי בית הכנסת שלכם: העיצוב, הצבעים, הלוגו, כל הטקסטים, מסך הטלוויזיה, הטפסים, ההרשאות וכל השאר.", "The system is fully built around your shul: the design, colors, logo, every text, the TV screen, the forms, the permissions and everything else.") +
-      '</p><p class="en" dir="' + (S.prefs.lang === "he" ? "ltr" : "rtl") + '">' + L("Fully customizable: the system is customized exactly as the customer wants, including design, texts, and everything else.", "מותאם אישית במלואו: המערכת מותאמת בדיוק כפי שהלקוח רוצה, כולל העיצוב, הטקסטים וכל השאר.") + '</p></div><button class="btn" id="customMore">' + L("מה אפשר להתאים?", "What can be customized?") + "</button></div>";
+  /* presentation layer above the shul's own site: the main selling message */
+  function brandBand() {
+    return '<section class="brand-band" aria-label="' + L("התאמה אישית", "Customization") + '"><div class="wrap"><div><span class="demo-chip">' + L("הדגמה", "Demo") + '</span><div class="tagline">' + L("בית הכנסת שלכם. המערכת שלכם.", "Your Shul. Your System.") + '</div><div class="tagline-2" dir="' + (S.prefs.lang === "he" ? "ltr" : "rtl") + '" style="text-align:' + (S.prefs.lang === "he" ? "right" : "left") + '">' + L("Your Shul. Your System.", "בית הכנסת שלכם. המערכת שלכם.") + "</div><p>" +
+      L("המערכת מותאמת אישית לבית הכנסת שלכם: העיצוב, השפה והטקסטים, המידע של הקהילה וההגדרות של כל מסך. כאן רואים קהילה לדוגמה, ואתם יכולים לשנות לה את השם ואת העיצוב ולראות איך הכל מתעדכן.", "Fully customized for your synagogue: the design, the language and texts, your community's information and how every screen is set up. This is a sample kehilla. Rename it and change its look, and watch everything update.") +
+      '</p><div class="row"><button class="btn primary" id="tryName">' + I.edit.replace("<svg", '<svg width="18" height="18"') + L("נסו עם השם של בית הכנסת שלכם", "Try it with your shul's name") + '</button><button class="btn ghost" id="customMore">' + L("מה אפשר להתאים?", "What can be customized?") + "</button></div></div>" +
+      "<div>" + UI.themePickerHtml() + '<p class="tiny muted" style="margin:8px 0 0">' + L("ארבעה עיצובים לדוגמה בלבד. העיצוב שלכם נבנה במיוחד עבורכם.", "Four examples only. Your design is created especially for you.") + "</p></div></div></section>";
+  }
+  function customSection() {
+    return '<section class="section"><div class="wrap"><div class="section-title"><div class="eyebrow">' + L("מותאם אישית", "Customized") + "</div><h2>" + L("המערכת מותאמת אישית לבית הכנסת שלכם", "Fully Customized for Your Synagogue") + '</h2><p class="muted" style="max-width:640px;margin:0 auto">' + L("לא תבנית קבועה: אותן יכולות מוכחות, בזהות ובדרך העבודה של הקהילה שלכם.", "Not a fixed template: the same proven features, in your community's identity and way of working.") + "</p></div>" + UI.customItemsHtml() + '<p class="tiny muted" style="text-align:center;margin-top:14px">' + UI.scopeNote() + "</p></div></section>";
   }
 
   UI.route("/", {
@@ -41,16 +46,16 @@
       else quick.push(["#/me", I.user, L("החשבון שלי", "My Account"), L("יתרה, תשלומים ויארצייטים", "Balance, payments and yahrzeits")]);
       if (r === "finance" || r === "content" || r === "super") quick.push(["#/gabbai", I.gear, L("מערכת הגבאים", "Gabbai System"), L("ניהול הכל במקום אחד", "Manage everything in one place")]);
       app.innerHTML =
-        '<section class="hero"><div class="wrap"><div><div class="eyebrow">' + esc(S.db.shul.en.toUpperCase()) + " · " + esc(S.db.shul.cityEn.toUpperCase()) + "</div><h1>" + esc(HT("heroTitle")) + '</h1><p class="lead">' + esc(HT("heroLead")) + "</p>" +
+        brandBand() + '<section class="hero"><div class="wrap"><div><div class="eyebrow">' + esc(S.db.shul.en.toUpperCase()) + " · " + esc(S.db.shul.cityEn.toUpperCase()) + "</div><h1>" + esc(HT("heroTitle")) + '</h1><p class="lead">' + esc(HT("heroLead")) + "</p>" +
         '<div class="row" style="margin-top:22px"><a class="btn primary lg" href="#/times">' + I.clock.replace("<svg", '<svg width="20" height="20"') + L("זמני תפילה וזמני היום", "Davening Times and Zmanim") + '</a><a class="btn lg" href="#/donate">' + L("תרמו עכשיו", "Donate Now") + '</a><button class="btn ghost lg" id="navBtn">' + L("ניווט לבית הכנסת", "Directions") + "</button></div>" +
-        '<div class="row small muted" style="margin-top:18px"><span>' + esc(S.hebDate(S.now())) + " · " + esc(S.fmtDateLong(S.now())) + "</span><span>·</span><span>" + L("נץ החמה ", "Netz ") + '<b class="num">' + S.hm(z.netz, true) + "</b></span><span>" + L("שקיעה ", "Shkiah ") + '<b class="num">' + S.hm(z.shkiah, true) + "</b></span></div></div>" +
+        '<div class="row small hero-meta" style="margin-top:18px"><span>' + esc(S.hebDate(S.now())) + " · " + esc(S.fmtDateLong(S.now())) + "</span><span>·</span><span>" + L("נץ החמה ", "Netz ") + '<b class="num">' + S.hm(z.netz, true) + "</b></span><span>" + L("שקיעה ", "Shkiah ") + '<b class="num">' + S.hm(z.shkiah, true) + "</b></span></div></div>" +
         shabbatCard() + "</div></section>" +
-        '<section class="section"><div class="wrap">' + customBand() + "</div></section>" +
+
         '<section class="section" style="padding-top:0"><div class="wrap"><div class="grid g4">' + quick.map(function (q) { return '<a class="tile" href="' + q[0] + '"><div class="ic">' + q[1] + "</div><div><b>" + q[2] + "</b><span>" + q[3] + "</span></div></a>"; }).join("") + "</div></div></section>" +
         '<section class="section" id="about" style="background:var(--surface-2);border-block:1px solid var(--line)"><div class="wrap"><div class="section-title"><div class="eyebrow">' + L("אודות", "About") + "</div><h2>" + esc(HT("aboutTitle")) + '</h2><p class="muted" style="max-width:640px;margin:0 auto">' + esc(HT("aboutLead")) + '</p></div><div class="grid g3">' +
         [1, 2, 3].map(function (i) { return '<div class="card"><h3>' + esc(HT("card" + i + "T")) + '</h3><p class="muted" style="margin:0">' + esc(HT("card" + i)) + "</p></div>"; }).join("") +
         '</div><p class="display" style="text-align:center;font-size:22px;margin-top:26px;color:var(--gold)">' + esc(HT("closing")) + "</p></div></section>" +
-        '<section class="section" id="contact"><div class="wrap grid g2"><div><div class="eyebrow">' + L("נשמח לשמוע", "We'd love to hear from you") + "</div><h2>" + L("צור קשר", "Contact") + '</h2><div class="stack" style="margin-top:14px">' +
+        customSection() + '<section class="section" id="contact" style="border-top:1px solid var(--line)"><div class="wrap grid g2"><div><div class="eyebrow">' + L("נשמח לשמוע", "We'd love to hear from you") + "</div><h2>" + L("צור קשר", "Contact") + '</h2><div class="stack" style="margin-top:14px">' +
         '<div class="row">' + I.phone.replace("<svg", '<svg width="20" height="20"') + '<span class="num">' + esc(S.db.shul.phone) + "</span></div>" +
         '<div class="row">' + I.mail.replace("<svg", '<svg width="20" height="20"') + '<span class="num">' + esc(S.db.shul.email) + "</span></div>" +
         '<div class="row">' + I.map.replace("<svg", '<svg width="20" height="20"') + '<span dir="ltr">' + esc(S.db.shul.address) + "</span></div></div>" +
@@ -58,6 +63,8 @@
         '<form class="card" id="contactForm"><h3>' + L("שלחו לנו הודעה", "Send us a message") + '</h3><div class="form-grid"><label class="field"><span>' + L("שם *", "Name *") + '</span><input name="name" required></label><label class="field"><span>' + L("טלפון *", "Phone *") + '</span><input name="phone" required inputmode="tel"></label></div>' +
         '<label class="field" style="margin-top:12px"><span>' + L("אימייל (לא חובה)", "Email (optional)") + '</span><input name="email" type="email"></label><label class="field" style="margin-top:12px"><span>' + L("הודעה *", "Message *") + '</span><textarea name="msg" required></textarea></label><button class="btn primary" style="margin-top:12px">' + L("שליחה", "Send") + "</button></form></div></section>";
       app.querySelector("#customMore").addEventListener("click", UI.customModal);
+      app.querySelector("#tryName").addEventListener("click", UI.customModal);
+      UI.bindCustom(app);
       var navM = function (kind) {
         UI.modal("<h2>" + L("ניווט לבית הכנסת", "Directions to the shul") + "</h2><p>" + L("באתר האמיתי הכפתור פותח את ", "On the real site this button opens ") + (kind === "waze" ? "Waze" : "Google Maps") + L(" עם הכתובת של בית הכנסת, מוכן לנסיעה.", " with the shul's address, ready to go.") + '</p><p class="muted small">' + L("בהדגמה הכתובת בדויה, ולכן לא נפתחת מפה חיצונית.", "In the demo the address is fictional, so no outside map opens.") + '</p><div class="actions"><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>");
       };
@@ -66,7 +73,7 @@
       app.querySelector("#contactForm").addEventListener("submit", function (e) {
         e.preventDefault(); var f = e.target, name = f.name.value.trim();
         S.notify("super", "הודעה חדשה מהאתר: " + name, "New message from the website: " + name);
-        S.save(); f.reset(); UI.toast(L("ההודעה נשלחה. נחזור אליכם בהקדם.", "Message sent. We will get back to you soon."));
+        S.save(); f.reset(); UI.toast(L("ההודעה נשלחה. נחזור אליכם בהקדם. (הדגמה: לא נשלח אימייל אמיתי)", "Message sent. We will get back to you soon. (Demo: no real email was sent)"));
       });
     }
   });
@@ -145,7 +152,7 @@
         var rec = { id: S.uid("i"), ref: ref, name: f.name.value.trim() || (u ? u.en : "Donor"), email: (f.email.value.trim() || (u ? u.email : "")).toLowerCase(), amount: t, type: bal ? "balance" : "donation", date: S.todayIso(), note: f.note.value.trim(), last4: wallet ? "" : f.card.value.replace(/\D/g, "").slice(-4), wallet: wallet || "", status: "pending", fee: f.fee.checked };
         if (bal && u && u.mid) {
           rec.memberId = u.mid; rec.status = "recorded";
-          S.db.ledger.push({ id: "sola-" + ref, mid: u.mid, date: S.todayIso(), type: "payment", amount: t, desc: "תשלום בכרטיס Sola #" + ref + "|Card payment Sola #" + ref, method: "card", by: "מערכת|System", source: "card" });
+          S.db.ledger.push({ id: "card-" + ref, mid: u.mid, date: S.todayIso(), type: "payment", amount: t, desc: "תשלום בכרטיס Ref #" + ref + "|Card payment Ref #" + ref, method: "card", by: "מערכת|System", source: "card" });
           S.log("finance", "תשלום בכרטיס נרשם אוטומטית: " + S.memberById(u.mid).he + ", " + S.money(t), "Card payment recorded automatically: " + S.memberById(u.mid).en + ", " + S.money(t));
           S.notify(u.mid, "התשלום שלך התקבל: " + S.money(t) + ". תודה!", "Your payment was received: " + S.money(t) + ". Thank you!");
         }
@@ -178,7 +185,7 @@
 
   function receiptHtml(rec) {
     return '<div class="print-area" style="background:#fff;color:#1f1b14;border:1px solid #e2d7c2;border-radius:14px;padding:22px;font-size:15px"><div style="text-align:center">' + UI.logo().replace("<svg", '<svg width="48" height="48" style="color:#0e2c4c"') + '<div style="font-family:Frank Ruhl Libre,serif;font-size:22px;font-weight:700;color:#0e2c4c">' + esc(S.db.shul.en) + '</div><div style="color:#6b5a3c">' + esc(S.db.shul.he) + " · " + esc(S.db.shul.address) + "</div></div><hr class=\"gold-line\">" +
-      '<div dir="ltr" style="text-align:left"><p><b>Tax Receipt</b> · קבלה לצורכי מס</p><table style="font-size:14px"><tr><td>Donor</td><td><b>' + esc(rec.name) + "</b></td></tr><tr><td>Amount</td><td><b>" + S.money(rec.amount) + "</b></td></tr><tr><td>Date</td><td>" + esc(rec.date) + "</td></tr><tr><td>Reference</td><td>Sola #" + esc(rec.ref) + "</td></tr><tr><td>Paid with</td><td>" + esc(rec.wallet || ("Card ending " + rec.last4)) + "</td></tr>" + (rec.note ? "<tr><td>Dedication</td><td>" + esc(rec.note.split("|").pop()) + "</td></tr>" : "") + "</table>" +
+      '<div dir="ltr" style="text-align:left"><p><b>Tax Receipt</b> · קבלה לצורכי מס</p><table style="font-size:14px"><tr><td>Donor</td><td><b>' + esc(rec.name) + "</b></td></tr><tr><td>Amount</td><td><b>" + S.money(rec.amount) + "</b></td></tr><tr><td>Date</td><td>" + esc(rec.date) + "</td></tr><tr><td>Reference</td><td>Ref #" + esc(rec.ref) + "</td></tr><tr><td>Paid with</td><td>" + esc(rec.wallet || ("Card ending " + rec.last4)) + "</td></tr>" + (rec.note ? "<tr><td>Dedication</td><td>" + esc(rec.note.split("|").pop()) + "</td></tr>" : "") + "</table>" +
       '<p style="font-size:13px;color:#555;margin-top:12px">' + esc(S.db.shul.en) + " is a 501(c)(3) nonprofit organization. No goods or services were provided in exchange for this contribution. This email is your tax receipt.</p><p dir=\"rtl\" style=\"font-size:13px;color:#555;text-align:right\">לא ניתנו סחורות או שירותים תמורת תרומה זו. אימייל זה הוא הקבלה שלכם לצורכי מס.</p></div></div>";
   }
 
@@ -193,7 +200,7 @@
         (bal ? '<a class="btn primary" href="#/me">' + L("לחשבון שלי", "To my account") + "</a>" : '<a class="btn primary" href="#/">' + L("לדף הבית", "Back to home") + "</a>") + "</div></div></div>";
       var rb = app.querySelector("#rcpt");
       if (rb) rb.addEventListener("click", function () {
-        var m = UI.modal("<h2>" + L("הקבלה כפי שנשלחה באימייל", "The receipt as emailed") + "</h2>" + receiptHtml(rec) + '<div class="actions"><button class="btn" id="pr">' + L("הדפסה", "Print") + '</button><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>", { wide: true });
+        var m = UI.modal("<h2>" + L("הקבלה כפי שנשלחה באימייל", "The receipt as emailed") + '</h2><p class="tiny muted">' + L("הדגמה: לא נשלח אימייל אמיתי.", "Demo: no real email was sent.") + "</p>" + receiptHtml(rec) + '<div class="actions"><button class="btn" id="pr">' + L("הדפסה", "Print") + '</button><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>", { wide: true });
         m.querySelector("#pr").addEventListener("click", function () { window.print(); });
       });
     }
@@ -240,7 +247,7 @@
     }
   });
   function welcomeEmail(name) {
-    UI.modal('<h2>' + L("אימייל ברוכים הבאים", "Welcome email") + '</h2><div style="background:#fff;color:#1f1b14;border:1px solid #e2d7c2;border-radius:14px;padding:20px"><div style="text-align:center">' + UI.logo().replace("<svg", '<svg width="44" height="44" style="color:#0e2c4c"') + '</div><p dir="ltr" style="text-align:left"><b>Welcome to ' + esc(S.db.shul.en) + ", " + esc(name) + '!</b><br>Your account is ready. Sign in any time to see your balance, payments and family yahrzeits, and to get the shul\'s updates.</p><p dir="rtl" style="text-align:right"><b>ברוכים הבאים ל' + esc(S.db.shul.he) + "!</b><br>החשבון שלך מוכן. אפשר להיכנס בכל עת ולראות יתרה, תשלומים ויארצייטים של המשפחה, ולקבל את עדכוני בית הכנסת.</p></div><div class=\"actions\"><button class=\"btn primary\" data-close>" + L("סגירה", "Close") + "</button></div>");
+    UI.modal('<h2>' + L("אימייל ברוכים הבאים", "Welcome email") + '</h2><p class="tiny muted">' + L("הדגמה: לא נשלח אימייל אמיתי.", "Demo: no real email was sent.") + '</p><div style="background:#fff;color:#1f1b14;border:1px solid #e2d7c2;border-radius:14px;padding:20px"><div style="text-align:center">' + UI.logo().replace("<svg", '<svg width="44" height="44" style="color:#0e2c4c"') + '</div><p dir="ltr" style="text-align:left"><b>Welcome to ' + esc(S.db.shul.en) + ", " + esc(name) + '!</b><br>Your account is ready. Sign in any time to see your balance, payments and family yahrzeits, and to get the shul\'s updates.</p><p dir="rtl" style="text-align:right"><b>ברוכים הבאים ל' + esc(S.db.shul.he) + "!</b><br>החשבון שלך מוכן. אפשר להיכנס בכל עת ולראות יתרה, תשלומים ויארצייטים של המשפחה, ולקבל את עדכוני בית הכנסת.</p></div><div class=\"actions\"><button class=\"btn primary\" data-close>" + L("סגירה", "Close") + "</button></div>");
   }
   window.SHUL_PUBLIC = { HOME_TEXTS: HOME_TEXTS, receiptHtml: receiptHtml, welcomeEmail: welcomeEmail };
 })();

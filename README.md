@@ -1,5 +1,7 @@
 # Shul System Demo
 
+**Your Shul. Your System. · בית הכנסת שלכם. המערכת שלכם.**
+
 An interactive sales demo of the synagogue management system, built for GitHub Pages.
 It mirrors the live system screen for screen, using a fictional congregation
 ("Kehillat Nachalat HaEmek") with fictional members, times and amounts.
@@ -19,16 +21,19 @@ python3 -m http.server 8000
 
 then visit `http://localhost:8000/`. On GitHub Pages, serve the repository root.
 
-## The demo bar
+## Presentation tools (not system features)
 
-The dark bar at the top is a demo navigation aid only, not a system feature:
+These exist only to present the system. They add no synagogue management capability:
 
 - **View as**: switch between visitor, new sign-in (not a member yet), congregant,
   content and times gabbai, finance gabbai and super admin, to see each role's own screens.
-- **Themes**: four example looks (Jerusalem Stone, White Marble, Night Tchelet, Galilee Olive).
-- **Clock**: pin the demo clock (for example Friday afternoon or before Netz) to see the TV's states.
-- **Fully customizable**: every shul gets its own design, texts and everything else.
-- **Reset**: restore the original fictional data.
+- **Example designs**: Jerusalem Classic, Modern Blue, Royal Elegant and Minimal Light. Each changes
+  fonts, colors, shapes, navigation and the TV. They are examples; every shul gets its own design.
+- **Try your shul's name**: rename the sample congregation and see it on the header, TV, Shabbat sheet,
+  receipts and emails.
+- **Language**: Hebrew or English.
+- **Demo clock**: pin a moment (Friday afternoon, Shabbat, before Netz) to see the TV's existing states.
+- **Reset**: restore the original fictional data, name and settings.
 
 ## Screens
 

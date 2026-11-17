@@ -3,28 +3,28 @@ body.bare { background: #000; overflow: hidden; }
 .tv-host { position: fixed; inset: 0; background: #000; direction: rtl; overflow: hidden; }
 .tv-stage {
   position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 50% 50%;
-  background: var(--tv-bg); color: var(--tv-ink); font-family: "Assistant", Arial, sans-serif;
+  background: var(--tv-bg); color: var(--tv-ink); font-family: var(--font-body);
   display: grid; grid-template-rows: 150px 1fr 74px; overflow: hidden;
 }
-.tv-stage::before { content: ""; position: absolute; inset: 0; background: var(--bg-tex); opacity: .8; pointer-events: none; }
+.tv-stage::before { content: ""; position: absolute; inset: 0; background: var(--tv-tex); opacity: .8; pointer-events: none; }
 .tv-stage > * { position: relative; }
-.tv-stage .en { direction: ltr; font-family: "Assistant", Arial, sans-serif; }
+.tv-stage .en { direction: ltr; font-family: var(--font-body); }
 
-.tv-head { display: grid; grid-template-columns: 560px 1fr 560px; align-items: center; padding: 0 56px; border-bottom: 2px solid var(--gold); }
-.tv-brand { display: flex; gap: 20px; align-items: center; color: var(--tv-head); }
+.tv-head { display: grid; grid-template-columns: 560px minmax(0, 1fr) 560px; align-items: center; padding: 0 56px; border-bottom: 2px solid var(--gold); background: var(--tv-head-bg); }
+.tv-brand { display: flex; gap: 20px; align-items: center; color: var(--tv-head-ink); }
 .tv-brand svg { width: 92px; height: 92px; }
-.tv-brand .he { font-family: "Frank Ruhl Libre", serif; font-size: 46px; font-weight: 700; line-height: 1.05; }
+.tv-brand .he { font-family: var(--tv-font-head); font-size: 46px; font-weight: 700; line-height: 1.05; }
 .tv-brand .en { font-size: 22px; opacity: .75; letter-spacing: .04em; text-align: right; }
 .tv-title { text-align: center; }
-.tv-title .he { font-family: "Frank Ruhl Libre", serif; font-size: 64px; font-weight: 700; color: var(--tv-head); line-height: 1.05; }
-.tv-title .sub { font-size: 26px; opacity: .8; margin-top: 4px; }
-.tv-clock { justify-self: end; direction: ltr; font-size: 96px; font-weight: 800; color: var(--tv-head); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.tv-title .he { font-family: var(--tv-font-head); font-size: 64px; font-weight: 700; color: var(--tv-head-ink); line-height: 1.05; }
+.tv-title .sub { font-size: 26px; opacity: .85; margin-top: 4px; color: var(--tv-head-ink); }
+.tv-clock { justify-self: end; direction: ltr; font-size: 96px; font-weight: 800; color: var(--tv-head-ink); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
 .tv-clock small { font-size: 40px; opacity: .55; font-weight: 700; }
 
-.tv-cols { display: grid; grid-template-columns: 560px 1fr 560px; gap: 30px; padding: 26px 40px 18px; min-height: 0; }
-.tv-col, .tv-center { background: var(--tv-panel); border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); border-radius: 26px; padding: 20px 26px; display: flex; flex-direction: column; min-height: 0; box-shadow: 0 10px 30px rgba(0, 0, 0, .08); }
+.tv-cols { display: grid; grid-template-columns: 560px minmax(0, 1fr) 560px; gap: 30px; padding: 26px 40px 18px; min-height: 0; }
+.tv-col, .tv-center { background: var(--tv-panel); border: var(--tv-panel-border); border-radius: var(--tv-radius); padding: 20px 26px; display: flex; flex-direction: column; min-height: 0; box-shadow: 0 10px 30px rgba(0, 0, 0, .08); }
 .tv-ch { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1.5px solid var(--gold); padding-bottom: 8px; margin-bottom: 8px; }
-.tv-ch .he { font-family: "Frank Ruhl Libre", serif; font-size: 36px; font-weight: 700; color: var(--tv-head); }
+.tv-ch .he { font-family: var(--tv-font-head); font-size: 36px; font-weight: 700; color: var(--tv-head); }
 .tv-ch .en { font-size: 20px; opacity: .65; text-transform: uppercase; letter-spacing: .12em; }
 .tv-ch.center { margin-top: 6px; }
 .tv-zrow { display: flex; justify-content: space-between; align-items: center; padding: 3px 12px; border-radius: 12px; }
@@ -37,11 +37,10 @@ body.bare { background: #000; overflow: hidden; }
 .compact .tv-ch { margin-bottom: 2px; }
 .tv-zrow .t { font-size: 34px; font-weight: 800; direction: ltr; font-variant-numeric: tabular-nums; }
 .tv-zrow.past { opacity: .38; }
-.tv-zrow.next { background: var(--tv-head); color: #fff; }
-[data-theme="night"] .tv-zrow.next { color: #0b1a2b; }
+.tv-zrow.next { background: var(--tv-hi); color: var(--tv-hi-ink); }
 .tv-sblock { margin-top: auto; border-top: 1.5px solid var(--gold); padding-top: 8px; }
 .tv-sbt { display: flex; flex-direction: column; padding: 0 12px 4px; }
-.tv-sbt .he { font-family: "Frank Ruhl Libre", serif; font-size: 28px; font-weight: 700; color: var(--tv-head); }
+.tv-sbt .he { font-family: var(--tv-font-head); font-size: 28px; font-weight: 700; color: var(--tv-head); }
 .tv-sbt .en { font-size: 16px; opacity: .65; }
 .tv-parline { margin-top: auto; text-align: center; padding: 10px; border-top: 1px solid color-mix(in srgb, var(--gold) 60%, transparent); display: flex; flex-direction: column; }
 .tv-parline .he { font-size: 26px; color: var(--tv-head); font-weight: 700; }
@@ -60,16 +59,15 @@ body.bare { background: #000; overflow: hidden; }
 
 .tv-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; }
 .tv-chips span { background: color-mix(in srgb, var(--gold) 20%, transparent); border: 1px solid var(--gold); color: var(--tv-ink); border-radius: 999px; padding: 4px 18px; font-size: 20px; font-weight: 700; }
-.tv-next { background: var(--tv-head); color: #fff; border-radius: 14px; padding: 8px 18px; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-[data-theme="night"] .tv-next { color: #0b1a2b; }
+.tv-next { background: var(--tv-hi); color: var(--tv-hi-ink); border-radius: 14px; padding: 8px 18px; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
 .tv-next .he { font-size: 25px; font-weight: 800; white-space: nowrap; }
 .tv-next .en { white-space: nowrap; }
 .tv-next .en { font-size: 17px; opacity: .85; }
-.tv-board { flex: 1; min-height: 0; display: flex; flex-direction: column; position: relative; }
+.tv-board { flex: 1; min-height: 0; display: flex; flex-direction: column; position: relative; overflow: hidden; }
 .tv-bwrap { flex: 1; display: flex; flex-direction: column; justify-content: center; animation: tvIn .8s ease; min-height: 0; }
 @keyframes tvIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .tv-bhead { display: flex; justify-content: center; gap: 16px; align-items: baseline; margin: 6px 0 12px; }
-.tv-bhead .he { font-family: "Frank Ruhl Libre", serif; font-size: 40px; font-weight: 700; color: var(--tv-head); }
+.tv-bhead .he { font-family: var(--tv-font-head); font-size: 40px; font-weight: 700; color: var(--tv-head); }
 .tv-bhead .en { font-size: 20px; opacity: .6; letter-spacing: .1em; text-transform: uppercase; }
 .tv-list { display: flex; flex-direction: column; gap: 14px; }
 .tv-li { border-inline-start: 4px solid var(--tv-accent); padding: 6px 18px; background: color-mix(in srgb, var(--surface) 55%, transparent); border-radius: 10px; }
@@ -78,20 +76,19 @@ body.bare { background: #000; overflow: hidden; }
 .tv-li .he .date { font-size: 22px; opacity: .65; font-weight: 700; }
 .tv-li .en { font-size: 19px; opacity: .7; line-height: 1.3; }
 .tv-welcome, .tv-mazal { text-align: center; padding: 0 30px; }
-.tv-welcome .he, .tv-mazal .mt { font-family: "Frank Ruhl Libre", serif; font-size: 92px; font-weight: 700; color: var(--tv-head); line-height: 1; }
+.tv-welcome .he, .tv-mazal .mt { font-family: var(--tv-font-head); font-size: 92px; font-weight: 700; color: var(--tv-head); line-height: 1; }
 .tv-welcome .en, .tv-mazal .mte { font-size: 30px; opacity: .65; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 24px; }
 .tv-mazal .mt { background: linear-gradient(180deg, #e7cd94, #b48e56); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .tv-stage .hb { font-size: 38px; line-height: 1.4; margin: 0 0 12px; }
 .tv-stage .eb { font-size: 24px; opacity: .72; margin: 0; direction: ltr; }
-.tv-flyer { margin: 0 20px; border-radius: 24px; padding: 46px; text-align: center; background: linear-gradient(150deg, var(--tv-head), color-mix(in srgb, var(--tv-head) 60%, #000)); color: #fff; box-shadow: inset 0 0 0 2px var(--gold); }
-[data-theme="night"] .tv-flyer { color: #0b1a2b; }
-.tv-flyer .ft { font-family: "Frank Ruhl Libre", serif; font-size: 70px; font-weight: 700; }
+.tv-flyer { margin: 0 20px; border-radius: 24px; padding: 46px; text-align: center; background: var(--tv-hi); color: var(--tv-hi-ink); box-shadow: inset 0 0 0 2px var(--gold); }
+.tv-flyer .ft { font-family: var(--tv-font-head); font-size: 70px; font-weight: 700; }
 .tv-flyer .fte { font-size: 28px; opacity: .8; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 18px; direction: ltr; }
 .tv-flyer .fb { font-size: 36px; line-height: 1.4; }
 .tv-flyer .fbe { font-size: 22px; opacity: .8; direction: ltr; margin-top: 8px; }
 .tv-donate { display: flex; gap: 40px; align-items: center; justify-content: center; padding: 0 30px; }
 .tv-donate .tv-qr { width: 300px; height: 300px; }
-.tv-donate .he { font-family: "Frank Ruhl Libre", serif; font-size: 60px; font-weight: 700; color: var(--tv-head); }
+.tv-donate .he { font-family: var(--tv-font-head); font-size: 60px; font-weight: 700; color: var(--tv-head); }
 .tv-donate .en { font-size: 26px; opacity: .65; margin-bottom: 14px; }
 .tv-dots { display: flex; gap: 8px; justify-content: center; padding-top: 6px; }
 .tv-dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--gold); opacity: .3; }
@@ -104,7 +101,7 @@ body.bare { background: #000; overflow: hidden; }
 @keyframes tvScroll { 0%, 15% { transform: translateY(0); } 100% { transform: translateY(min(0px, calc(-100% + 640px))); } }
 .tv-shcard { display: flex; align-items: center; justify-content: center; gap: 34px; padding: 30px; border-radius: 26px; background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--gold) 22%, transparent), transparent 70%); }
 .tv-shcard .tv-candle { width: 90px; height: 300px; }
-.tv-shcard .he { font-family: "Frank Ruhl Libre", serif; font-size: 110px; font-weight: 700; color: var(--tv-head); line-height: 1; text-align: center; }
+.tv-shcard .he { font-family: var(--tv-font-head); font-size: 110px; font-weight: 700; color: var(--tv-head); line-height: 1; text-align: center; }
 .tv-shcard .en { font-size: 34px; text-align: center; opacity: .75; letter-spacing: .14em; text-transform: uppercase; }
 .tv-shcard .par { font-size: 26px; text-align: center; margin-top: 14px; color: var(--gold); font-weight: 700; }
 .tv-shcard.small { padding: 10px; gap: 14px; }
@@ -116,8 +113,7 @@ body.bare { background: #000; overflow: hidden; }
 @keyframes flick { 0% { transform: scale(1, 1) rotate(-1deg); } 50% { transform: scale(.94, 1.06) rotate(1.5deg); } 100% { transform: scale(1.03, .96) rotate(-1deg); } }
 .is-shabbat .tv-head { border-bottom-width: 3px; }
 
-.tv-foot { display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: center; padding: 0 40px; background: var(--tv-head); color: #fff; }
-[data-theme="night"] .tv-foot { color: #0b1a2b; }
+.tv-foot { display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: center; padding: 0 40px; background: var(--tv-foot-bg); color: var(--tv-foot-ink); }
 .tv-fname { font-size: 24px; white-space: nowrap; }
 .tv-ticker { overflow: hidden; white-space: nowrap; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
 .tv-tick-in { display: inline-block; animation: tick 70s linear infinite; }
@@ -130,3 +126,24 @@ body.bare { background: #000; overflow: hidden; }
 .tv-ctl.show { opacity: 1; }
 .tv-board.shabbat .tv-li .he { font-size: 27px; }
 .tv-board.shabbat .tv-li .en { font-size: 17px; }
+
+/* theme personalities on the TV */
+[data-theme="modern"] .tv-head { border-bottom: 0; }
+[data-theme="modern"] .tv-brand svg { color: #fff; }
+[data-theme="modern"] .tv-col, [data-theme="modern"] .tv-center { box-shadow: 0 16px 40px rgba(23, 105, 194, .12); }
+[data-theme="modern"] .tv-ch { border-bottom-color: #d6e8f8; }
+[data-theme="modern"] .tv-pgroup, [data-theme="modern"] .tv-chips span { color: #1769c2; }
+[data-theme="royal"] .tv-ch .en, [data-theme="royal"] .tv-bhead .en { color: var(--gold); opacity: .8; }
+[data-theme="royal"] .tv-col, [data-theme="royal"] .tv-center { box-shadow: inset 0 0 0 5px rgba(13, 27, 48, .9), inset 0 0 0 6px rgba(212, 179, 106, .25); }
+[data-theme="royal"] .tv-zrow .t, [data-theme="royal"] .tv-clock { font-weight: 600; }
+[data-theme="minimal"] .tv-head { border-bottom: 1px solid #ececec; }
+[data-theme="minimal"] .tv-col, [data-theme="minimal"] .tv-center { box-shadow: none; }
+[data-theme="minimal"] .tv-ch { border-bottom: 1px solid #111; }
+[data-theme="minimal"] .tv-zrow .t, [data-theme="minimal"] .tv-clock { font-weight: 300; }
+[data-theme="minimal"] .tv-ch .he, [data-theme="minimal"] .tv-title .he, [data-theme="minimal"] .tv-brand .he { font-weight: 400; }
+[data-theme="minimal"] .tv-li { border-inline-start-width: 2px; background: #fafafa; }
+[data-theme="minimal"] .tv-mazal .mt { background: none; color: #111; -webkit-background-clip: border-box; background-clip: border-box; }
+.tv-host.nocursor, .tv-host.nocursor * { cursor: none; }
+.tv-next { gap: 16px; overflow: hidden; }
+.tv-next .en { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.tv-col, .tv-center { min-width: 0; }
