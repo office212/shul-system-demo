@@ -236,7 +236,7 @@
     return '<a class="cta-demo' + (cls ? " " + cls : "") + '" href="#/proposal" aria-label="' + L("בקשת הדגמה", "Request a demo") + '">' + I.sparkle.replace("<svg", '<svg width="16" height="16"') + "<span class=\"cta-l\">" + L("בקשת הדגמה", "Request a demo") + '</span><span class="cta-s">' + L("הדגמה", "Demo") + "</span></a>";
   }
   function salesbarHtml() {
-    return '<div class="sb-in"><span class="sb-brand">Shul System</span><span class="sb-dot" aria-hidden="true">·</span><a href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + '</a><span class="sb-dot" aria-hidden="true">·</span><a href="mailto:' + SALES.email + '">' + I.mail.replace("<svg", '<svg width="14" height="14"') + '<bdi dir="ltr">' + esc(SALES.email) + '</bdi></a><span class="sb-dot" aria-hidden="true">·</span><a href="tel:' + SALES.tel + '">' + I.phone.replace("<svg", '<svg width="14" height="14"') + '<bdi dir="ltr">' + esc(SALES.phone) + "</bdi></a></div>";
+    return '<div class="sb-in"><span class="sb-brand">Shul System</span><span class="sb-dot" aria-hidden="true">·</span><a href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + '</a><span class="sb-dot" aria-hidden="true">·</span><a href="mailto:' + SALES.email + '">' + I.mail.replace("<svg", '<svg width="14" height="14"') + '<bdi dir="ltr">' + esc(SALES.email) + '</bdi></a><span class="sb-dot" aria-hidden="true">·</span><a href="tel:' + SALES.tel + '">' + I.phone.replace("<svg", '<svg width="14" height="14"') + '<bdi dir="ltr">' + esc(SALES.phone) + '</bdi></a><span class="sb-dot" aria-hidden="true">·</span><span class="sb-week">' + L("שבוע ההדגמה: 15 עד 21 בנובמבר 2026, נתונים בדויים", "Demo week: Nov 15 to 21, 2026, fictional data") + "</span></div>";
   }
   var layout = "site";
   function renderChrome() {
@@ -350,7 +350,7 @@
     var parts = path.split("/").filter(Boolean);
     var def = routes["/" + parts.join("/")], arg = null;
     if (!def && parts.length > 1) { def = routes["/" + parts.slice(0, -1).join("/") + "/*"]; arg = parts[parts.length - 1]; }
-    if (!def) def = routes["/"];
+    if (!def) { def = routes["/"]; if (path !== "/" && params.frame !== "1") { try { history.replaceState(null, "", location.pathname + location.search + "#/"); } catch (e) {} setTimeout(function () { toast(L("הכתובת הזו לא קיימת, אז הגענו לדף הבית.", "That address doesn't exist, so here's the home page.")); }, 400); } }
     var framed = params.frame === "1" || params.embed === "1";
     var ok = allowed(def.need);
     layout = def.bare ? "bare" : def.layout === "xp" ? "xp" : (def.admin && ok) ? "admin" : (params.embed === "1" ? "bare-site" : "site");

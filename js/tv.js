@@ -26,7 +26,7 @@
     announcement: ["הכרזות", "Announcements"], mazaltov: ["מזל טוב", "Mazal Tov"], flyer: ["פלייר", "Flyer"],
     sponsor: ["נתרם על ידי", "Donated By"], parnas: ["פרנס היום ונר למאור", "Parnas Hayom and Ner Lamaor"],
     hazkara: ["הזכרות ותנחומים", "Hazkarot and Condolences"], yahrzeit: ["יארצייט השבוע", "Yahrzeits This Week"],
-    dedication: ["הקדשות", "Dedications"]
+    dedication: ["הקדשות", "Dedications"], halacha: ["הלכה יומית", "Halacha of the Day"]
   };
 
   /* ---------- what to show ---------- */
@@ -93,15 +93,17 @@
   function shabbatCard(small) {
     return '<div class="tv-shcard ' + (small ? "small" : "") + '">' + candle("l") + '<div class="tv-shtext"><div class="he">' + esc(T("centerShabbat", "he")) + '</div><div class="en">' + esc(T("centerShabbat", "en")) + '</div><div class="par">פרשת ' + S.PARASHA.he + " | Parashat " + S.PARASHA.en + "</div></div>" + candle("r") + "</div>";
   }
+  /* a real, scannable QR code for this demo's donate page */
+  var qrCache = null;
   function qr() {
-    var n = 25, cells = "", s = 11;
-    function r() { s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; }
-    function finder(x, y) { return '<rect x="' + x + '" y="' + y + '" width="7" height="7" fill="#111"/><rect x="' + (x + 1) + '" y="' + (y + 1) + '" width="5" height="5" fill="#fff"/><rect x="' + (x + 2) + '" y="' + (y + 2) + '" width="3" height="3" fill="#111"/>'; }
-    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
-      if ((x < 8 && y < 8) || (x > n - 9 && y < 8) || (x < 8 && y > n - 9)) continue;
-      if (r() < 0.48) cells += '<rect x="' + x + '" y="' + y + '" width="1" height="1"/>';
-    }
-    return '<svg class="tv-qr" viewBox="-1 -1 27 27" shape-rendering="crispEdges"><rect x="-1" y="-1" width="27" height="27" fill="#fff"/><g fill="#111">' + cells + "</g>" + finder(0, 0) + finder(n - 7, 0) + finder(0, n - 7) + "</svg>";
+    if (qrCache) return qrCache;
+    var url = location.origin + location.pathname + "#/donate";
+    if (typeof window.qrcode !== "function") return "";
+    var q = window.qrcode(0, "M"); q.addData(url); q.make();
+    var n = q.getModuleCount(), cells = "";
+    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) if (q.isDark(y, x)) cells += "M" + x + " " + y + "h1v1h-1z";
+    qrCache = '<svg class="tv-qr" viewBox="-2 -2 ' + (n + 4) + " " + (n + 4) + '" shape-rendering="crispEdges" role="img" aria-label="QR"><rect x="-2" y="-2" width="' + (n + 4) + '" height="' + (n + 4) + '" fill="#fff"/><path fill="#111" d="' + cells + '"/></svg>';
+    return qrCache;
   }
   function listItems(items) {
     return items.map(function (it) {
@@ -121,6 +123,8 @@
     if (by("announcement").length) b.push({ kind: "announcement", html: '<div class="tv-list">' + by("announcement").slice(0, 4).map(function (a) { return '<div class="tv-li"><div class="he"><b class="kind">' + esc(a.title.he) + "</b> " + esc(a.text.he) + '</div><div class="en"><b>' + esc(a.title.en) + "</b> " + esc(a.text.en) + "</div></div>"; }).join("") + "</div>" });
     by("mazaltov").forEach(function (m) { b.push({ kind: "mazaltov", html: '<div class="tv-mazal"><div class="mt">מזל טוב</div><div class="mte">Mazal Tov</div><p class="hb">' + esc(m.text.he) + '</p><p class="eb">' + esc(m.text.en) + "</p></div>" }); });
     by("flyer").forEach(function (f) { b.push({ kind: "flyer", html: '<div class="tv-flyer ' + (f.style || "") + '"><div class="ft">' + esc(f.title.he) + '</div><div class="fte">' + esc(f.title.en) + '</div><div class="fb">' + esc(f.text.he) + '</div><div class="fbe">' + esc(f.text.en) + "</div></div>" }); });
+    var hl = S.halacha(d);
+    b.push({ kind: "halacha", html: '<div class="tv-halacha"><p class="hb">' + esc(hl[0]) + '</p><p class="eb">' + esc(hl[1]) + '</p><div class="src">' + esc(hl[2]) + " · " + esc(hl[3]) + "</div></div>" });
     var ded = by("sponsor").concat(by("parnas"), by("dedication"));
     if (ded.length) b.push({ kind: "sponsor", html: '<div class="tv-list">' + listItems(ded) + "</div>" });
     if (yz.length) b.push({ kind: "yahrzeit", html: '<div class="tv-list">' + listItems(yz) + "</div>" });
@@ -144,10 +148,9 @@
   }
   /* ---------- the screen ---------- */
   var state = { idx: 0, preview: false, shabbatPreview: false, stage: null, root: null, timers: [] };
+  /* the header names the day only; the greetings live in the Shabbat card */
   function titleFor(st, d) {
-    if (st === "shabbat") return ["שבת שלום", "Good Shabbat"];
-    if (st === "erev") return ["ערב שבת קודש", "Erev Shabbat Kodesh"];
-    if (st === "motzei") return ["שבוע טוב", "Shavua Tov"];
+    if (d.getDay() === 6) return ["שבת קודש", "Shabbat Kodesh"];
     return ["יום " + S.DAY_HE[d.getDay()], S.DAY_EN[d.getDay()]];
   }
   function build() {
@@ -164,7 +167,7 @@
       var past = !tomorrow && z[zz[0]] <= m;
       return '<div class="tv-zrow ' + (past ? "past" : "") + (zz[0] === nextKey ? " next" : "") + '"><div><div class="he">' + zz[1] + '</div><div class="en">' + zz[2] + '</div></div><div class="t">' + tm(z[zz[0]]) + "</div></div>";
     }).join("");
-    var showShabbatBlock = dow === 5 || (dow === 6 && m < stt.rt + 5) || shabbat;
+    var showShabbatBlock = (dow === 4 && m >= 720) || dow === 5 || (dow === 6 && m < stt.rt) || shabbat;
     var sblock = showShabbatBlock ? '<div class="tv-sblock"><div class="tv-sbt"><span class="he">שבת קודש · פרשת ' + S.PARASHA.he + '</span><span class="en">Shabbat Kodesh · Parashat ' + S.PARASHA.en + "</span></div>" +
       [["הדלקת נרות", "Candle Lighting", stt.candles], ["צאת שבת", "Motzei Shabbat", stt.ends], ["רבינו תם", "Rabbeinu Tam", stt.rt]].map(function (r) { return '<div class="tv-zrow"><div><div class="he">' + r[0] + '</div><div class="en">' + r[1] + '</div></div><div class="t">' + tm(r[2]) + "</div></div>"; }).join("") + "</div>"
       : '<div class="tv-parline"><span class="he">' + esc(T("comingParasha", "he").replace("{parasha}", S.PARASHA.he)) + '</span><span class="en">' + esc(T("comingParasha", "en").replace("{parasha}", S.PARASHA.en)) + "</span></div>";
@@ -175,7 +178,7 @@
     groups.forEach(function (g) { g.rows.forEach(function (r) { if (!nextMinyan && g.he !== "מחר" && r.time > m && !(g.keep && dow === 5 && !shabbat)) nextMinyan = r; }); });
     var prow = groups.map(function (g) {
       return '<div class="tv-pgroup"><span class="he">' + g.he + '</span><span class="en">' + g.en + "</span></div>" + (g.rows.length ? g.rows.map(function (r) {
-        return '<div class="tv-zrow ' + (r === nextMinyan ? "next" : "") + '"><div><div class="he">' + esc(r.he) + '</div><div class="en">' + esc(r.en) + '</div></div><div class="t">' + tm(r.time) + "</div></div>";
+        return '<div class="tv-zrow ' + (r === nextMinyan ? "next" : "") + '"><div>' + (r === nextMinyan ? '<div class="tv-nextlbl">התפילה הבאה · Next</div>' : "") + '<div class="he">' + esc(r.he) + '</div><div class="en">' + esc(r.en) + '</div></div><div class="t">' + tm(r.time) + "</div></div>";
       }).join("") : '<div class="tv-empty">אין זמני תפילה נוספים · No more davening times</div>');
     }).join("");
 
@@ -199,7 +202,8 @@
 
     /* strips */
     var chips = [];
-    if (!shabbat && S.dayIdx(d) >= 2) chips.push("קידוש לבנה | עד ט״ו כסלו · Kiddush Levana until 15 Kislev");
+    if (!shabbat && S.dayIdx(d) >= 2 && dow !== 5 && dow !== 6) chips.push("קידוש לבנה | עד ט״ו כסלו · Kiddush Levana until 15 Kislev");
+    if (!shabbat) chips.push("דף יומי: " + S.daf(d, "he") + " · Daf Yomi: " + S.daf(d, "en"));
     var nz = "";
     if (!shabbat) {
       if (!tomorrow && m < z.netz && m >= z.alot - 120) nz = '<span class="he">הנץ בעוד ' + cd(z.netz - m, "he") + '</span><span class="en">Netz ' + cd(z.netz - m, "en") + "</span>";
@@ -222,7 +226,7 @@
       '<div class="tv-ch center"><span class="he">' + esc(T("boardTitle", "he")) + '</span><span class="en">' + esc(T("boardTitle", "en")) + "</span></div>" + center + "</section>" +
       '<section class="tv-col"><div class="tv-ch"><span class="he">' + esc(T("colPrayers", "he")) + '</span><span class="en">' + esc(T("colPrayers", "en")) + '</span></div><div class="tv-prayers">' + prow + '</div><div class="tv-slot">' + slot + "</div></section>" +
       "</div>" +
-      '<footer class="tv-foot"><div class="tv-fname"><b>' + esc(S.db.shul.he) + "</b> · <bdi dir=\"ltr\">" + esc(S.db.shul.address) + '</bdi></div><div class="tv-ticker"><div class="tv-tick-in">' + ticker.concat(ticker).map(function (t) { return "<span>✦ " + esc(t.text.he) + " · " + esc(t.text.en) + "</span>"; }).join("") + "</div></div></footer>" +
+      '<footer class="tv-foot"><div class="tv-fname"><b>' + esc(S.db.shul.he) + "</b> · <bdi dir=\"ltr\">" + esc(S.db.shul.address) + '</bdi> · <span class="tv-demo">שבוע הדגמה · Demo week</span></div><div class="tv-ticker"><div class="tv-tick-in">' + ticker.concat(ticker).map(function (t) { return "<span>✦ " + esc(t.text.he) + " · " + esc(t.text.en) + "</span>"; }).join("") + "</div></div></footer>" +
       '<div class="tv-dim" style="opacity:' + dims + '"></div>' + (draft ? '<div class="tv-draft">תצוגה מקדימה · Preview, not published</div>' : "");
     state.lastBoards = shabbat ? 0 : bd.length;
   }
@@ -286,7 +290,7 @@
         '<div class="tv-ctl" id="tvCtl"><a class="btn sm" href="#/screen">' + S.L("חזרה להדגמה", "Back to demo") + '</a><button class="btn sm" id="tvSh">' + (state.shabbatPreview ? "צא מתצוגת שבת · Exit Shabbat preview" : "תצוגת שבת · Shabbat preview") + '</button><button class="btn sm" id="tvFs">' + S.L("מסך מלא", "Fullscreen") + "</button></div>") + "</div>";
       state.stage = app.querySelector("#tvStage");
       build(); fit(); checkReload();
-      window.onresize = fit;
+      window.addEventListener("resize", fit);
       state.timers.push(setInterval(tick, 1000), setInterval(rotate, 9000), setInterval(function () { state.stage.style.marginLeft = (Math.round(Math.random() * 6) - 3) + "px"; }, 300000));
       var ctl = app.querySelector("#tvCtl");
       if (ctl) {
@@ -295,7 +299,7 @@
         ctl.querySelector("#tvSh").addEventListener("click", function () { location.hash = state.shabbatPreview ? "#/tv" : "#/tv?shabbat=1"; });
         ctl.querySelector("#tvFs").addEventListener("click", function () { var el = document.documentElement; if (document.fullscreenElement) document.exitFullscreen(); else if (el.requestFullscreen) el.requestFullscreen().catch(function () {}); });
       }
-      window.addEventListener("hashchange", function stop() { if (!/^#\/tv/.test(location.hash)) { state.timers.forEach(clearInterval); state.timers = []; state.stage = null; window.removeEventListener("hashchange", stop); } });
+      window.addEventListener("hashchange", function stop() { if (!/^#\/tv/.test(location.hash)) { state.timers.forEach(clearInterval); state.timers = []; state.stage = null; window.removeEventListener("resize", fit); window.removeEventListener("hashchange", stop); } });
     }
   });
   S.onChange(function () { if (state.stage) { build(); checkReload(); } });

@@ -42,7 +42,11 @@
     ];
   }
   var ALSO = [
-    ["דף שבת מוכן להדפסה, שנבנה לבד מהזמנים", "A Shabbat bulletin ready to print, built from the times"],
+    ["דף שבת שנבנה לבד מהזמנים, ונשלח להדפסה במדפסת של בית הכנסת מכל מקום", "A Shabbat bulletin that builds itself from the times, sent to the shul's printer from anywhere"],
+    ["אפליקציה לגבאי בטלפון אנדרואיד", "A gabbai app for Android phones"],
+    ["שליטה במסך מרחוק: צילום מסך, כיבוי והדלקה, לוח לילה, והתראה אם הוא מתנתק", "Remote screen control: a screenshot, power on and off, a night schedule, and an alert if it goes offline"],
+    ["הלכה יומית ודף יומי במסך", "Halacha of the day and Daf Yomi on the screen"],
+    ["התראה לטלפון של המתפללים על כל הודעה חדשה", "A notification to members' phones for every new announcement"],
     ["תרומות באתר: כרטיס, Apple Pay ו-Google Pay", "Donations on the website: card, Apple Pay and Google Pay"],
     ["מכתבי מס לכל מתפלל ודוח שנתי", "Tax letters for every member and an annual report"],
     ["משפחות חדשות נרשמות לבד, ואתם מאשרים", "New families sign up themselves, and you approve"],
@@ -52,7 +56,8 @@
   var TRY = [
     { role: "super", dest: "#/gabbai", ic: "shield", h: ["אני הגבאי", "I'm the gabbai"], p: ["לוח הבקרה: תשלומים, נדרים, זמנים והמסך", "The dashboard: payments, nedarim, times and the screen"] },
     { role: "member", dest: "#/me", ic: "user", h: ["אני מתפלל", "I'm a member"], p: ["החשבון בטלפון: יתרה, תשלום ויארצייטים", "The phone account: balance, paying and yahrzeits"] },
-    { role: null, dest: "#/screen", ic: "tv", h: ["המסך בבית הכנסת", "The shul screen"], p: ["זמנים, לוח הקהילה ומצב שבת", "Times, the community board and Shabbat mode"] }
+    { role: null, dest: "#/screen", ic: "tv", h: ["המסך בבית הכנסת", "The shul screen"], p: ["זמנים, לוח הקהילה ומצב שבת", "Times, the community board and Shabbat mode"] },
+    { role: null, dest: "#/tour", ic: "map", h: ["סיור מלא", "The full tour"], p: ["כל חלקי המערכת במקום אחד, וכמה מותאם אישית", "Every part of the system in one place, and what's made for you"] }
   ];
 
   function visual(n) {
@@ -75,7 +80,7 @@
         '<header class="nb-top"><a class="nb-mark" href="#/">' + UI.logo() + '<span>Shul System</span></a><nav><button type="button" data-go="nbHow">' + L("איך זה עובד", "How it works") + '</button><button type="button" data-go="nbTry">' + L("לנסות", "Try it") + '</button><span class="nb-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-xl="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-xl="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></span><a class="nb-cta" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a></nav></header>" +
         /* hero */
         '<section class="nb-hero"><div class="nb-hero-copy"><p class="nb-k">' + L("מערכת לניהול בית הכנסת", "Software for running a shul") + "</p><h1>" + L("כל מה שכתוב<br>במחברת של הגבאי.<br><em>עכשיו זה עובד לבד.</em>", "Everything in<br>the gabbai's notebook.<br><em>Now it runs itself.</em>") + '</h1><p class="nb-lead">' + L("זמני תפילה, חובות, נדרים ויארצייטים. מעדכנים פעם אחת, והמסך בבית הכנסת, החשבון של כל מתפלל ודף השבת מתעדכנים מעצמם.", "Davening times, balances, nedarim and yahrzeits. Update once, and the shul screen, every member's account and the Shabbat bulletin follow on their own.") + '</p><div class="nb-ctas"><button type="button" class="nb-btn" data-go="nbHow">' + L("לראות איך", "See how") + '</button><a class="nb-btn ghost" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a></div></div>" +
-        '<div class="nb-book" aria-label="' + L("המחברת של הגבאי", "The gabbai's notebook") + '"><div class="nb-page"><div class="nb-date">' + L("מוצאי שבת, פרשת " + S.PARASHA.he, "Motzei Shabbat, " + S.PARASHA.en) + '</div><p class="nb-title">' + L("לעשות!!", "To do!!") + "</p><ol>" + LN.map(function (n, i) { return '<li data-line="' + i + '"><button type="button" data-go="nb' + i + '">' + n.hand + "</button></li>"; }).join("") + '</ol><p class="nb-scrawl">' + L("+ קבלה למס לאהרן פ. · דף שבת לצלם · לבדוק מי שילם בכרטיס...", "+ tax receipt for Aharon F. · copy the Shabbat sheet · check who paid by card...") + '</p><span class="nb-ring" aria-hidden="true"></span></div></div></section>' +
+        '<div class="nb-book" aria-label="' + L("המחברת של הגבאי", "The gabbai's notebook") + '"><div class="nb-page"><div class="nb-date">' + L("מוצאי שבת, פרשת " + S.PARASHA.he, "Motzei Shabbat, " + S.PARASHA.en) + '</div><p class="nb-title">' + L("לעשות!!", "To do!!") + "</p><ol>" + LN.map(function (n, i) { return '<li data-line="' + i + '"><button type="button" data-go="nb' + i + '">' + n.hand + "</button></li>"; }).join("") + '</ol><p class="nb-scrawl">' + L("+ קבלה למס לאהרן פ. · דף שבת לצלם · לבדוק מי שילם בכרטיס...", "+ tax receipt for Aharon F. · copy the Shabbat bulletin · check who paid by card...") + '</p><span class="nb-ring" aria-hidden="true"></span></div></div></section>' +
         /* the four lines */
         '<div id="nbHow">' + LN.map(function (n, i) {
           return '<section class="nb-ch" id="nb' + i + '"><div class="nb-ch-l"><p class="nb-k">' + (i + 1) + " · " + L(n.k[0], n.k[1]) + '</p><p class="nb-line"><span>' + n.hand + '</span></p><h2>' + L(n.h[0], n.h[1]) + "</h2><p>" + L(n.p[0], n.p[1]) + '</p><a class="nb-more" href="' + n.dest + '" data-role="' + n.role + '">' + L("לפתוח במערכת", "Open it in the system") + ' ←</a></div><div class="nb-ch-r">' + visual(n) + "</div></section>";

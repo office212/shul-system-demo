@@ -332,7 +332,7 @@ tr.flash td { animation: flashRow 1.6s ease; }
 .mom { border: 0; background: transparent; color: var(--x-mut); font: inherit; font-size: 13.5px; font-weight: 600; padding: 8px 14px; border-radius: 10px; cursor: pointer; transition: background .2s, color .2s; }
 .mom[aria-pressed="true"] { background: rgba(255, 255, 255, .1); color: var(--x-ink); }
 .room-note { color: #b8c0cc; font-size: 15px; min-height: 1.6em; margin: 16px 0 30px; }
-.room-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; text-align: start; }
+.room-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; text-align: start; }
 .fact { display: flex; flex-direction: column; gap: 6px; padding: 18px; border: 1px solid var(--x-line); border-radius: 16px; background: rgba(255, 255, 255, .03); }
 .fact svg { color: var(--x-gold); }
 .fact span { color: var(--x-mut); font-size: 14px; line-height: 1.5; }
@@ -615,6 +615,7 @@ body.framed .salesbar, body.bare .salesbar { display: none; }
 .sb-in { max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 10px; }
 .sb-brand { color: #eef1f6; font-weight: 700; }
 .sb-dot { color: #5c6475; }
+.sb-week { opacity: .75; font-size: .92em; }
 .salesbar a { display: inline-flex; align-items: center; gap: 6px; color: #d4b26e; text-decoration: none; font-weight: 600; }
 .salesbar a:hover { text-decoration: underline; }
 .salesbar svg { opacity: .85; }

@@ -64,7 +64,7 @@
 
     var items = [
       { id: "it1", type: "announcement", title: { he: "שיעור בפרשת השבוע", en: "Weekly Parasha Shiur" }, text: { he: "יום חמישי בשעה 8:00 בערב, עם הרב. כיבוד קל.", en: "Thursday at 8:00 PM with the Rav. Light refreshments." }, showOn: "weekday", status: "published" },
-      { id: "it2", type: "announcement", title: { he: "מסיבת חנוכה לילדים", en: "Children's Chanukah Party" }, text: { he: "יום ראשון, ו׳ בטבת, בשעה 4:00 אחר הצהריים באולם הקהילה.", en: "Sunday, December 6 at 4:00 PM in the social hall." }, showOn: "weekday", status: "published" },
+      { id: "it2", type: "announcement", title: { he: "מסיבת חנוכה לילדים", en: "Children's Chanukah Party" }, text: { he: "יום ראשון, כ״ו בכסלו, בשעה 4:00 אחר הצהריים באולם הקהילה.", en: "Sunday, December 6 at 4:00 PM in the social hall." }, showOn: "weekday", status: "published" },
       { id: "it3", type: "announcement", title: { he: "דף יומי", en: "Daf Yomi" }, text: { he: "כל ערב אחרי מעריב, בבית המדרש.", en: "Every evening after Maariv in the Beit Midrash." }, showOn: "weekday", status: "published" },
       { id: "it4", type: "mazaltov", title: { he: "מזל טוב", en: "Mazal Tov" }, text: { he: "למשפחת שטרן להולדת הנכדה. שתזכו לגדלה לתורה, לחופה ולמעשים טובים.", en: "To the Stern family on the birth of a granddaughter. May you raise her to Torah, chuppah and good deeds." }, showOn: "weekday", status: "published" },
       { id: "it5", type: "mazaltov", title: { he: "מזל טוב", en: "Mazal Tov" }, text: { he: "לחיים וייס לרגל בר המצווה של בנו אליעזר.", en: "To Chaim Weiss on the Bar Mitzvah of his son Eliezer." }, showOn: "weekday", status: "published" },
@@ -127,7 +127,7 @@
     var inbox = [
       { id: "i1", ref: "10482231", name: "Moshe Klein", email: "moshe.klein@example.com", amount: 180, type: "donation", date: "2026-11-16", note: "לרפואה שלמה|For a refuah shelemah", last4: "4242", wallet: "", status: "pending" },
       { id: "i2", ref: "10482277", name: "Sarah Miller", email: "sarah.miller@example.net", amount: 50, type: "donation", date: "2026-11-16", note: "", last4: "1881", wallet: "Apple Pay", status: "pending" },
-      { id: "i3", ref: "10482290", name: "Y. Rubin", email: "yaakov.rubin@example.com", amount: 250, type: "balance", date: "2026-11-17", note: "", last4: "0005", wallet: "", status: "pending" }
+      { id: "i3", ref: "10482290", name: "Y. Rubin", email: "rubin.family@example.org", amount: 250, type: "donation", date: "2026-11-17", note: "לכבוד השבת|In honor of Shabbat", last4: "0005", wallet: "", status: "pending" }
     ];
     var recurring = [
       { id: "r1", he: "דמי חבר חודשיים", en: "Monthly membership", amount: 60, freq: "monthly", count: 11, active: true, next: "2026-12-01" },
@@ -164,7 +164,7 @@
       backups.push({ at: d.toISOString(), ok: true, docs: 1880 - b * 6, kb: 412 - b });
     }
     return {
-      v: 1,
+      v: 2,
       shul: {
         he: "קהילת נחלת העמק", en: "Kehillat Nachalat HaEmek",
         cityHe: "סידר הולו", cityEn: "Cedar Hollow",
