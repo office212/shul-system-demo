@@ -37,7 +37,7 @@
       '<button class="dock-btn" data-pop="design" aria-haspopup="true"><span class="dock-sw" style="background:' + th.c + '"></span><span class="dock-k">' + L("עיצוב", "Design") + "</span><b>" + esc(S.N(th)) + "</b></button>" +
       '<button class="dock-btn hide-md" data-pop="time" aria-haspopup="true">' + ic("clock") + '<span class="dock-k">' + L("זמן", "Time") + "</span><b>" + esc(L(mom[1], mom[2])) + "</b></button>" +
       '<div class="dock-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-lang="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-lang="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></div>' +
-      '<button class="dock-btn dock-more" data-pop="more" aria-label="' + L("עוד", "More") + '">' + ic("menu") + "</button>" +
+      '<button class="dock-btn dock-more" data-pop="more" aria-label="' + L("פקדי הדגמה", "Demo controls") + '">' + ic("menu") + '<span class="dock-tabl">' + L("פקדי הדגמה", "Demo controls") + "</span></button>" +
       '<a class="dock-cta hide-md" href="#/proposal">' + L("בקשת הצעה", "Request a proposal") + "</a></div>" +
       '<div class="dock-pop" id="dockPop" hidden></div>';
     dock.querySelectorAll("[data-pop]").forEach(function (btn) { btn.addEventListener("click", function (e) { e.stopPropagation(); toggle(btn.getAttribute("data-pop"), btn); }); });
@@ -55,11 +55,11 @@
     }
     if (kind === "design") {
       var brands = UI().BRANDS;
-      return head(L("עיצוב", "Design"), L("ארבעה עיצובים לדוגמה. כל בית כנסת מקבל עיצוב שנבנה עבורו.", "Four example designs. Every shul gets a design made for it.")) +
+      return head(L("עיצוב", "Design"), L("אלה רק ארבע דוגמאות. העיצוב ניתן להתאמה מלאה: לוגו, צבעים, גופנים, צורות וכל מילה. המערכת עצמה נשארת זהה.", "These are only four examples. The design is fully customizable: logo, colors, fonts, shapes and every word. The system itself stays the same.")) +
         '<div class="pop-themes">' + UI().THEMES.map(function (t) { return '<button class="pop-theme" data-theme-pick="' + t.id + '" aria-pressed="' + (S.prefs.theme === t.id) + '"><span class="sw" style="background:' + t.c + '"></span><b>' + esc(S.N(t)) + "</b></button>"; }).join("") + "</div>" +
         '<div class="pop-sub">' + L("צבע מותג (תצוגה בלבד)", "Brand color (preview only)") + '</div><div class="pop-brands"><button class="brand-dot none" data-brand="" aria-pressed="' + !S.prefs.brand + '" title="' + L("ברירת המחדל של העיצוב", "Design default") + '">' + L("רגיל", "Default") + "</button>" +
         Object.keys(brands).map(function (k) { return '<button class="brand-dot" data-brand="' + k + '" aria-pressed="' + (S.prefs.brand === k) + '" title="' + k + '" style="background:' + brands[k] + '"></button>'; }).join("") + "</div>" +
-        (S.prefs.theme === "royal" ? '<p class="pop-note">' + L("בעיצוב המלכותי הזהב הוא צבע המותג.", "Royal Elegant keeps its gold as the brand color.") + "</p>" : "") +
+        (S.prefs.theme === "royal" ? '<p class="pop-note">' + L("בעיצוב הזה צבע ההדגשה קבוע.", "This design keeps its own accent color.") + "</p>" : "") +
         '<div class="pop-links"><a href="#/showcase/design">' + L("סטודיו העיצוב", "Open the design studio") + "</a></div>";
     }
     if (kind === "time") {
@@ -68,6 +68,9 @@
     }
     return head(L("פקדי הדגמה", "Demo controls"), L("משנים את ההצגה בלבד, לא את המוצר.", "These change the presentation, not the product.")) +
       '<div class="pop-list">' +
+      '<button class="pop-item compact pop-m" data-act="persp">' + ic(curPersp().ic) + "<span><small>" + L("צפייה בתור", "Viewing as") + "</small><b>" + esc(L(curPersp().he, curPersp().en)) + "</b></span></button>" +
+      '<button class="pop-item compact pop-m" data-act="design"><span class="dock-sw" style="background:' + UI().THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0].c + '"></span><span><small>' + L("עיצוב", "Design") + "</small><b>" + esc(S.N(UI().THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0])) + "</b></span></button>" +
+      '<div class="pop-item compact pop-m pop-lang"><span><b>' + L("שפה", "Language") + '</b></span><span class="dock-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-lang="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-lang="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></span></div>' +
       '<a class="pop-item compact" href="#/proposal">' + ic("mail") + "<span><b>" + L("בקשת הדגמה אישית והצעת מחיר", "Request a personal demo and proposal") + "</b></span></a>" +
       '<button class="pop-item compact" data-act="time">' + ic("clock") + "<span><b>" + L("זמן ההדגמה", "Demo time") + "</b></span></button>" +
       '<a class="pop-item compact" href="#/showcase/design">' + ic("palette") + "<span><b>" + L("סטודיו העיצוב", "Design studio") + "</b></span></a>" +
@@ -84,7 +87,8 @@
     pop.querySelectorAll("[data-brand]").forEach(function (b) { b.addEventListener("click", function () { UI().setBrand(b.getAttribute("data-brand")); render(); }); });
     pop.querySelectorAll("[data-moment]").forEach(function (b) { b.addEventListener("click", function () { setMoment(b.getAttribute("data-moment")); }); });
     pop.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", close); });
-    var t = pop.querySelector('[data-act="time"]'); if (t) t.addEventListener("click", function (e) { e.stopPropagation(); toggle("time", null); });
+    ["time", "persp", "design"].forEach(function (k) { var t = pop.querySelector('[data-act="' + k + '"]'); if (t) t.addEventListener("click", function (e) { e.stopPropagation(); toggle(k, null); }); });
+    pop.querySelectorAll("[data-lang]").forEach(function (b) { b.addEventListener("click", function () { close(); UI().setLang(b.getAttribute("data-lang")); }); });
     var rs = pop.querySelector('[data-act="reset"]');
     if (rs) rs.addEventListener("click", function () {
       close();

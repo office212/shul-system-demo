@@ -161,10 +161,10 @@
 
   /* ---------- demo bar + header ---------- */
   var THEMES = [
-    { id: "classic", he: "ירושלמי קלאסי", en: "Jerusalem Classic", c: "linear-gradient(135deg,#e6d6b8 50%,#0e2c4c 50%)", dhe: "אבן ירושלמית, שיש ונגיעות זהב. אווירה מסורתית ומכובדת.", den: "Jerusalem stone, marble and gold. Traditional and dignified." },
-    { id: "modern", he: "כחול מודרני", en: "Modern Blue", c: "linear-gradient(135deg,#ffffff 50%,#1f86e0 50%)", dhe: "נקי ועכשווי, תכלת ולבן, פינות מעוגלות.", den: "Clean and contemporary, sky blue and white, soft rounded shapes." },
-    { id: "royal", he: "מלכותי", en: "Royal Elegant", c: "linear-gradient(135deg,#0a1526 50%,#d4b36a 50%)", dhe: "כחול עמוק וזהב מעודן, טיפוגרפיה אלגנטית.", den: "Deep navy and refined gold, elegant typography." },
-    { id: "minimal", he: "מינימלי בהיר", en: "Minimal Light", c: "linear-gradient(135deg,#ffffff 50%,#161616 50%)", dhe: "בהיר, מרווח ושקט. עיצוב מודרני ומאופק.", den: "Bright, spacious and quiet. Understated modern design." }
+    { id: "classic", he: "ירושלים", en: "Jerusalem", c: "linear-gradient(135deg,#efe6d6 50%,#1d3a6b 50%)", dhe: "אבן חמה, כחול עמוק ונגיעות נחושת. סריף מודרני בכותרות.", den: "Warm stone, deep blue and brass. A modern serif for headings." },
+    { id: "modern", he: "נקי", en: "Clear", c: "linear-gradient(135deg,#ffffff 50%,#2348d6 50%)", dhe: "לבן חד, כחול אחד חזק וטיפוגרפיה הדוקה. עכשווי ושקט.", den: "Crisp white, one strong blue, tight type. Contemporary and calm." },
+    { id: "warm", he: "חם", en: "Warm", c: "linear-gradient(135deg,#f6e3d1 50%,#b4532a 50%)", dhe: "חול וחימר, כותרות מעוגלות וכפתורים רכים. מזמין ומשפחתי.", den: "Sand and clay, rounded headings, soft pill buttons. Welcoming." },
+    { id: "royal", he: "מלכותי", en: "Royal", c: "linear-gradient(135deg,#0c1628 50%,#e0c48c 50%)", dhe: "כחול לילה ושמפניה, סריף אלגנטי. חגיגי ומכובד.", den: "Night navy and champagne, an elegant serif. Festive and dignified." }
   ];
   var BRANDS = { navy: "#1b3a5c", emerald: "#1f5f4a", plum: "#4b2e5a", slate: "#334155", teal: "#0f5e6b" };
   function curTheme() { return S.over.theme || S.prefs.theme; }
@@ -177,7 +177,7 @@
     if (c && th !== "royal") {
       h.style.setProperty("--primary", c); h.style.setProperty("--primary-hover", "color-mix(in srgb, " + c + " 82%, #ffffff)");
       h.style.setProperty("--title-ink", c); h.style.setProperty("--tv-head", c); h.style.setProperty("--tv-hi", c);
-      if (th !== "modern") h.style.setProperty("--head-ink", c);
+      h.style.setProperty("--head-ink", c);
     }
   }
   function setBrand(b) { S.prefs.brand = b || null; S.savePrefs(); applyPrefs(); }
@@ -226,7 +226,7 @@
   function customModal() {
     var m = modal('<div class="eyebrow">' + L("בית הכנסת שלכם. המערכת שלכם.", "Your Shul. Your System.") + "</div><h2>" + L("המערכת מותאמת אישית לבית הכנסת שלכם", "Fully customized for your shul") + '</h2><p class="muted">' + L("זו לא תבנית קבועה. כל בית כנסת מקבל מערכת בזהות שלו. הנה מה שאפשר להתאים:", "This is not a fixed template. Every shul gets a system in its own identity. Here is what can be customized:") + "</p>" + customItemsHtml() +
       '<p class="tiny muted" style="margin-top:12px">' + scopeNote() + '</p><hr class="gold-line"><h3>' + L("נסו בעצמכם: שם בית הכנסת שלכם", "Try it: your shul's name") + "</h3>" + renameHtml() +
-      '<h3 style="margin-top:18px">' + L("ארבעה עיצובים לדוגמה", "Four example designs") + '</h3><p class="small muted">' + L("אלה רק דוגמאות למה שאפשר. העיצוב שלכם ייבנה במיוחד עבורכם.", "These are only examples of what is possible. Your design is created especially for you.") + "</p>" + themePickerHtml() +
+      '<h3 style="margin-top:18px">' + L("עיצובים לדוגמה", "Example designs") + '</h3><p class="small muted">' + L("אלה רק דוגמאות למה שאפשר. העיצוב שלכם ייבנה במיוחד עבורכם.", "These are only examples of what is possible. Your design is created especially for you.") + "</p>" + themePickerHtml() +
       '<div class="actions"><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>", { wide: true });
     bindCustom(m);
   }
