@@ -164,7 +164,11 @@
     { id: "classic", he: "ירושלמי קלאסי", en: "Jerusalem Classic", c: "linear-gradient(135deg,#e6d6b8 50%,#0e2c4c 50%)", dhe: "אבן ירושלמית, שיש ונגיעות זהב. אווירה מסורתית ומכובדת.", den: "Jerusalem stone, marble and gold. Traditional and dignified." },
     { id: "modern", he: "כחול מודרני", en: "Modern Blue", c: "linear-gradient(135deg,#ffffff 50%,#1f86e0 50%)", dhe: "נקי ועכשווי, תכלת ולבן, פינות מעוגלות.", den: "Clean and contemporary, sky blue and white, soft rounded shapes." },
     { id: "royal", he: "מלכותי", en: "Royal Elegant", c: "linear-gradient(135deg,#0a1526 50%,#d4b36a 50%)", dhe: "כחול עמוק וזהב מעודן, טיפוגרפיה אלגנטית.", den: "Deep navy and refined gold, elegant typography." },
-    { id: "minimal", he: "מינימלי בהיר", en: "Minimal Light", c: "linear-gradient(135deg,#ffffff 50%,#161616 50%)", dhe: "בהיר, מרווח ושקט. עיצוב מודרני ומאופק.", den: "Bright, spacious and quiet. Understated modern design." }
+    { id: "minimal", he: "מינימלי בהיר", en: "Minimal Light", c: "linear-gradient(135deg,#ffffff 50%,#161616 50%)", dhe: "בהיר, מרווח ושקט. עיצוב מודרני ומאופק.", den: "Bright, spacious and quiet. Understated modern design." },
+    { id: "midnight", he: "לילה", en: "Midnight", c: "linear-gradient(135deg,#0b0e12 50%,#3ddc97 50%)", dhe: "מצב כהה מודרני עם נגיעות מנטה. נוח לעיניים ובולט על המסך.", den: "A modern dark mode with mint accents. Easy on the eyes, striking on the screen." },
+    { id: "sage", he: "זית ואבן", en: "Olive & Stone", c: "linear-gradient(135deg,#efeee6 50%,#4f6b4a 50%)", dhe: "ירוק זית רך ואבן חמה. רגוע, טבעי ומזמין.", den: "Soft olive green and warm stone. Calm, natural and welcoming." },
+    { id: "terracotta", he: "טרקוטה", en: "Terracotta", c: "linear-gradient(135deg,#f6e6d6 50%,#b5542f 50%)", dhe: "חימר ים תיכוני חם, כותרות סריף כבדות ופינות רכות.", den: "Warm Mediterranean clay, heavy serif headings and soft corners." },
+    { id: "bold", he: "עכשווי נועז", en: "Bold Contemporary", c: "linear-gradient(135deg,#ffcf33 50%,#3b2fd9 50%)", dhe: "סגול וצהוב, כרטיסים עם קו מתאר חד. צעיר ונועז.", den: "Violet and yellow, sharply outlined cards. Young and bold." }
   ];
   var BRANDS = { navy: "#1b3a5c", emerald: "#1f5f4a", plum: "#4b2e5a", slate: "#334155", teal: "#0f5e6b" };
   function curTheme() { return S.over.theme || S.prefs.theme; }
@@ -174,7 +178,7 @@
     h.setAttribute("data-theme", th);
     ["--primary", "--primary-hover", "--title-ink", "--head-ink", "--tv-head", "--tv-hi"].forEach(function (v) { h.style.removeProperty(v); });
     var c = BRANDS[S.prefs.brand];
-    if (c && th !== "royal") {
+    if (c && th !== "royal" && th !== "midnight") {
       h.style.setProperty("--primary", c); h.style.setProperty("--primary-hover", "color-mix(in srgb, " + c + " 82%, #ffffff)");
       h.style.setProperty("--title-ink", c); h.style.setProperty("--tv-head", c); h.style.setProperty("--tv-hi", c);
       if (th !== "modern") h.style.setProperty("--head-ink", c);
@@ -226,7 +230,7 @@
   function customModal() {
     var m = modal('<div class="eyebrow">' + L("בית הכנסת שלכם. המערכת שלכם.", "Your Shul. Your System.") + "</div><h2>" + L("המערכת מותאמת אישית לבית הכנסת שלכם", "Fully customized for your shul") + '</h2><p class="muted">' + L("זו לא תבנית קבועה. כל בית כנסת מקבל מערכת בזהות שלו. הנה מה שאפשר להתאים:", "This is not a fixed template. Every shul gets a system in its own identity. Here is what can be customized:") + "</p>" + customItemsHtml() +
       '<p class="tiny muted" style="margin-top:12px">' + scopeNote() + '</p><hr class="gold-line"><h3>' + L("נסו בעצמכם: שם בית הכנסת שלכם", "Try it: your shul's name") + "</h3>" + renameHtml() +
-      '<h3 style="margin-top:18px">' + L("ארבעה עיצובים לדוגמה", "Four example designs") + '</h3><p class="small muted">' + L("אלה רק דוגמאות למה שאפשר. העיצוב שלכם ייבנה במיוחד עבורכם.", "These are only examples of what is possible. Your design is created especially for you.") + "</p>" + themePickerHtml() +
+      '<h3 style="margin-top:18px">' + L("עיצובים לדוגמה", "Example designs") + '</h3><p class="small muted">' + L("אלה רק דוגמאות למה שאפשר. העיצוב שלכם ייבנה במיוחד עבורכם.", "These are only examples of what is possible. Your design is created especially for you.") + "</p>" + themePickerHtml() +
       '<div class="actions"><button class="btn primary" data-close>' + L("סגירה", "Close") + "</button></div>", { wide: true });
     bindCustom(m);
   }

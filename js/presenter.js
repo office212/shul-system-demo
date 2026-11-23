@@ -55,11 +55,11 @@
     }
     if (kind === "design") {
       var brands = UI().BRANDS;
-      return head(L("עיצוב", "Design"), L("ארבעה עיצובים לדוגמה. כל בית כנסת מקבל עיצוב שנבנה עבורו.", "Four example designs. Every shul gets a design made for it.")) +
+      return head(L("עיצוב", "Design"), L("עיצובים לדוגמה. העיצוב הוא שכבה נפרדת: כל בית כנסת בוחר או מקבל עיצוב משלו, והמערכת עצמה זהה.", "Example designs. The design is a separate layer: every shul chooses or gets its own, and the system itself stays the same.")) +
         '<div class="pop-themes">' + UI().THEMES.map(function (t) { return '<button class="pop-theme" data-theme-pick="' + t.id + '" aria-pressed="' + (S.prefs.theme === t.id) + '"><span class="sw" style="background:' + t.c + '"></span><b>' + esc(S.N(t)) + "</b></button>"; }).join("") + "</div>" +
         '<div class="pop-sub">' + L("צבע מותג (תצוגה בלבד)", "Brand color (preview only)") + '</div><div class="pop-brands"><button class="brand-dot none" data-brand="" aria-pressed="' + !S.prefs.brand + '" title="' + L("ברירת המחדל של העיצוב", "Design default") + '">' + L("רגיל", "Default") + "</button>" +
         Object.keys(brands).map(function (k) { return '<button class="brand-dot" data-brand="' + k + '" aria-pressed="' + (S.prefs.brand === k) + '" title="' + k + '" style="background:' + brands[k] + '"></button>'; }).join("") + "</div>" +
-        (S.prefs.theme === "royal" ? '<p class="pop-note">' + L("בעיצוב המלכותי הזהב הוא צבע המותג.", "Royal Elegant keeps its gold as the brand color.") + "</p>" : "") +
+        ((S.prefs.theme === "royal" || S.prefs.theme === "midnight") ? '<p class="pop-note">' + L("בעיצוב הזה צבע ההדגשה קבוע.", "This design keeps its own accent color.") + "</p>" : "") +
         '<div class="pop-links"><a href="#/showcase/design">' + L("סטודיו העיצוב", "Open the design studio") + "</a></div>";
     }
     if (kind === "time") {

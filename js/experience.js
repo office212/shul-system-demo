@@ -117,7 +117,7 @@
     return '<div class="tiers">' +
       col(L("במערכת היום", "In the system today"), "t1", "מגדירים בעצמכם", "Configure it yourself", [["כל מילה בהמסך, בעברית ובאנגלית", "Every word on the screen, in Hebrew and English", "#/gabbai/tv", "content"], ["כל מילה בדף הבית של האתר", "Every word on the website's home page", "#/gabbai/landing", "super"], ["זמני תפילה, כולל ימים מסוימים", "Davening times, including specific weekdays", "#/gabbai/tv", "content"], ["מה מוצג במסך, מתי ובאילו ימים", "What the screen shows, when and on which days", "#/gabbai/content", "content"], ["בהירות המסך ורענון מרחוק", "Screen brightness and remote refresh", "#/gabbai/tv", "super"], ["שורות דף השבת", "The Shabbat bulletin's rows", "#/gabbai/shabbat", "content"], ["תפקיד והרשאות לכל גבאי", "A role and permissions for each gabbai", "#/admin", "super"]]) +
       col(L("בהתאמה אישית", "Made for you"), "t2", "מעוצב עבור בית הכנסת שלכם", "Designed for your shul", [["לוגו, צבעים וגופנים בזהות שלכם", "Your logo, colors and typography"], ["עיצוב האתר, הפורטל ומערכת הגבאים", "The design of the website, portal and administration"], ["מראה המסך באולם", "The look of the shul screen"], ["הטקסטים, הנוסח והמנהגים של הקהילה", "Your community's wording, nusach and minhagim"], ["התאמת התהליכים הקיימים לדרך העבודה שלכם", "Existing workflows set up the way you work"]]) +
-      col(L("בהדגמה בלבד", "Demo only"), "t3", "פקדי ההדגמה", "Presentation controls", [["החלפת פרספקטיבה ותפקיד", "Switching perspective and role"], ["ארבעת העיצובים לדוגמה וצבע המותג", "The four example designs and brand color"], ["הקלדת שם בית הכנסת", "Typing your shul's name"], ["זמן ההדגמה ואיפוס", "Demo time and reset"]]) +
+      col(L("בהדגמה בלבד", "Demo only"), "t3", "פקדי ההדגמה", "Presentation controls", [["החלפת פרספקטיבה ותפקיד", "Switching perspective and role"], ["העיצובים לדוגמה וצבע המותג", "The example designs and brand color"], ["הקלדת שם בית הכנסת", "Typing your shul's name"], ["זמן ההדגמה ואיפוס", "Demo time and reset"]]) +
       '</div><p class="tiers-note">' + UI.scopeNote() + "</p>";
   }
 
@@ -360,7 +360,7 @@
   /* =================================================================== */
   /* ---------- E: same shul, different designs ---------- */
   var DEV = [["site", "אתר", "Website", "#/site?frame=1&as=visitor", 1280, 860], ["me", "פורטל", "Member portal", "#/me?frame=1&as=member", 400, 860], ["admin", "ניהול", "Administration", "#/gabbai?frame=1&as=super", 1360, 860], ["tv", "מסך", "screen", "#/tv?preview=1", 1920, 1080]];
-  var TYPO = { classic: "Frank Ruhl Libre · Assistant", modern: "Rubik", royal: "Bellefair · Assistant", minimal: "Heebo Light" };
+  var TYPO = { classic: "Frank Ruhl Libre · Assistant", modern: "Rubik", royal: "Bellefair · Assistant", minimal: "Heebo Light", midnight: "Heebo", sage: "Rubik · Assistant", terracotta: "Frank Ruhl Libre · Rubik", bold: "Rubik Black" };
   UI.route("/showcase/design", {
     layout: "xp", live: false, title: function () { return L("סטודיו העיצוב", "Design studio"); },
     render: function (app, arg, params) {

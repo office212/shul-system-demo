@@ -182,3 +182,10 @@ body.bare { background: #000; overflow: hidden; }
 .tv-stage.lang-en .tv-shcard.small .en { font-size: 54px; }
 .tv-stage.lang-en .tv-board.shabbat .tv-li .he { font-size: 17px; }
 .tv-stage.lang-en .tv-board.shabbat .tv-li .en { font-size: 27px; }
+[data-theme="midnight"] .tv-ch .en, [data-theme="midnight"] .tv-bhead .en { color: #3ddc97; opacity: .85; }
+[data-theme="midnight"] .tv-col, [data-theme="midnight"] .tv-center { box-shadow: 0 20px 50px rgba(0, 0, 0, .45); }
+[data-theme="sage"] .tv-col, [data-theme="sage"] .tv-center { box-shadow: 0 10px 30px rgba(40, 50, 30, .08); }
+[data-theme="terracotta"] .tv-head, [data-theme="bold"] .tv-head { border-bottom: 0; }
+[data-theme="terracotta"] .tv-brand svg, [data-theme="bold"] .tv-brand svg { color: #fff; }
+[data-theme="terracotta"] .tv-col, [data-theme="terracotta"] .tv-center { box-shadow: 0 16px 40px rgba(120, 60, 20, .1); }
+[data-theme="bold"] .tv-col, [data-theme="bold"] .tv-center { box-shadow: 6px 6px 0 #15132b; }
