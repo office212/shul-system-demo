@@ -53,7 +53,7 @@ presentation, never the product:
 - A slim contact bar at the bottom of every page: Request a demo, email and phone. Not on the screen itself (`#/tv`).
 - On the platform tour hero: Request a demo, Call, and the email address. The notebook page ends with
   a torn notebook page: Request a demo, the phone and the email address. Each showcase ends with a
-  "See this running in your shul" band, and the screen showroom has its own Request a demo button.
+  "Fitted to your shul, the way you need it" band, and the screen showroom has its own Request a demo button.
 
 ## Experience pages
 
