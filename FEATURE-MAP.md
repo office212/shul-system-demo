@@ -39,7 +39,7 @@ names them on the home page and in the screen showroom, and the tour marks them 
 ## Presentation only (not product features)
 
 Perspective switcher, example designs and brand color, the shul-name field, the demo clock,
-reset, the gabbai's notebook (`#/`, its notes are fictional; every answer in it is a row of the table above),
+reset, the gabbai's drawer (`#/`, its notes and objects are fictional; every answer in it is a row of the table above),
 the platform tour, the showcases, the TV showroom and the proposal request.
 These exist to present the product and add no shul management capability.
 
