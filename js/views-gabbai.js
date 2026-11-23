@@ -5,7 +5,7 @@
   var S = window.SHUL, UI = window.SHUL_UI, L = S.L, esc = S.esc, I = UI.I, B = UI.B;
   var sv = function (svg, n) { return svg.replace("<svg", '<svg width="' + (n || 18) + '" height="' + (n || 18) + '"'); };
   function who() { var u = S.db.demoUsers[S.role()]; return u ? u.he + "|" + u.en : "|"; }
-  function tvFrame(q) { return '<div class="tv-frame"><iframe class="tvpv" title="' + L("תצוגה מקדימה של המסך", "screen preview") + '" src="index.html#/tv?preview=1' + (q || "") + '" loading="lazy"></iframe></div>'; }
+  function tvFrame(q) { return '<div class="tv-frame"><iframe class="tvpv" title="' + L("תצוגה מקדימה של המסך", "screen preview") + '" src="index.html' + (/[?&]frame=1/.test(location.hash) ? "?nested=1" : "") + '#/tv?preview=1' + (q || "") + '"' + (/[?&]frame=1/.test(location.hash) ? "" : ' loading="lazy"') + "></iframe></div>"; }
 
   /* ---------- gabbai home ---------- */
   UI.route("/gabbai", { admin: true,

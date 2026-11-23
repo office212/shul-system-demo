@@ -3,10 +3,11 @@
 **Your Shul. Your System. · בית הכנסת שלכם. המערכת שלכם.**
 
 An interactive sales experience for the shul management platform. It opens on the
-gabbai's notebook (`#/`): a scribbled to-do page every gabbai knows. Four of its lines, one at a
-time, are crossed out as the real system shows what replaces them, live on the demo data. Then a
-short list of what else is included, three ways to try the system yourself, the example designs,
-and the contact. The platform tour (`#/tour`) has the real product running live inside it,
+gabbai's drawer (`#/`): a walnut desk and an open drawer, seen from above, holding what a gabbai
+carries around (a slip with the new Mincha time, an envelope of dues, the nedarim notebook, a flyer,
+a yahrzeit card, the screen's remote and the keys). Pick one up and the real system, live on the demo
+data, shows what replaces it. When the drawer is empty, it closes. Below it: what else is included,
+four ways to try the system yourself, the example designs, and the contact on a business card. The platform tour (`#/tour`) has the real product running live inside it,
 lets a visitor personalize it with their shul's name and a design direction, and leads into the product
 itself: the shul website, the member portal, the administration and the TV.
 
@@ -51,15 +52,15 @@ presentation, never the product:
 - A gold **Request a demo** button in the top bar of every page (overview, showcases, screen showroom, proposal,
   shul website, member pages and administration). On phones it becomes a compact "Demo" button.
 - A slim contact bar at the bottom of every page: Request a demo, email and phone. Not on the screen itself (`#/tv`).
-- On the platform tour hero: Request a demo, Call, and the email address. The notebook page ends with
-  a torn notebook page: Request a demo, the phone and the email address. Each showcase ends with a
+- On the platform tour hero: Request a demo, Call, and the email address. The drawer page ends with
+  a business card on the desk: Request a demo, the phone and the email address. Each showcase ends with a
   "Fitted to your shul, the way you need it" band, and the screen showroom has its own Request a demo button.
 
 ## Experience pages
 
 | Address | What |
 |---|---|
-| `#/` | The gabbai's notebook: four notebook lines (davening times, a member's balance, Shabbat nedarim, a yahrzeit), each crossed out as the live system shows what replaces it; what else is included; try it as the gabbai, as a member or on the screen; example designs; contact |
+| `#/` | The gabbai's drawer: seven objects (davening times, dues, Shabbat nedarim, a flyer, yahrzeits, the screen, the keys to roles and backup); each one, picked up, opens the live system that replaces it; what else is included; try it; example designs; contact |
 | `#/tour` | Platform tour: live composition, personalization, perspectives, five interactions, daily operations, customization tiers |
 | `#/showcase/ledger` | One ledger, two views: finance gabbai and member side by side |
 | `#/showcase/tv` | From editor to shul: preview and publish to the screen |
@@ -98,7 +99,7 @@ presentation, never the product:
 - `js/seed.js`: the fictional data
 - `js/ui.js`: router and layouts (site, admin shell, experience, TV), header, modals, toasts, simulated push, bell
 - `js/presenter.js`: the presentation dock
-- `js/notebook.js`, `css/notebook.css`: the gabbai's notebook (`#/`)
+- `js/drawer.js`, `css/drawer.css`: the gabbai's drawer (`#/`); its wood and paper textures are generated images in `img/` (`desk.jpg`, `oak.jpg`, `liner.jpg`, `grain.png`)
 - `css/paper.css`: the paper-and-ink look of everything around the product (tour, showcases, screen showroom,
   proposal, the demo bar and the contact strip). The product screens keep their example designs.
 - `js/experience.js`, `css/experience.css`: the platform tour, showcases, admin shell and portal styles
