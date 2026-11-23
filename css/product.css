@@ -121,3 +121,60 @@ tbody tr:hover td { background: color-mix(in srgb, var(--surface-2) 70%, transpa
 [data-theme="royal"] .btn.accent { color: #0c1628; }
 [data-theme="royal"] .eyebrow { color: var(--gold); letter-spacing: .12em; }
 [data-theme="royal"] .tv-ch .en, [data-theme="royal"] .tv-bhead .en { color: var(--gold); opacity: .8; }
+
+/* ---------- polish pass: calmer, more product-like ---------- */
+/* notices: one compact row each, no underlines, an arrow at the end */
+a.alert { text-decoration: none; padding: 12px 16px; gap: 10px; font-size: 14.5px; border: 1px solid color-mix(in srgb, currentColor 14%, transparent); transition: border-color .15s, background .15s; flex-wrap: nowrap; }
+a.alert:hover { border-color: color-mix(in srgb, currentColor 35%, transparent); }
+a.alert svg { width: 18px; height: 18px; flex: none; }
+a.alert b { font-weight: 600; }
+a.alert span { opacity: .8; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+a.alert::after { content: "‹"; margin-inline-start: auto; font-size: 20px; line-height: 1; opacity: .6; }
+[dir="ltr"] a.alert::after { content: "›"; }
+.dash-hello + .stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; }
+.dash-hello + .stack > * + * { margin-top: 0; }
+
+/* figures and shortcuts sit in one even row */
+.kpis { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.kpi .k { font-weight: 500; }
+.kpi .s { margin-top: 2px; }
+.quick { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.quick a { padding: 13px 14px; font-size: 14.5px; }
+.quick a.primary { box-shadow: 0 1px 2px rgba(16, 24, 40, .1), inset 0 1px 0 rgba(255, 255, 255, .14); }
+
+/* cards and lists a little tighter */
+.card .card-head { margin-bottom: 14px; }
+.list-row { padding: 11px 0; font-size: 14.5px; }
+.page { padding-top: 26px; }
+.page-head { margin-bottom: 22px; }
+.page-head h1 { font-size: clamp(26px, 3vw, 34px); }
+.admin-content .page-head p.muted { font-size: 14.5px; }
+.big-actions .btn { min-height: 76px; font-size: 16px; font-weight: 600; border-radius: var(--radius-card); }
+.mbar { height: 6px; }
+
+/* the admin sidebar runs the full height */
+.admin-side { min-height: 100vh; border-inline-end: 1px solid var(--line); }
+.side-foot { border-top-color: var(--line); }
+
+/* demo contact inside the product: quiet, in the product's own colors */
+body:not(.layout-xp) .cta-demo, .site-head .cta-demo, .admin-top .cta-demo { background: transparent; color: var(--ink) !important; border: 1px dashed color-mix(in srgb, var(--ink) 35%, transparent); box-shadow: none; font-family: var(--font-body); font-weight: 600; font-size: 13px; padding: 7px 12px; border-radius: var(--radius-btn); }
+body:not(.layout-xp) .cta-demo:hover { background: var(--surface-2); box-shadow: none; }
+body:not(.layout-xp):not(.bare) .salesbar { background: var(--surface); border-top: 1px solid var(--line); color: var(--muted); font-family: var(--font-body); font-size: 13px; }
+body:not(.layout-xp) .salesbar a { color: var(--ink-soft); font-weight: 500; text-decoration: none; }
+body:not(.layout-xp) .salesbar a:hover { color: var(--ink); text-decoration: underline; }
+body:not(.layout-xp) .salesbar .sb-brand { color: var(--ink); font-weight: 600; }
+body:not(.layout-xp) .salesbar svg { color: var(--muted); }
+
+/* screen content list: calmer item cards */
+.admin-content .card h3 { font-weight: 600; }
+.admin-content .badge { font-size: 11.5px; }
+
+@media (max-width: 760px) {
+  .dash-hello + .stack { grid-template-columns: 1fr; }
+  a.alert span { display: none; }
+  .kpis { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi { padding: 14px; }
+  .kpi .v { font-size: 22px; }
+  .quick { grid-template-columns: 1fr 1fr; }
+  .dash-hello h1 { font-size: 26px; }
+}
