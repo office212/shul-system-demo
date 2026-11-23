@@ -3,8 +3,9 @@
 **Your Shul. Your System. · בית הכנסת שלכם. המערכת שלכם.**
 
 An interactive sales experience for the shul management platform. It opens on the
-gabbai's story (`#/`): Motzei Shabbat, 23:40, the gabbai's phone full of the questions every
-gabbai knows, each one answered by a real capability of the system, shown live. The platform
+board at the shul entrance (`#/`): the cork board every gabbai knows, full of handwritten notes.
+Each note, torn off the board, shows where it lives in the system, live; when the board is empty
+the shul screen lights up on the same wall. The platform
 tour (`#/tour`) has the real product running live inside it, lets a visitor
 personalize it with their shul's name and a design direction, and leads into the product
 itself: the shul website, the member portal, the administration and the TV.
@@ -48,15 +49,15 @@ presentation, never the product:
 - A gold **Request a demo** button in the top bar of every page (overview, showcases, screen showroom, proposal,
   shul website, member pages and administration). On phones it becomes a compact "Demo" button.
 - A slim contact bar at the bottom of every page: Request a demo, email and phone. Not on the screen itself (`#/tv`).
-- On the platform tour hero: Request a demo, Call, and the email address. The gabbai's story ends with
-  "I want a quiet Motzei Shabbat" (the proposal), Call, and the email address. Each showcase ends with a
+- On the platform tour hero: Request a demo, Call, and the email address. The board page ends with
+  a note with tear-off tabs (the proposal), the phone and the email address. Each showcase ends with a
   "See this running in your shul" band, and the screen showroom has its own Request a demo button.
 
 ## Experience pages
 
 | Address | What |
 |---|---|
-| `#/` | The gabbai's story: the gabbai's phone on Motzei Shabbat; as the visitor scrolls, each message is answered by a real capability (davening times, member balance, card payments, Shabbat nedarim, yahrzeits, screen content and the Shabbat bulletin, tax letters), shown in the live product. Then the shul's own name on the screen, the gabbai's questions, and the request |
+| `#/` | The board at the entrance: ten notes (davening times, a member's debt, Shabbat nedarim, a yahrzeit, "gabbai wanted", Mazal Tov, last week's Shabbat times, a receipt, a card payment to check, a new family). Tearing one off opens the capability that replaces it, in the live product. The empty board becomes the screen, a brass plaque takes the shul's name, a weekly-sheet Q&A, and a tear-off note for the request |
 | `#/tour` | Platform tour: live composition, personalization, perspectives, five interactions, daily operations, customization tiers |
 | `#/showcase/ledger` | One ledger, two views: finance gabbai and member side by side |
 | `#/showcase/tv` | From editor to shul: preview and publish to the screen |
@@ -95,7 +96,7 @@ presentation, never the product:
 - `js/seed.js`: the fictional data
 - `js/ui.js`: router and layouts (site, admin shell, experience, TV), header, modals, toasts, simulated push, bell
 - `js/presenter.js`: the presentation dock
-- `js/story.js`, `css/story.css`: the gabbai's story (`#/`)
+- `js/board.js`, `css/board.css`: the board at the entrance (`#/`)
 - `js/experience.js`, `css/experience.css`: the platform tour, showcases, admin shell and portal styles
 - `js/tv.js`, `js/sheet.js`: the TV screen and the Shabbat bulletin
 - `js/views-*.js`: public pages, congregant, finance, gabbai and admin screens

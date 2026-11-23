@@ -1,5 +1,5 @@
 /* Shul System sales demo | the sales experience around the product.
-   #/                  the gabbai's story (js/story.js)
+   #/                  the board at the entrance (js/board.js)
    #/tour              platform tour with the live, personalizable product composition
    #/showcase/ledger   one ledger, two views: finance gabbai and member, side by side
    #/showcase/tv       from the editor to the shul screen
@@ -49,7 +49,7 @@
     app.querySelectorAll('.xp-links a[href^="#"]').forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); var t = app.querySelector(a.getAttribute("href")); if (t) t.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); }); });
   }
   function go(role, dest) { UI.setRole(role, true, dest); }
-  /* shared with the gabbai's story (js/story.js) */
+  /* shared with the board at the entrance (js/board.js) */
   window.SHUL_XP = { frame: frame, fitFrames: fitFrames, browser: browser, phone: phone, tvset: tvset, slug: slug, telBtn: telBtn, go: go, ic: ic, ARROW: ARROW };
 
   /* ---------- personalization: name + design, reflected live everywhere ---------- */
