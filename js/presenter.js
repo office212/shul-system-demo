@@ -32,7 +32,7 @@
     var p = curPersp(), mk = momentKey();
     var mom = MOMENTS.filter(function (m) { return m[0] === mk; })[0] || MOMENTS[0];
     dock.innerHTML = '<div class="dock-bar" role="toolbar" aria-label="' + L("פקדי הדגמה", "Demo controls") + '">' +
-      '<a class="dock-home" href="#/" title="' + L("סקירת המערכת", "Platform overview") + '"><span class="dock-mark">S</span><span class="dock-lbl">' + L("הדגמה", "Demo") + "</span></a>" +
+      '<a class="dock-home" href="#/" title="' + L("דף הבית", "Home") + '"><span class="dock-mark">S</span><span class="dock-lbl">' + L("הדגמה", "Demo") + "</span></a>" +
       '<button class="dock-btn" data-pop="persp" aria-haspopup="true">' + ic(p.ic) + '<span class="dock-k">' + L("צפייה בתור", "Viewing as") + "</span><b>" + esc(L(p.he, p.en)) + "</b></button>" +
       '<button class="dock-btn" data-pop="design" aria-haspopup="true"><span class="dock-sw" style="background:' + th.c + '"></span><span class="dock-k">' + L("עיצוב", "Design") + "</span><b>" + esc(S.N(th)) + "</b></button>" +
       '<button class="dock-btn hide-md" data-pop="time" aria-haspopup="true">' + ic("clock") + '<span class="dock-k">' + L("זמן", "Time") + "</span><b>" + esc(L(mom[1], mom[2])) + "</b></button>" +
@@ -51,7 +51,7 @@
       return head(L("פרספקטיבה", "Perspective"), L("מחליף את התפקיד בהדגמה בלבד. במערכת האמיתית הכניסה היא עם Google והתפקיד נקבע על ידי המנהל.", "Changes the role in the demo only. In the real system sign-in is with Google and the administrator assigns roles.")) +
         '<div class="pop-list">' + PERSP.map(function (p) {
           return '<button class="pop-item" data-role="' + p.id + '" aria-pressed="' + (S.prefs.role === p.id) + '">' + ic(p.ic, 20) + "<span><b>" + esc(L(p.he, p.en)) + "</b><small>" + esc(L(p.dhe, p.den)) + "</small></span></button>";
-        }).join("") + '</div><div class="pop-links"><a href="#/">' + L("סקירת המערכת", "Platform overview") + '</a><a href="#/screen">' + L("אולם התצוגה של המסך", "screen showroom") + '</a><a href="#/showcase/roles">' + L("השוואת תפקידים", "Compare roles") + "</a></div>";
+        }).join("") + '</div><div class="pop-links"><a href="#/tour">' + L("סיור במערכת", "Platform tour") + '</a><a href="#/screen">' + L("אולם התצוגה של המסך", "screen showroom") + '</a><a href="#/showcase/roles">' + L("השוואת תפקידים", "Compare roles") + "</a></div>";
     }
     if (kind === "design") {
       var brands = UI().BRANDS;

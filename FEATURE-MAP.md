@@ -33,7 +33,8 @@ Presentation-only tools are listed separately at the end.
 ## Presentation only (not product features)
 
 Perspective switcher, example designs and brand color, the shul-name field, the demo clock,
-reset, the platform overview, the showcases, the TV showroom and the proposal request.
+reset, the gabbai's story (`#/`, its messages are fictional; every answer in it is a row of the table above),
+the platform tour, the showcases, the TV showroom and the proposal request.
 These exist to present the product and add no shul management capability.
 
 ## Known deviations
