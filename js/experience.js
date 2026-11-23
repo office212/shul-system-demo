@@ -1,5 +1,6 @@
 /* Shul System sales demo | the sales experience around the product.
-   #/                  platform overview with the live, personalizable product composition
+   #/                  the gabbai's story (js/story.js)
+   #/tour              platform tour with the live, personalizable product composition
    #/showcase/ledger   one ledger, two views: finance gabbai and member, side by side
    #/showcase/tv       from the editor to the shul screen
    #/showcase/roles    what each role can do, and entering as any of them
@@ -41,13 +42,15 @@
     return '<header class="xp-nav' + (sub ? " sub" : "") + '"><div class="xp-wrap"><a class="xp-mark" href="#/"><span class="xp-logo">' + UI.logo() + "</span><span>Shul System</span></a>" +
       (sub ? '<span class="xp-crumb">' + sub + "</span>" : '<nav class="xp-links"><a href="#perspectives">' + L("פרספקטיבות", "Perspectives") + '</a><a href="#see">' + L("לראות בפעולה", "See it work") + '</a><a href="#daily">' + L("עבודה שוטפת", "Daily operations") + '</a><a href="#custom">' + L("התאמה אישית", "Customization") + "</a></nav>") +
       '<span class="xp-sp"></span><div class="xp-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-xl="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-xl="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></div>' +
-      (sub ? '<a class="xp-btn ghost" href="#/">' + L("סקירת המערכת", "Platform overview") + "</a>" : "") + UI.ctaDemo("xp-cta") + "</div></header>";
+      (sub ? '<a class="xp-btn ghost" href="#/tour">' + L("סיור במערכת", "Platform tour") + "</a>" : "") + UI.ctaDemo("xp-cta") + "</div></header>";
   }
   function bindNav(app) {
     app.querySelectorAll("[data-xl]").forEach(function (b) { b.addEventListener("click", function () { UI.setLang(b.getAttribute("data-xl")); }); });
     app.querySelectorAll('.xp-links a[href^="#"]').forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); var t = app.querySelector(a.getAttribute("href")); if (t) t.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); }); });
   }
   function go(role, dest) { UI.setRole(role, true, dest); }
+  /* shared with the gabbai's story (js/story.js) */
+  window.SHUL_XP = { frame: frame, fitFrames: fitFrames, browser: browser, phone: phone, tvset: tvset, slug: slug, telBtn: telBtn, go: go, ic: ic, ARROW: ARROW };
 
   /* ---------- personalization: name + design, reflected live everywhere ---------- */
   var sample = window.SHUL_SEED().shul;
@@ -118,8 +121,8 @@
       '</div><p class="tiers-note">' + UI.scopeNote() + "</p>";
   }
 
-  UI.route("/", {
-    layout: "xp", live: false, title: function () { return L("מערכת לניהול בית הכנסת", "Shul management platform"); },
+  UI.route("/tour", {
+    layout: "xp", live: false, title: function () { return L("סיור במערכת", "Platform tour"); },
     render: function (app) {
       var pTab = 0;
       app.innerHTML = '<div class="xp" id="top">' + xpNav() +
