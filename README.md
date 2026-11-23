@@ -38,7 +38,7 @@ The floating dock at the bottom of every page holds the demo controls (on phones
 presentation, never the product:
 
 - **Viewing as**: website visitor, member, finance gabbai, content gabbai, administrator or a new sign-in.
-- **Design**: eight example designs (Jerusalem Classic, Modern Blue, Royal Elegant, Minimal Light, Midnight, Olive & Stone, Terracotta, Bold Contemporary) and a preview-only brand color. The design is a separate layer over the same system.
+- **Design**: four example designs (Jerusalem, Clear, Warm, Royal) and a preview-only brand color. The design is a separate, fully customizable layer over the same system.
 - **Time**: pin a moment of the demo week to see the TV's states (before Netz, night dimming, Friday, Shabbat).
 - **Language**: Hebrew or English.
 - **Reset**: restores the fictional data, the name, the design and the time.
@@ -92,7 +92,7 @@ presentation, never the product:
 ## Files
 
 - `index.html`: the shell
-- `css/app.css`: site styles and the four themes; `css/tv.css`: the TV board
+- `css/app.css`: site styles and the four example designs (tokens); `css/product.css`: the modern base for every product screen and each design's personality; `css/tv.css`: the TV board
 - `js/core.js`: language, store, demo week, zmanim, money, roles
 - `js/seed.js`: the fictional data
 - `js/ui.js`: router and layouts (site, admin shell, experience, TV), header, modals, toasts, simulated push, bell

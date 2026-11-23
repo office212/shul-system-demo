@@ -128,21 +128,6 @@ body.bare { background: #000; overflow: hidden; }
 .tv-board.shabbat .tv-li .en { font-size: 17px; }
 
 /* theme personalities on the TV */
-[data-theme="modern"] .tv-head { border-bottom: 0; }
-[data-theme="modern"] .tv-brand svg { color: #fff; }
-[data-theme="modern"] .tv-col, [data-theme="modern"] .tv-center { box-shadow: 0 16px 40px rgba(23, 105, 194, .12); }
-[data-theme="modern"] .tv-ch { border-bottom-color: #d6e8f8; }
-[data-theme="modern"] .tv-pgroup, [data-theme="modern"] .tv-chips span { color: #1769c2; }
-[data-theme="royal"] .tv-ch .en, [data-theme="royal"] .tv-bhead .en { color: var(--gold); opacity: .8; }
-[data-theme="royal"] .tv-col, [data-theme="royal"] .tv-center { box-shadow: inset 0 0 0 5px rgba(13, 27, 48, .9), inset 0 0 0 6px rgba(212, 179, 106, .25); }
-[data-theme="royal"] .tv-zrow .t, [data-theme="royal"] .tv-clock { font-weight: 600; }
-[data-theme="minimal"] .tv-head { border-bottom: 1px solid #ececec; }
-[data-theme="minimal"] .tv-col, [data-theme="minimal"] .tv-center { box-shadow: none; }
-[data-theme="minimal"] .tv-ch { border-bottom: 1px solid #111; }
-[data-theme="minimal"] .tv-zrow .t, [data-theme="minimal"] .tv-clock { font-weight: 300; }
-[data-theme="minimal"] .tv-ch .he, [data-theme="minimal"] .tv-title .he, [data-theme="minimal"] .tv-brand .he { font-weight: 400; }
-[data-theme="minimal"] .tv-li { border-inline-start-width: 2px; background: #fafafa; }
-[data-theme="minimal"] .tv-mazal .mt { background: none; color: #111; -webkit-background-clip: border-box; background-clip: border-box; }
 .tv-host.nocursor, .tv-host.nocursor * { cursor: none; }
 .tv-next { gap: 16px; overflow: hidden; }
 .tv-next .en { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
@@ -182,10 +167,3 @@ body.bare { background: #000; overflow: hidden; }
 .tv-stage.lang-en .tv-shcard.small .en { font-size: 54px; }
 .tv-stage.lang-en .tv-board.shabbat .tv-li .he { font-size: 17px; }
 .tv-stage.lang-en .tv-board.shabbat .tv-li .en { font-size: 27px; }
-[data-theme="midnight"] .tv-ch .en, [data-theme="midnight"] .tv-bhead .en { color: #3ddc97; opacity: .85; }
-[data-theme="midnight"] .tv-col, [data-theme="midnight"] .tv-center { box-shadow: 0 20px 50px rgba(0, 0, 0, .45); }
-[data-theme="sage"] .tv-col, [data-theme="sage"] .tv-center { box-shadow: 0 10px 30px rgba(40, 50, 30, .08); }
-[data-theme="terracotta"] .tv-head, [data-theme="bold"] .tv-head { border-bottom: 0; }
-[data-theme="terracotta"] .tv-brand svg, [data-theme="bold"] .tv-brand svg { color: #fff; }
-[data-theme="terracotta"] .tv-col, [data-theme="terracotta"] .tv-center { box-shadow: 0 16px 40px rgba(120, 60, 20, .1); }
-[data-theme="bold"] .tv-col, [data-theme="bold"] .tv-center { box-shadow: 6px 6px 0 #15132b; }

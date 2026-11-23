@@ -161,14 +161,10 @@
 
   /* ---------- demo bar + header ---------- */
   var THEMES = [
-    { id: "classic", he: "ירושלמי קלאסי", en: "Jerusalem Classic", c: "linear-gradient(135deg,#e6d6b8 50%,#0e2c4c 50%)", dhe: "אבן ירושלמית, שיש ונגיעות זהב. אווירה מסורתית ומכובדת.", den: "Jerusalem stone, marble and gold. Traditional and dignified." },
-    { id: "modern", he: "כחול מודרני", en: "Modern Blue", c: "linear-gradient(135deg,#ffffff 50%,#1f86e0 50%)", dhe: "נקי ועכשווי, תכלת ולבן, פינות מעוגלות.", den: "Clean and contemporary, sky blue and white, soft rounded shapes." },
-    { id: "royal", he: "מלכותי", en: "Royal Elegant", c: "linear-gradient(135deg,#0a1526 50%,#d4b36a 50%)", dhe: "כחול עמוק וזהב מעודן, טיפוגרפיה אלגנטית.", den: "Deep navy and refined gold, elegant typography." },
-    { id: "minimal", he: "מינימלי בהיר", en: "Minimal Light", c: "linear-gradient(135deg,#ffffff 50%,#161616 50%)", dhe: "בהיר, מרווח ושקט. עיצוב מודרני ומאופק.", den: "Bright, spacious and quiet. Understated modern design." },
-    { id: "midnight", he: "לילה", en: "Midnight", c: "linear-gradient(135deg,#0b0e12 50%,#3ddc97 50%)", dhe: "מצב כהה מודרני עם נגיעות מנטה. נוח לעיניים ובולט על המסך.", den: "A modern dark mode with mint accents. Easy on the eyes, striking on the screen." },
-    { id: "sage", he: "זית ואבן", en: "Olive & Stone", c: "linear-gradient(135deg,#efeee6 50%,#4f6b4a 50%)", dhe: "ירוק זית רך ואבן חמה. רגוע, טבעי ומזמין.", den: "Soft olive green and warm stone. Calm, natural and welcoming." },
-    { id: "terracotta", he: "טרקוטה", en: "Terracotta", c: "linear-gradient(135deg,#f6e6d6 50%,#b5542f 50%)", dhe: "חימר ים תיכוני חם, כותרות סריף כבדות ופינות רכות.", den: "Warm Mediterranean clay, heavy serif headings and soft corners." },
-    { id: "bold", he: "עכשווי נועז", en: "Bold Contemporary", c: "linear-gradient(135deg,#ffcf33 50%,#3b2fd9 50%)", dhe: "סגול וצהוב, כרטיסים עם קו מתאר חד. צעיר ונועז.", den: "Violet and yellow, sharply outlined cards. Young and bold." }
+    { id: "classic", he: "ירושלים", en: "Jerusalem", c: "linear-gradient(135deg,#efe6d6 50%,#1d3a6b 50%)", dhe: "אבן חמה, כחול עמוק ונגיעות נחושת. סריף מודרני בכותרות.", den: "Warm stone, deep blue and brass. A modern serif for headings." },
+    { id: "modern", he: "נקי", en: "Clear", c: "linear-gradient(135deg,#ffffff 50%,#2348d6 50%)", dhe: "לבן חד, כחול אחד חזק וטיפוגרפיה הדוקה. עכשווי ושקט.", den: "Crisp white, one strong blue, tight type. Contemporary and calm." },
+    { id: "warm", he: "חם", en: "Warm", c: "linear-gradient(135deg,#f6e3d1 50%,#b4532a 50%)", dhe: "חול וחימר, כותרות מעוגלות וכפתורים רכים. מזמין ומשפחתי.", den: "Sand and clay, rounded headings, soft pill buttons. Welcoming." },
+    { id: "royal", he: "מלכותי", en: "Royal", c: "linear-gradient(135deg,#0c1628 50%,#e0c48c 50%)", dhe: "כחול לילה ושמפניה, סריף אלגנטי. חגיגי ומכובד.", den: "Night navy and champagne, an elegant serif. Festive and dignified." }
   ];
   var BRANDS = { navy: "#1b3a5c", emerald: "#1f5f4a", plum: "#4b2e5a", slate: "#334155", teal: "#0f5e6b" };
   function curTheme() { return S.over.theme || S.prefs.theme; }
@@ -178,10 +174,10 @@
     h.setAttribute("data-theme", th);
     ["--primary", "--primary-hover", "--title-ink", "--head-ink", "--tv-head", "--tv-hi"].forEach(function (v) { h.style.removeProperty(v); });
     var c = BRANDS[S.prefs.brand];
-    if (c && th !== "royal" && th !== "midnight") {
+    if (c && th !== "royal") {
       h.style.setProperty("--primary", c); h.style.setProperty("--primary-hover", "color-mix(in srgb, " + c + " 82%, #ffffff)");
       h.style.setProperty("--title-ink", c); h.style.setProperty("--tv-head", c); h.style.setProperty("--tv-hi", c);
-      if (th !== "modern") h.style.setProperty("--head-ink", c);
+      h.style.setProperty("--head-ink", c);
     }
   }
   function setBrand(b) { S.prefs.brand = b || null; S.savePrefs(); applyPrefs(); }

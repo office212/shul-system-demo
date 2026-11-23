@@ -360,13 +360,13 @@
   /* =================================================================== */
   /* ---------- E: same shul, different designs ---------- */
   var DEV = [["site", "אתר", "Website", "#/site?frame=1&as=visitor", 1280, 860], ["me", "פורטל", "Member portal", "#/me?frame=1&as=member", 400, 860], ["admin", "ניהול", "Administration", "#/gabbai?frame=1&as=super", 1360, 860], ["tv", "מסך", "screen", "#/tv?preview=1", 1920, 1080]];
-  var TYPO = { classic: "Frank Ruhl Libre · Assistant", modern: "Rubik", royal: "Bellefair · Assistant", minimal: "Heebo Light", midnight: "Heebo", sage: "Rubik · Assistant", terracotta: "Frank Ruhl Libre · Rubik", bold: "Rubik Black" };
+  var TYPO = { classic: "Noto Serif Hebrew · IBM Plex Sans Hebrew", modern: "IBM Plex Sans Hebrew", warm: "Secular One · IBM Plex Sans Hebrew", royal: "Noto Serif Hebrew · IBM Plex Sans Hebrew" };
   UI.route("/showcase/design", {
     layout: "xp", live: false, title: function () { return L("סטודיו העיצוב", "Design studio"); },
     render: function (app, arg, params) {
       var dev = 0;
       app.innerHTML = '<div class="xp light">' + xpNav(L("סטודיו העיצוב", "Design studio")) +
-        '<div class="xp-wrap sc-head"><span class="xp-k">E</span><h1>' + L("אותו בית כנסת. זהות אחרת.", "The same shul. A different identity.") + "</h1><p>" + L("אותם נתונים ואותן יכולות, בכיוונים עיצוביים שונים. אלה ארבע דוגמאות; העיצוב שלכם נבנה עבורכם.", "The same data and features, in different design directions. These are four examples; your design is created for you.") + "</p></div>" +
+        '<div class="xp-wrap sc-head"><span class="xp-k">E</span><h1>' + L("אותה מערכת. כל עיצוב שתרצו.", "One system. Any design you want.") + "</h1><p>" + L("העיצוב הוא שכבה נפרדת ומותאם באופן מלא: לוגו, צבעים, גופנים, צורות, המסך באולם וכל מילה. כאן ארבע דוגמאות בלבד; מה שהמערכת עושה נשאר אותו דבר בכל עיצוב.", "The design is a separate layer and fully customizable: logo, colors, fonts, shapes, the shul screen and every word. These are only four examples; what the system does stays the same in every design.") + "</p></div>" +
         '<div class="xp-wrap studio"><aside class="studio-side">' + personalHtml(true) +
         '<div class="studio-h">' + L("כיוון עיצובי", "Design direction") + '</div><div class="studio-themes">' + UI.THEMES.map(function (t) { return '<button class="st-card" data-st="' + t.id + '" aria-pressed="' + (S.prefs.theme === t.id) + '"><span class="st-sw" style="background:' + t.c + '"></span><span><b>' + esc(S.N(t)) + "</b><small>" + esc(L(t.dhe, t.den)) + '</small><small class="st-type">' + TYPO[t.id] + "</small></span></button>"; }).join("") + "</div>" +
         '<div class="studio-h">' + L("צבע מותג", "Brand color") + ' <span class="badge">' + L("תצוגה בלבד", "Preview only") + '</span></div><div class="pop-brands" id="stBrands"></div>' +

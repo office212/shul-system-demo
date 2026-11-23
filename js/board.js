@@ -117,6 +117,10 @@
         '<section class="bd-sheet"><div class="sh-paper"><header class="sh-head"><span>' + L("גיליון לגבאים", "A sheet for gabbaim") + '</span><h2>' + L("שו״ת הגבאי", "The Gabbai's Q&amp;A") + "</h2><span>" + L("שאלות שגבאים שואלים, ותשובות מתוך המערכת", "Questions gabbaim ask, answered from the system") + '</span></header><div class="sh-cols">' +
         QA.map(function (q, i) { return '<article class="sh-q"><h3><span>' + L("שאלה", "Q") + "</span> " + L(q[0][0], q[0][1]) + "</h3><p><span>" + L("תשובה", "A") + "</span> " + L(q[1][0], q[1][1]) + ' <a href="' + q[2] + '"' + (q[3] ? ' data-go-role="' + q[3] + '"' : "") + ">" + L("לראות במערכת", "See it in the system") + "</a></p></article>"; }).join("") +
         "</div></div></section>" +
+        /* the design is a layer: any look, the same system */
+        '<section class="bd-looks"><div class="lk-in"><p class="bd-what">' + L("עיצוב", "Design") + "</p><h2>" + L("ייראה בדיוק כמו בית הכנסת שלכם.", "It looks exactly like your shul.") + '</h2><p class="lk-lead">' + L("העיצוב ניתן להתאמה מלאה: לוגו, צבעים, גופנים, צורות, המסך באולם וכל מילה. מה שהמערכת עושה נשאר זהה בכל עיצוב.", "The design is fully customizable: logo, colors, fonts, shapes, the shul screen and every word. What the system does stays the same in every design.") + '</p><div class="lk-grid">' +
+          UI.THEMES.map(function (t) { return '<a class="lk" href="#/showcase/design" data-lk="' + t.id + '"><div class="lk-shot" data-theme="' + t.id + '"><div class="lk-bar"><span class="lk-logo">' + UI.logo() + '</span><b>' + esc(S.N(S.db.shul)) + '</b></div><div class="lk-hero"><small>' + L("השבת הקרובה", "This Shabbat") + "</small><strong>" + L("פרשת " + S.PARASHA.he, "Parashat " + S.PARASHA.en) + '</strong><div class="lk-card"><span>' + L("הדלקת נרות", "Candle lighting") + '</span><b class="num">' + S.hm(S.shabbatTimes().candles, S.prefs.lang === "en") + '</b></div><span class="lk-btn">' + L("לתרומה", "Donate") + '</span></div></div><span class="lk-name">' + esc(S.N(t)) + "</span></a>"; }).join("") +
+          '</div><p class="lk-more"><a href="#/showcase/design">' + L("לסטודיו העיצוב, לראות את כל המסכים בכל עיצוב", "Open the design studio to see every screen in every design") + "</a></p></div></section>" +
         /* the close: a note with tear-off tabs */
         '<section class="bd-end"><div class="end-note"><i class="pin pin-red"></i><p class="end-k">' + L("גבאי?", "Gabbai?") + "</p><h2>" + L("רוצה מוצאי שבת שקט?", "Want a quiet Motzei Shabbat?") + '</h2><p class="end-s">' + L("נכין לבית הכנסת שלך הדגמה אישית והצעה למנוי חודשי.", "We'll prepare a personal demo for your shul and a monthly subscription proposal.") + "</p><p class=\"end-tip\">" + L("תתלוש פתק ←", "Tear one off ↓") + '</p><div class="end-tabs">' +
         [0, 1, 2, 3, 4, 5, 6].map(function (i) { return '<a class="end-tab" href="#/proposal" data-tab><span>' + L("הדגמה", "Demo") + '</span><bdi dir="ltr">' + esc(SALES.phone) + "</bdi></a>"; }).join("") + "</div></div>" +
@@ -227,6 +231,7 @@
       var inp = app.querySelector("#bdName"), nt = null;
       inp.addEventListener("input", function () { clearTimeout(nt); nt = setTimeout(function () { var v = inp.value.trim(); S.db.shul.he = v || sample.he; S.db.shul.en = v || sample.en; S.save(); }, 260); });
 
+      app.querySelectorAll("[data-lk]").forEach(function (a) { a.addEventListener("click", function () { UI.setTheme(a.getAttribute("data-lk"), true); }); });
       /* the tear-off tabs */
       app.querySelectorAll("[data-tab]").forEach(function (a) {
         a.addEventListener("click", function (e) {
