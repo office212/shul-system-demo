@@ -26,16 +26,17 @@
   function render() {
     var dock = document.getElementById("dock"); if (!dock) return;
     var b = document.body;
-    if (b.classList.contains("bare") || b.classList.contains("framed")) { dock.innerHTML = ""; dock.hidden = true; return; }
+    var home = (location.hash || "#/").split("?")[0]; home = home === "#/" || home === "#" || home === "";
+    if (b.classList.contains("bare") || b.classList.contains("framed") || home) { dock.innerHTML = ""; dock.hidden = true; return; }
     dock.hidden = false;
     var th = UI().THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0];
     var p = curPersp(), mk = momentKey();
     var mom = MOMENTS.filter(function (m) { return m[0] === mk; })[0] || MOMENTS[0];
     dock.innerHTML = '<div class="dock-bar" role="toolbar" aria-label="' + L("פקדי הדגמה", "Demo controls") + '">' +
-      '<a class="dock-home" href="#/" title="' + L("דף הבית", "Home") + '"><span class="dock-mark">S</span><span class="dock-lbl">' + L("הדגמה", "Demo") + "</span></a>" +
+      '<a class="dock-home" href="#/" title="' + L("חזרה לדף הבית", "Back to the home page") + '"><span class="dock-mark">S</span><span class="dock-lbl">' + L("חזרה", "Home") + "</span></a>" +
       '<button class="dock-btn" data-pop="persp" aria-haspopup="true">' + ic(p.ic) + '<span class="dock-k">' + L("צפייה בתור", "Viewing as") + "</span><b>" + esc(L(p.he, p.en)) + "</b></button>" +
       '<button class="dock-btn" data-pop="design" aria-haspopup="true"><span class="dock-sw" style="background:' + th.c + '"></span><span class="dock-k">' + L("עיצוב", "Design") + "</span><b>" + esc(S.N(th)) + "</b></button>" +
-      '<button class="dock-btn hide-md" data-pop="time" aria-haspopup="true">' + ic("clock") + '<span class="dock-k">' + L("זמן", "Time") + "</span><b>" + esc(L(mom[1], mom[2])) + "</b></button>" +
+      '<button class="dock-btn dock-try" data-pop="try" aria-haspopup="true">' + ic("sparkle") + '<b>' + L("מה לנסות?", "What to try?") + "</b></button>" +
       '<div class="dock-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-lang="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-lang="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></div>' +
       '<button class="dock-btn dock-more" data-pop="more" aria-label="' + L("פקדי הדגמה", "Demo controls") + '">' + ic("menu") + '<span class="dock-tabl">' + L("פקדי הדגמה", "Demo controls") + "</span></button>" +
       '<a class="dock-cta hide-md" href="#/proposal">' + L("בקשת הצעה", "Request a proposal") + "</a></div>" +
@@ -45,8 +46,19 @@
     if (open) toggle(open, null, true);
   }
 
+  var TRY = [
+    ["finance", "#/finance/pay", "wallet", "לרשום תשלום", "Record a payment", "בחרו מתפלל וסכום, ושמרו. היתרה מתעדכנת מיד.", "Pick a member and an amount, save. The balance updates at once."],
+    ["content", "#/gabbai/tv", "clock", "לשנות זמן תפילה", "Change a davening time", "ערכו שעה, והמסך שבצד מתעדכן תוך שנייה.", "Edit a time and the screen beside it updates within a second."],
+    ["finance", "#/finance/nedarim", "list", "לרשום נדרי שבת", "Enter Shabbat nedarim", "טבלה אחת לכל העליות, שמירה אחת.", "One table for every aliyah, one save."],
+    ["member", "#/me", "user", "לראות כמו מתפלל", "See it as a member", "היתרה, החיובים ותשלום בכרטיס, בטלפון.", "The balance, charges and paying by card, on the phone."],
+    ["content", "#/gabbai/content", "megaphone", "לפרסם הודעה למסך", "Post to the screen", "מזל טוב או הודעה, עם תצוגה מקדימה.", "A Mazal Tov or announcement, with a preview."]
+  ];
   function popHtml(kind) {
     var head = function (t, sub) { return '<div class="pop-h"><b>' + t + "</b><span>" + sub + "</span></div>"; };
+    if (kind === "try") {
+      return head(L("מה לנסות?", "What to try?"), L("זו המערכת האמיתית עם קהילה לדוגמה. אי אפשר לקלקל כלום.", "This is the real system with a sample community. You can't break anything.")) +
+        '<div class="pop-list">' + TRY.map(function (t) { return '<button class="pop-item" data-try="' + t[0] + "|" + t[1] + '">' + ic(t[2], 20) + "<span><b>" + esc(L(t[3], t[4])) + "</b><small>" + esc(L(t[5], t[6])) + "</small></span></button>"; }).join("") + "</div>";
+    }
     if (kind === "persp") {
       return head(L("פרספקטיבה", "Perspective"), L("מחליף את התפקיד בהדגמה בלבד. במערכת האמיתית הכניסה היא עם Google והתפקיד נקבע על ידי המנהל.", "Changes the role in the demo only. In the real system sign-in is with Google and the administrator assigns roles.")) +
         '<div class="pop-list">' + PERSP.map(function (p) {
@@ -57,9 +69,6 @@
       var brands = UI().BRANDS;
       return head(L("עיצוב", "Design"), L("אלה רק ארבע דוגמאות. העיצוב ניתן להתאמה מלאה: לוגו, צבעים, גופנים, צורות וכל מילה. המערכת עצמה נשארת זהה.", "These are only four examples. The design is fully customizable: logo, colors, fonts, shapes and every word. The system itself stays the same.")) +
         '<div class="pop-themes">' + UI().THEMES.map(function (t) { return '<button class="pop-theme" data-theme-pick="' + t.id + '" aria-pressed="' + (S.prefs.theme === t.id) + '"><span class="sw" style="background:' + t.c + '"></span><b>' + esc(S.N(t)) + "</b></button>"; }).join("") + "</div>" +
-        '<div class="pop-sub">' + L("צבע מותג (תצוגה בלבד)", "Brand color (preview only)") + '</div><div class="pop-brands"><button class="brand-dot none" data-brand="" aria-pressed="' + !S.prefs.brand + '" title="' + L("ברירת המחדל של העיצוב", "Design default") + '">' + L("רגיל", "Default") + "</button>" +
-        Object.keys(brands).map(function (k) { return '<button class="brand-dot" data-brand="' + k + '" aria-pressed="' + (S.prefs.brand === k) + '" title="' + k + '" style="background:' + brands[k] + '"></button>'; }).join("") + "</div>" +
-        (S.prefs.theme === "royal" ? '<p class="pop-note">' + L("בעיצוב הזה צבע ההדגשה קבוע.", "This design keeps its own accent color.") + "</p>" : "") +
         '<div class="pop-links"><a href="#/showcase/design">' + L("סטודיו העיצוב", "Open the design studio") + "</a></div>";
     }
     if (kind === "time") {
@@ -72,7 +81,7 @@
       '<button class="pop-item compact pop-m" data-act="design"><span class="dock-sw" style="background:' + UI().THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0].c + '"></span><span><small>' + L("עיצוב", "Design") + "</small><b>" + esc(S.N(UI().THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0])) + "</b></span></button>" +
       '<div class="pop-item compact pop-m pop-lang"><span><b>' + L("שפה", "Language") + '</b></span><span class="dock-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-lang="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-lang="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></span></div>' +
       '<a class="pop-item compact" href="#/proposal">' + ic("mail") + "<span><b>" + L("בקשת הדגמה אישית והצעת מחיר", "Request a personal demo and proposal") + "</b></span></a>" +
-      '<button class="pop-item compact" data-act="time">' + ic("clock") + "<span><b>" + L("זמן ההדגמה", "Demo time") + "</b></span></button>" +
+      '<button class="pop-item compact pop-m" data-act="try">' + ic("sparkle") + "<span><b>" + L("מה לנסות?", "What to try?") + "</b></span></button>" +
       '<a class="pop-item compact" href="#/showcase/design">' + ic("palette") + "<span><b>" + L("סטודיו העיצוב", "Design studio") + "</b></span></a>" +
       '<button class="pop-item compact" data-act="reset">' + ic("refresh") + "<span><b>" + L("איפוס ההדגמה", "Reset the demo") + "</b><small>" + L("מחזיר את כל הנתונים המדומים, השם והעיצוב", "Restores all fictional data, the name and the design") + "</small></span></button></div>";
   }
@@ -85,9 +94,10 @@
     pop.querySelectorAll("[data-role]").forEach(function (b) { b.addEventListener("click", function () { var r = b.getAttribute("data-role"); var p = PERSP.filter(function (x) { return x.id === r; })[0]; close(); UI().setRole(r, true, p.dest); }); });
     pop.querySelectorAll("[data-theme-pick]").forEach(function (b) { b.addEventListener("click", function () { UI().setTheme(b.getAttribute("data-theme-pick")); }); });
     pop.querySelectorAll("[data-brand]").forEach(function (b) { b.addEventListener("click", function () { UI().setBrand(b.getAttribute("data-brand")); render(); }); });
+    pop.querySelectorAll("[data-try]").forEach(function (b) { b.addEventListener("click", function () { var v = b.getAttribute("data-try").split("|"); close(); UI().setRole(v[0], true, v[1]); }); });
     pop.querySelectorAll("[data-moment]").forEach(function (b) { b.addEventListener("click", function () { setMoment(b.getAttribute("data-moment")); }); });
     pop.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", close); });
-    ["time", "persp", "design"].forEach(function (k) { var t = pop.querySelector('[data-act="' + k + '"]'); if (t) t.addEventListener("click", function (e) { e.stopPropagation(); toggle(k, null); }); });
+    ["time", "persp", "design", "try"].forEach(function (k) { var t = pop.querySelector('[data-act="' + k + '"]'); if (t) t.addEventListener("click", function (e) { e.stopPropagation(); toggle(k, null); }); });
     pop.querySelectorAll("[data-lang]").forEach(function (b) { b.addEventListener("click", function () { close(); UI().setLang(b.getAttribute("data-lang")); }); });
     var rs = pop.querySelector('[data-act="reset"]');
     if (rs) rs.addEventListener("click", function () {

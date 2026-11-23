@@ -261,3 +261,6 @@ body.layout-xp { background: var(--pp-wall); }
   .dock-more { padding: 7px 11px; min-height: 40px; }
   .dock-tabl { font-size: 13.5px; }
 }
+.dock-try { background: #f1ebdf; }
+.dock-try b { color: var(--pp-pen); }
+.dock-try svg { color: var(--pp-pen) !important; }
