@@ -83,7 +83,7 @@
 
   function noteHtml(n) {
     var p = n.pos;
-    return '<button type="button" class="nt nt-' + n.cls + '" data-note="' + n.id + '" style="--x:' + p[0] + "%;--y:" + p[1] + "%;--w:" + p[2] + "px;--r:" + p[3] + 'deg" aria-label="' + esc(L(n.h[0], n.h[1])) + '"><span class="nt-in">' + n.html + "</span>" +
+    return '<button type="button" class="nt nt-' + n.cls + (n.id === "times" ? " hint" : "") + '" data-hint="' + esc(L("התחילו כאן ↑", "Start here ↑")) + '" data-note="' + n.id + '" style="--x:' + p[0] + "%;--y:" + p[1] + "%;--w:" + p[2] + "px;--r:" + p[3] + 'deg" aria-label="' + esc(L(n.h[0], n.h[1])) + '"><span class="nt-in">' + n.html + "</span>" +
       (n.pin ? '<i class="pin pin-' + n.pin + '" aria-hidden="true"></i>' : "") + (n.tape ? '<i class="tape" aria-hidden="true"></i>' : "") + "</button>";
   }
   function visual(n) {
@@ -106,7 +106,7 @@
 
       app.innerHTML = '<div class="bd">' +
         '<header class="bd-top"><a class="bd-mark" href="#/">' + UI.logo() + "<span>Shul System</span></a><nav><a href=\"#/tour\">" + L("סיור במערכת", "Platform tour") + '</a><span class="bd-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-xl="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-xl="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></span><a class="bd-cta" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a></nav></header>" +
-        '<section class="bd-wall" id="bdWall"><div class="bd-head"><h1>' + L("כל גבאי מכיר<br>את הלוח הזה.", "Every gabbai knows<br>this board.") + '</h1><p class="bd-hand">' + L("תוריד ממנו פתק, ותראה לאן הוא הולך.", "Take a note off it, and see where it goes.") + "</p></div>" +
+        '<section class="bd-wall" id="bdWall"><div class="bd-head"><p class="bd-what">' + L("Shul System · מערכת לניהול בית הכנסת", "Shul System · software for running a shul") + "</p><h1>" + L("כל גבאי מכיר<br>את הלוח הזה.", "Every gabbai knows<br>this board.") + '</h1><p class="bd-lead">' + L("כל פתק על הלוח הוא עבודה שהגבאי עושה היום ביד: זמנים, חובות, נדרים, יארצייטים.", "Every note on this board is work the gabbai does by hand today: times, debts, nedarim, yahrzeits.") + '</p><p class="bd-hand bd-do">' + L("לחצו על פתק, ותראו איך המערכת עושה את זה במקומכם", "Click a note to see how the system does it for you") + ' <span aria-hidden="true">↓</span></p></div>' +
         '<div class="bd-scene" id="bdScene"><div class="bd-frame" id="bdFrame"><div class="bd-cork" id="bdCork">' +
           '<span class="bd-deco d-scrap" aria-hidden="true"><i class="pin pin-yellow"></i></span><span class="bd-deco d-card" aria-hidden="true"><b>' + L("הובלות כהן", "Cohen Movers") + '</b><span>' + L("הובלות קטנות וגדולות", "Small and large moves") + '</span><bdi dir="ltr">(555) 0147-2210</bdi></span>' +
           NOTES.map(noteHtml).join("") + "</div></div>" +
@@ -148,6 +148,7 @@
           timers.push(setTimeout(function () { fly.remove(); }, quick ? 900 : 1100));
         }
         el.classList.add("gone"); el.disabled = true; el.setAttribute("aria-hidden", "true");
+        cork.querySelectorAll(".nt.hint").forEach(function (h) { h.classList.remove("hint"); });
         left -= 1; drawCount();
         if (!left) timers.push(setTimeout(finale, quick ? 700 : 300));
       }

@@ -33,7 +33,8 @@ then visit `http://localhost:8000/`. On GitHub Pages, serve the repository root.
 
 ## Presentation tools (not system features)
 
-The floating dock at the bottom of every page holds the demo controls. They change the
+The floating dock at the bottom of every page holds the demo controls (on phones, a single
+"Demo controls" tab in the corner that opens them all). They change the
 presentation, never the product:
 
 - **Viewing as**: website visitor, member, finance gabbai, content gabbai, administrator or a new sign-in.
@@ -97,6 +98,8 @@ presentation, never the product:
 - `js/ui.js`: router and layouts (site, admin shell, experience, TV), header, modals, toasts, simulated push, bell
 - `js/presenter.js`: the presentation dock
 - `js/board.js`, `css/board.css`: the board at the entrance (`#/`)
+- `css/paper.css`: the paper-and-ink look of everything around the product (tour, showcases, screen showroom,
+  proposal, the demo bar and the contact strip). The product screens keep their example designs.
 - `js/experience.js`, `css/experience.css`: the platform tour, showcases, admin shell and portal styles
 - `js/tv.js`, `js/sheet.js`: the TV screen and the Shabbat bulletin
 - `js/views-*.js`: public pages, congregant, finance, gabbai and admin screens
