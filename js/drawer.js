@@ -160,7 +160,7 @@
         name: ["השלט של המסך", "The screen's remote"],
         k: ["המסך באולם", "The screen in the shul"], h: ["המסך עובד לבד. גם בשבת.", "The screen runs itself. On Shabbat too."],
         p: ["זמני היום והתפילות, לוח הקהילה, הלכה יומית ודף יומי. בהדלקת נרות הוא עובר למצב שבת, ובלילה מתעמעם. מהמערכת מרעננים אותו בלחיצה, ובמערכת המלאה גם רואים צילום שלו, מכבים ומדליקים, ומקבלים התראה אם הוא מתנתק.", "Zmanim and davening times, the community board, a halacha of the day and the Daf Yomi. At candle lighting it switches to Shabbat mode, and at night it dims. From the system you refresh it in one press; the full system also shows you a screenshot of it, powers it on and off, and alerts you if it goes offline."],
-        vis: "screen", role: null, dest: "#/screen" },
+        vis: "screen", role: null, dest: "#/tv" },
       { id: "keys", cls: "o-keys", html: keysSvg(), pos: [65, 57, 24, 0, 64, 83.5, 34, -4],
         name: ["צרור המפתחות", "The keys"],
         k: ["גבאים והרשאות", "Gabbaim and permissions"], h: ["מחליפים גבאי? שום דבר לא הולך לאיבוד.", "A new gabbai? Nothing gets lost."],
@@ -170,18 +170,19 @@
   }
 
   var ALSO = [
-    ["דף שבת שנבנה לבד מהזמנים, ונשלח להדפסה במדפסת של בית הכנסת מכל מקום", "A Shabbat bulletin that builds itself from the times, sent to the shul's printer from anywhere"],
+    ["דף שבת שנבנה לבד מהזמנים, מוכן להדפסה", "A Shabbat bulletin that builds itself from the times, ready to print"],
     ["תרומות באתר: כרטיס, Apple Pay ו-Google Pay", "Donations on the website: card, Apple Pay and Google Pay"],
     ["משפחות חדשות נרשמות לבד, ואתם מאשרים", "New families sign up themselves, and you approve"],
-    ["אפליקציה לגבאי בטלפון אנדרואיד", "A gabbai app for Android phones"],
     ["דוח שנתי ומכתבי מס לכל מתפלל", "An annual report and tax letters for every member"],
-    ["הכל בעברית ובאנגלית", "Everything in Hebrew and English"]
+    ["הכל בעברית ובאנגלית", "Everything in Hebrew and English"],
+    ["אפליקציה לגבאי בטלפון אנדרואיד", "A gabbai app for Android phones", 1],
+    ["הדפסה במדפסת של בית הכנסת, מכל מקום", "Printing on the shul's printer, from anywhere", 1],
+    ["שליטה במסך מרחוק: צילום, כיבוי והדלקה, והתראה אם הוא מתנתק", "Remote screen control: a screenshot, power, and an alert if it goes offline", 1]
   ];
   var TRY = [
     { role: "super", dest: "#/gabbai", h: ["אני הגבאי", "I'm the gabbai"], p: ["לוח הבקרה: תשלומים, נדרים, זמנים והמסך", "The dashboard: payments, nedarim, times and the screen"] },
     { role: "member", dest: "#/me", h: ["אני מתפלל", "I'm a member"], p: ["החשבון בטלפון: יתרה, תשלום ויארצייטים", "The phone account: balance, paying and yahrzeits"] },
-    { role: null, dest: "#/screen", h: ["המסך באולם", "The shul screen"], p: ["זמנים, לוח הקהילה ומצב שבת", "Times, the community board and Shabbat mode"] },
-    { role: null, dest: "#/tour", h: ["סיור מלא", "The full tour"], p: ["כל חלקי המערכת, ומה מותאם אישית", "Every part of the system, and what's made for you"] }
+    { role: null, dest: "#/tv", h: ["המסך באולם", "The shul screen"], p: ["במסך מלא, כמו שהוא תלוי בבית הכנסת", "Full screen, as it hangs in the shul"] }
   ];
 
   /* ---------- what replaces each object: the live system ---------- */
@@ -200,17 +201,32 @@
     return X.browser("admin." + X.slug() + ".org", X.frame(o.vis + (o.vis.indexOf("?") > 0 ? "&" : "?") + "frame=1&as=" + o.role, 1360, 860, "", L(o.k[0], o.k[1])), "dv-win");
   }
 
+  /* the desk's top bar, shared with the proposal page */
+  function deskTop(page) {
+    var lang = '<span class="dw-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-xl="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-xl="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></span>';
+    var nav = page === "home"
+      ? '<button type="button" data-open-first>' + L("איך זה עובד", "How it works") + '</button><button type="button" data-go="dwTry">' + L("לנסות", "Try it") + "</button>" + lang + '<a class="dw-cta" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a>"
+      : '<a class="dw-navl" href="#/">' + L("המגירה", "The drawer") + '</a><button type="button" data-enter>' + L("להיכנס למערכת", "Enter the system") + "</button>" + lang;
+    return '<header class="dw-top"><a class="dw-mark" href="#/">' + UI.logo() + "<span>Shul System</span></a><nav>" + nav + "</nav></header>";
+  }
+  function bindTop(root) {
+    root.querySelectorAll("[data-xl]").forEach(function (b) { b.addEventListener("click", function () { UI.setLang(b.getAttribute("data-xl")); }); });
+    root.querySelectorAll("[data-enter]").forEach(function (b) { b.addEventListener("click", function (e) { e.preventDefault(); X.go("super", "#/gabbai"); }); });
+  }
+  window.SHUL_DW = { top: deskTop, bindTop: bindTop };
+
   UI.route("/", {
     layout: "xp", live: false, title: function () { return L("המגירה של הגבאי", "The gabbai's drawer"); },
-    render: function (app) {
+    render: function (app, arg, params) {
       if (cleanup) cleanup();
+      params = params || {};
       document.body.classList.add("pg-dw");
       var OB = objects(), timers = [];
       var left = function () { return OB.filter(function (o) { return !taken[o.id]; }).length; };
 
       app.innerHTML = '<div class="dw">' +
         '<section class="dw-scene" id="dwScene">' +
-        '<div class="dw-desk"><header class="dw-top"><a class="dw-mark" href="#/">' + UI.logo() + '<span>Shul System</span></a><nav><button type="button" data-open-first>' + L("איך זה עובד", "How it works") + '</button><button type="button" data-go="dwTry">' + L("לנסות", "Try it") + '</button><span class="dw-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-xl="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-xl="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></span><a class="dw-cta" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a></nav></header>" +
+        '<div class="dw-desk">' + deskTop("home") +
         '<div class="dw-intro"><p class="dw-kick">' + L("מערכת לניהול בית הכנסת", "Software for running a shul") + "</p><h1>" + L("המגירה של הגבאי.", "The gabbai's drawer.") + "</h1><p>" + L("כל מה שבפנים, המערכת כבר עושה. הרימו משהו.", "Everything in here, the system already does. Pick something up.") + "</p></div></div>" +
         '<div class="dw-stage"><div class="dw-drawer' + (opened || reduce ? " open" : "") + '" id="dwDrawer"><div class="dw-box"><div class="dw-in" id="dwIn">' + propsHtml() +
         OB.map(function (o, i) {
@@ -222,13 +238,14 @@
         '<div class="dw-foot" id="dwFoot"></div></section>' +
 
         /* below the drawer */
-        '<section class="dw-also"><div class="dw-wrap"><h2>' + L("ועוד כמה דברים שכבר לא צריכים מגירה.", "And a few more things that no longer need a drawer.") + "</h2><ul>" + ALSO.map(function (a) { return "<li>" + L(a[0], a[1]) + "</li>"; }).join("") + "</ul></div></section>" +
+        '<section class="dw-also"><div class="dw-wrap"><h2>' + L("ועוד כמה דברים שכבר לא צריכים מגירה.", "And a few more things that no longer need a drawer.") + "</h2><ul>" + ALSO.map(function (a) { return "<li><span>" + L(a[0], a[1]) + (a[2] ? ' <em class="dw-tag">' + L("לא בהדגמה", "not in this demo") + "</em>" : "") + "</span></li>"; }).join("") + "</ul></div></section>" +
         '<section class="dw-try" id="dwTry"><div class="dw-wrap"><h2>' + L("נסו בעצמכם.", "Try it yourself.") + "</h2><p>" + L("זו המערכת האמיתית, עם קהילה לדוגמה. אי אפשר לקלקל כלום.", "This is the real system, with a sample community. You can't break anything.") + '</p><div class="dw-try-grid">' +
         TRY.map(function (t, i) { return '<a class="dw-card" href="' + t.dest + '"' + (t.role ? ' data-role="' + t.role + '"' : "") + '><span class="dw-card-n">0' + (i + 1) + "</span><b>" + L(t.h[0], t.h[1]) + "</b><span>" + L(t.p[0], t.p[1]) + "</span><em>" + L("לפתוח", "Open") + " " + X.ARROW + "</em></a>"; }).join("") + "</div></div></section>" +
-        '<section class="dw-looks"><div class="dw-wrap"><h2>' + L("ייראה כמו בית הכנסת שלכם.", "It looks like your shul.") + "</h2><p>" + L("לוגו, צבעים, גופנים וכל מילה, בהתאמה מלאה. המערכת עצמה זהה בכל עיצוב. ארבע דוגמאות:", "Logo, colors, fonts and every word, fully customized. The system itself is the same in every design. Four examples:") + '</p><div class="dw-looks-row">' +
-        UI.THEMES.map(function (t) { return '<button type="button" class="dw-look" data-look="' + t.id + '"><span class="dw-sw" style="background:' + t.c + '"></span><b>' + esc(S.N(t)) + "</b></button>"; }).join("") + "</div></div></section>" +
+        '<section class="dw-looks" id="dwLooks"><div class="dw-wrap dw-looks-grid"><div class="dw-looks-copy"><h2>' + L("ייראה כמו בית הכנסת שלכם.", "It looks like your shul.") + "</h2><p>" + L("הקלידו את שם בית הכנסת ובחרו כיוון עיצובי. האתר והחשבון של המתפלל משתנים מולכם.", "Type your shul's name and pick a design direction. The website and the member account change in front of you.") + "</p>" + X.personalHtml() +
+        '<div class="dw-made"><b>' + L("בהתאמה אישית לכל בית כנסת", "Made for each shul") + "</b><ul><li>" + L("לוגו, צבעים וגופנים בזהות שלכם", "Your logo, colors and fonts") + "</li><li>" + L("העיצוב של האתר, המסך והחשבון של המתפלל", "The design of the website, the screen and the member account") + "</li><li>" + L("כל מילה, בעברית ובאנגלית", "Every word, in Hebrew and English") + "</li></ul><p>" + L("ארבעת העיצובים כאן הם רק דוגמאות. המערכת עצמה זהה בכל עיצוב.", "The four designs here are only examples. The system itself is the same in every design.") + "</p></div></div>" +
+        '<div class="dw-looks-vis">' + X.browser("www." + X.slug() + ".org", X.frame("#/site?frame=1&as=visitor", 1280, 860, "", L("אתר בית הכנסת", "Shul website")).replace(' src="', ' data-src="'), "dw-lk-win") + '<div class="dw-lk-phone">' + X.phone(X.frame("#/me?frame=1&as=member", 400, 860, "", L("חשבון המתפלל", "Member account")).replace(' src="', ' data-src="')) + "</div></div></div></section>" +
         '<section class="dw-end"><div class="dw-wrap"><div class="dw-bcard"><span class="bc-logo">' + UI.logo() + '</span><b>Shul System</b><span class="bc-line">' + L("מערכת לניהול בית הכנסת", "Software for running a shul") + '</span><a href="tel:' + SALES.tel + '"><bdi dir="ltr">' + esc(SALES.phone) + '</bdi></a><a href="mailto:' + SALES.email + '"><bdi dir="ltr">' + esc(SALES.email) + "</bdi></a></div>" +
-        '<div class="dw-end-copy"><h2>' + L("בואו נדבר.", "Let's talk.") + "</h2><p>" + L("נכין לבית הכנסת שלכם הדגמה אישית, בשם ובעיצוב שלכם, והצעה למנוי חודשי.", "We'll prepare a personal demo for your shul, in your name and design, and a monthly subscription proposal.") + '</p><div class="dw-btns"><a class="dw-btn light" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + '</a><a class="dw-btn ghost light" href="#/tour">' + L("סיור מלא במערכת", "Full platform tour") + "</a></div></div></div>" +
+        '<div class="dw-end-copy"><h2>' + L("בואו נדבר.", "Let's talk.") + "</h2><p>" + L("נכין לבית הכנסת שלכם הדגמה אישית, בשם ובעיצוב שלכם, והצעה למנוי חודשי.", "We'll prepare a personal demo for your shul, in your name and design, and a monthly subscription proposal.") + '</p><div class="dw-btns"><a class="dw-btn light" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + '</a><a class="dw-btn ghost light" href="#/gabbai" data-enter>' + L("להיכנס למערכת", "Enter the system") + "</a></div></div></div>" +
         '<p class="dw-fine">' + L("הדגמה עם נתונים בדויים. אין תשלומים, אימיילים או התראות אמיתיים.", "Demo with fictional data. No real payments, emails or notifications.") + "</p></section></div>";
 
       var drawer = app.querySelector("#dwDrawer"), foot = app.querySelector("#dwFoot"), fin = app.querySelector("#dwFinal");
@@ -357,12 +374,33 @@
       function goTo(id) { var el = app.querySelector("#" + id); if (el) el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }); }
       function bindGo(b) { b.addEventListener("click", function () { goTo(b.getAttribute("data-go")); }); }
       app.querySelectorAll(".dw-top [data-go]").forEach(bindGo);
-      app.querySelectorAll("[data-xl]").forEach(function (b) { b.addEventListener("click", function () { UI.setLang(b.getAttribute("data-xl")); }); });
+      bindTop(app);
       app.querySelectorAll(".dw-try a[data-role]").forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); X.go(a.getAttribute("data-role"), a.getAttribute("href")); }); });
-      app.querySelectorAll("[data-look]").forEach(function (b) { b.addEventListener("click", function () { UI.setTheme(b.getAttribute("data-look"), true); location.hash = "#/showcase/design"; }); });
+
+      /* make it yours: the name and the design, live in the website and the member account */
+      var looks = app.querySelector("#dwLooks"), lkFrames = looks.querySelectorAll("iframe"), lastTheme = S.prefs.theme;
+      function loadLooks() { lkFrames.forEach(function (f) { if (f.getAttribute("data-src")) { f.src = f.getAttribute("data-src"); f.removeAttribute("data-src"); } }); }
+      var lio = "IntersectionObserver" in window ? new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { loadLooks(); lio.disconnect(); } }, { rootMargin: "600px 0px" }) : null;
+      if (lio) lio.observe(looks); else loadLooks();
+      X.fitFrames(looks);
+      X.bindPersonal(looks, function () {
+        if (S.prefs.theme === lastTheme) return;
+        lastTheme = S.prefs.theme;
+        lkFrames.forEach(function (f) { var u = f.getAttribute("src"); if (u) f.src = u.replace(/&t=\w+/, "") + "&t=" + lastTheme; });
+      });
+
+      /* arriving with ?open=<object> or ?to=<section> (also from older addresses) */
+      if (params.open || params.to) {
+        try { history.replaceState(null, "", location.pathname + location.search + "#/"); } catch (e) {}
+        if (params.open) {
+          var oi = -1; OB.forEach(function (o, k) { if (o.id === params.open) oi = k; });
+          if (oi >= 0) { drawer.classList.add("open"); opened = true; timers.push(setTimeout(function () { openObj(oi); }, 450)); }
+        }
+        if (params.to) timers.push(setTimeout(function () { goTo(params.to); }, 120));
+      }
 
       function stop() {
-        timers.forEach(clearTimeout); document.removeEventListener("keydown", onKey); window.removeEventListener("hashchange", onHash);
+        timers.forEach(clearTimeout); if (lio) lio.disconnect(); document.removeEventListener("keydown", onKey); window.removeEventListener("hashchange", onHash);
         if (hold) { hold.ov.remove(); hold = null; }
         document.documentElement.classList.remove("dw-lock"); document.body.classList.remove("pg-dw"); cleanup = null;
       }

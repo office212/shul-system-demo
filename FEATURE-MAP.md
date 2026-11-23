@@ -20,11 +20,11 @@ Presentation-only tools are listed separately at the end.
 | Tax letters, annual report, recurring charges | README "Finance" | `#/finance/more` |
 | Davening times editor (weekday groups, specific weekdays) | `admin/prayer-times.js`, `src/ui/oh-times.js` | `#/gabbai/tv` |
 | TV texts editor | `admin/tv-texts-editor.js`, `src/tv/tv-texts.js` | `#/gabbai/tv` |
-| TV brightness (off, manual, automatic) and remote refresh | `admin/tv-brightness-editor.js`, `src/tv/tv-dim.js` | `#/gabbai/tv`, `#/screen` |
-| Screen content with dates, days and weekday/Shabbat preview | `gabbai/tv/content/`, `src/engines/display-engine.js` | `#/gabbai/content`, `#/showcase/tv` |
+| TV brightness (off, manual, automatic) and remote refresh | `admin/tv-brightness-editor.js`, `src/tv/tv-dim.js` | `#/gabbai/tv`, the drawer's remote |
+| Screen content with dates, days and weekday/Shabbat preview | `gabbai/tv/content/`, `src/engines/display-engine.js` | `#/gabbai/content` |
 | TV: zmanim, davening times with the next-minyan label, community board, halacha of the day, Daf Yomi, Netz countdown, parasha line, Shabbat block from Thursday noon, early Shabbat card, Shabbat mode until Shabbat ends, a scannable donation QR code | `tv/`, `screen/screen.js`, `src/tv/*` | `#/tv` (`js/tv.js`), `#/screen` |
 | Shabbat bulletin: Hebrew and English title and bottom line, overrides, every week, print, Daf Yomi, show on screen, Shabbat Shalom to the community | `src/shabbat-sheet/*`, `gabbai/shabbat/` | `#/gabbai/shabbat` (`js/sheet.js`) |
-| Roles: super admin, finance, content, both, member | README "Roles and permissions", `src/firebase/firestore.rules` | Admin sidebar, `#/admin`, `#/showcase/roles` |
+| Roles: super admin, finance, content, both, member | README "Roles and permissions", `src/firebase/firestore.rules` | Admin sidebar, `#/admin`, the drawer's keys |
 | Activity log | `gabbai/activity/` | `#/gabbai/activity` |
 | Backup download, restore dry run (every collection; adds only what is missing), nightly backup | `backup/`, `restore/`, `functions/dailybackup` | `#/backup` |
 | Push notifications and bell, broadcast | `functions/notifications`, `src/ui/oh-shell.js` | Bell in every signed-in view, `#/admin` (simulated) |
@@ -34,13 +34,13 @@ Presentation-only tools are listed separately at the end.
 
 The gabbai app for Android, printing to the shul's printer from anywhere, and remote screen
 control (screenshot, power, night schedule, offline alert) are part of the real system. The demo
-names them on the home page and in the screen showroom, and the tour marks them "not in this demo".
+names them on the drawer (the remote, and the list below it, marked "not in this demo").
 
 ## Presentation only (not product features)
 
 Perspective switcher, example designs and brand color, the shul-name field, the demo clock,
 reset, the gabbai's drawer (`#/`, its notes and objects are fictional; every answer in it is a row of the table above),
-the platform tour, the showcases, the TV showroom and the proposal request.
+"make it yours" (the shul's name and design) and the proposal request.
 These exist to present the product and add no shul management capability.
 
 ## Known deviations

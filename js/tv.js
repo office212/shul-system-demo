@@ -287,7 +287,7 @@
       state.shabbatPreview = params.shabbat === "1";
       try { if (!state.preview && !localStorage.getItem("shulDemo.tvReloadSeen")) localStorage.setItem("shulDemo.tvReloadSeen", String(S.db.tvDisplay.reloadAt || 0)); } catch (e) {}
       app.innerHTML = '<div class="tv-host"><div class="tv-stage" id="tvStage"></div>' + (state.preview ? "" :
-        '<div class="tv-ctl" id="tvCtl"><a class="btn sm" href="#/screen">' + S.L("חזרה להדגמה", "Back to demo") + '</a><button class="btn sm" id="tvSh">' + (state.shabbatPreview ? "צא מתצוגת שבת · Exit Shabbat preview" : "תצוגת שבת · Shabbat preview") + '</button><button class="btn sm" id="tvFs">' + S.L("מסך מלא", "Fullscreen") + "</button></div>") + "</div>";
+        '<div class="tv-ctl" id="tvCtl"><a class="btn sm" href="#/">' + S.L("חזרה להדגמה", "Back to demo") + '</a><button class="btn sm" id="tvSh">' + (state.shabbatPreview ? "צא מתצוגת שבת · Exit Shabbat preview" : "תצוגת שבת · Shabbat preview") + '</button><button class="btn sm" id="tvFs">' + S.L("מסך מלא", "Fullscreen") + "</button></div>") + "</div>";
       state.stage = app.querySelector("#tvStage");
       build(); fit(); checkReload();
       window.addEventListener("resize", fit);

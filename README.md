@@ -7,9 +7,12 @@ gabbai's drawer (`#/`): a walnut desk and an open drawer, seen from above, holdi
 carries around (a slip with the new Mincha time, an envelope of dues, the nedarim notebook, a flyer,
 a yahrzeit card, the screen's remote and the keys). Pick one up and the real system, live on the demo
 data, shows what replaces it. When the drawer is empty, it closes. Below it: what else is included,
-four ways to try the system yourself, the example designs, and the contact on a business card. The platform tour (`#/tour`) has the real product running live inside it,
-lets a visitor personalize it with their shul's name and a design direction, and leads into the product
-itself: the shul website, the member portal, the administration and the TV.
+three ways to try the system yourself, "make it yours" (type the shul's name, pick a design, and the
+live website and member account change), and the contact on a business card.
+
+One path: the drawer tells the story, "Enter the system" opens the real product with the demo bar, and
+"Request a demo" opens the proposal. Older addresses (`#/tour`, `#/screen`, `#/showcase/*`) lead to the
+matching place in the drawer.
 
 See `FEATURE-MAP.md` for how every capability maps to the production repository.
 
@@ -39,9 +42,9 @@ full-width bar with short labels). They change the
 presentation, never the product:
 
 - **Viewing as**: website visitor, member, finance gabbai, content gabbai, administrator or a new applicant.
-- **Design**: four example designs (Jerusalem, Clear, Warm, Royal); a preview-only brand color is in the design studio. The design is a separate, fully customizable layer over the same system.
+- **Design**: four example designs (Jerusalem, Clear, Warm, Royal); the shul's name and the design are also tried at the end of the drawer page. The design is a separate, fully customizable layer over the same system.
 - **What to try?**: five guided tasks (record a payment, change a davening time, enter Shabbat nedarim, see it as a member, post to the screen), each opening the right screen in the right role.
-- The demo bar is hidden on the home page. Moments of the week for the screen are in the screen showroom (`#/screen`).
+- The demo bar is hidden on the drawer and the proposal page. Moments of the week for the screen are on the drawer's remote.
 - **Language**: Hebrew or English.
 - **Reset**: restores the fictional data, the name, the design and the time.
 - **Request a proposal**: prepares the request and opens it in the visitor's own email app, addressed to the
@@ -49,24 +52,16 @@ presentation, never the product:
 
 ## Contact the seller from any page
 
-- A gold **Request a demo** button in the top bar of every page (overview, showcases, screen showroom, proposal,
-  shul website, member pages and administration). On phones it becomes a compact "Demo" button.
-- A slim contact bar at the bottom of every page: Request a demo, email and phone. Not on the screen itself (`#/tv`).
-- On the platform tour hero: Request a demo, Call, and the email address. The drawer page ends with
-  a business card on the desk: Request a demo, the phone and the email address. Each showcase ends with a
-  "Fitted to your shul, the way you need it" band, and the screen showroom has its own Request a demo button.
+- **Request a demo** in the top bar of the drawer, and in the top bar of the product (shul website, member pages
+  and administration). On phones it becomes a compact "Demo" button.
+- A slim contact bar at the bottom of the product pages: Request a demo, email and phone. Not on the screen itself (`#/tv`).
+- The drawer ends with a business card on the desk, and the proposal page shows it beside the form.
 
 ## Experience pages
 
 | Address | What |
 |---|---|
-| `#/` | The gabbai's drawer: seven objects (davening times, dues, Shabbat nedarim, a flyer, yahrzeits, the screen, the keys to roles and backup); each one, picked up, opens the live system that replaces it; what else is included; try it; example designs; contact |
-| `#/tour` | Platform tour: live composition, personalization, perspectives, five interactions, daily operations, customization tiers |
-| `#/showcase/ledger` | One ledger, two views: finance gabbai and member side by side |
-| `#/showcase/tv` | From editor to shul: preview and publish to the screen |
-| `#/showcase/roles` | Every role and what it can do, and entering as any of them |
-| `#/showcase/design` | Design studio: the same shul in different designs |
-| `#/screen` | TV showroom with moments of the week |
+| `#/` | The gabbai's drawer: seven objects (davening times, dues, Shabbat nedarim, a flyer, yahrzeits, the screen, the keys to roles and backup); each one, picked up, opens the live system that replaces it; what else is included; try it; make it yours (the shul's name and a design, live); contact |
 | `#/proposal` | Personalized demo and proposal request |
 
 ## Screens
@@ -100,9 +95,9 @@ presentation, never the product:
 - `js/ui.js`: router and layouts (site, admin shell, experience, TV), header, modals, toasts, simulated push, bell
 - `js/presenter.js`: the presentation dock
 - `js/drawer.js`, `css/drawer.css`: the gabbai's drawer (`#/`); its wood and paper textures are generated images in `img/` (`desk.jpg`, `oak.jpg`, `liner.jpg`, `grain.png`)
-- `css/paper.css`: the paper-and-ink look of everything around the product (tour, showcases, screen showroom,
-  proposal, the demo bar and the contact strip). The product screens keep their example designs.
-- `js/experience.js`, `css/experience.css`: the platform tour, showcases, admin shell and portal styles
+- `css/paper.css`: the paper-and-ink look of the demo bar and the contact strip. The product screens keep their example designs.
+- `js/experience.js`: shared live-frame helpers, the shul-name and design control, older addresses, and the proposal page (`#/proposal`)
+- `css/experience.css`: frames, admin shell and portal styles
 - `js/tv.js`, `js/sheet.js`: the TV screen and the Shabbat bulletin
 - `js/vendor/qrcode.js`: QR code generator by Kazuhiko Arase (MIT license), for the screen's donation code
 - `js/views-*.js`: public pages, congregant, finance, gabbai and admin screens
