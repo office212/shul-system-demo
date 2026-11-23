@@ -1,4 +1,4 @@
-/* Shul system sales demo | the Shabbat sheet: times source and the printable page. */
+/* Shul system sales demo | the Shabbat bulletin: times source and the printable page. */
 (function () {
   "use strict";
   var S = window.SHUL, esc = S.esc;
@@ -41,8 +41,9 @@
       }).join("");
     };
     return '<div class="sheet-wrap"><div class="sheet-page ' + (opts.clean ? "clean " : "") + (opts.print ? "print-area" : "") + '"><div class="sh-top">' + window.SHUL_UI.logo().replace("<svg", '<svg style="color:#0e2c4c"') +
-      '<div class="sh-shul">' + esc(S.db.shul.he) + " · " + esc(S.db.shul.en) + '</div><div class="sh-title">' + esc(sh.title.he) + '</div><div class="sh-par">פרשת ' + S.PARASHA.he + " · י״א כסלו תשפ״ז<br><bdi dir=\"ltr\">Parashat " + S.PARASHA.en + " · November 21, 2026</bdi></div></div>" +
+      '<div class="sh-shul">' + esc(S.db.shul.he) + " · " + esc(S.db.shul.en) + '</div><div class="sh-title">' + esc(sh.title.he) + '</div>' + (sh.title.en ? '<div class="sh-title-en">' + esc(sh.title.en) + "</div>" : "") + '<div class="sh-par">פרשת ' + S.PARASHA.he + " · י״א כסלו תשפ״ז<br><bdi dir=\"ltr\">Parashat " + S.PARASHA.en + " · November 21, 2026</bdi></div></div>" +
       day("fri", "ערב שבת · יום שישי", "Friday, Nov 20") + day("sat", "שבת קודש", "Shabbat, Nov 21") +
+      '<div class="sh-daf">דף יומי בשבת: ' + S.daf(S.weekDate(6), "he") + ' · <bdi dir="ltr">Daf Yomi: ' + S.daf(S.weekDate(6), "en") + "</bdi></div>" +
       '<div class="sh-note">' + esc(sh.note.he) + "<br>" + esc(sh.note.en) + "</div></div></div>";
   }
   window.SHUL_SHEET = { rowTime: rowTime, sourceTime: sourceTime, srcLabel: srcLabel, pageHtml: pageHtml };

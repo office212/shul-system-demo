@@ -57,10 +57,9 @@
     S.log("finance", "תשלום בכרטיס נרשם אוטומטית: " + m.he + ", " + S.money(amount), "Card payment recorded automatically: " + m.en + ", " + S.money(amount));
     S.notify(mid, "התשלום שלך התקבל: " + S.money(amount) + ". תודה!", "Your payment was received: " + S.money(amount) + ". Thank you!");
   }
-  function pendingFor(mid) { return S.db.inbox.filter(function (x) { return x.memberId === mid && x.status === "pending"; }); }
   function portalHtml(mid, opts) {
     opts = opts || {};
-    var m = S.memberById(mid), b = S.balance(mid), lv = ledgerView(mid), pend = pendingFor(mid);
+    var m = S.memberById(mid), b = S.balance(mid), lv = ledgerView(mid);
     var kind = b > 0 ? "owe" : b < 0 ? "credit" : "zero";
     var typeL = { charge: L("חיוב", "Charge"), payment: L("תשלום", "Payment"), correction: L("תיקון", "Correction") };
     var limit = opts.limit || 999;
@@ -68,7 +67,6 @@
       '<div class="mp-balance bh-' + kind + '" data-flash="bal"><span class="mp-bl">' + (kind === "owe" ? L("יתרה לתשלום", "Balance due") : kind === "credit" ? L("זכות", "Credit") : L("אין חוב ✓", "Nothing owed ✓")) + "</span>" +
       (kind !== "zero" ? '<span class="mp-amt num">' + S.money(Math.abs(b)) + "</span>" : "") +
       (kind === "owe" ? (opts.payButton || '<a class="btn primary mp-pay" href="#/donate?mode=balance">' + I.wallet.replace("<svg", '<svg width="18" height="18"') + L("תשלום בכרטיס", "Pay by card") + "</a>") : "") + "</div>" +
-      (pend.length ? '<div class="mp-pending" data-flash="pend"><h3>' + L("תשלומים שהתקבלו", "Payments received") + "</h3><ul>" + pend.map(function (x) { return '<li><b class="num">' + S.money(x.amount) + "</b> · " + esc(S.fmtDate(x.date)) + ' · <bdi dir="ltr">Ref #' + esc(x.ref) + "</bdi></li>"; }).join("") + "</ul><p>" + L("התקבל, ממתין לאישור הגבאי. היתרה תתעדכן אחרי שהגבאי ירשום את התשלום.", "Received, waiting for gabbai confirmation. Your balance updates once the gabbai records it.") + "</p></div>" : "") +
       '<div class="mp-totals"><span>' + L("סך חיובים", "Total charges") + ' <b class="num">' + S.money(lv.charges) + "</b></span><span>" + L("סך תשלומים", "Total payments") + ' <b class="num">' + S.money(lv.payments) + "</b></span></div>" +
       '<div class="table-wrap mp-table"><table><thead><tr><th>' + L("תאריך", "Date") + "</th><th>" + L("סוג", "Type") + "</th><th>" + L("סכום", "Amount") + "</th><th>" + L("תיאור", "Description") + "</th></tr></thead><tbody>" +
       lv.rows.slice(0, limit).map(function (e) { var v = lv.voided[e.id]; return '<tr class="' + (v ? "voided-row" : "") + '" data-id="' + e.id + '"><td class="nowrap">' + esc(S.fmtDate(e.date)) + '</td><td><span class="type-pill t-' + e.type + '">' + typeL[e.type] + "</span>" + (v ? ' <span class="muted small">' + L("(בוטל)", "(cancelled)") + "</span>" : "") + '</td><td class="num' + (v ? " strike" : "") + '">' + S.money(e.amount) + "</td><td>" + esc(B(e.desc)) + "</td></tr>"; }).join("") +
@@ -129,5 +127,5 @@
       S.save(); UI.toast(L("נשלח לגבאי לאישור", "Sent to the gabbai for approval")); UI.render();
     });
   }
-  window.SHUL_MEMBER = { recordBalancePayment: recordBalancePayment, portalHtml: portalHtml, ledgerView: ledgerView, pendingFor: pendingFor, balanceText: balanceText, method: method, METHOD: METHOD, statementHtml: statementHtml, csvFor: csvFor, yahrzeitForm: yahrzeitForm, yzStatus: yzStatus };
+  window.SHUL_MEMBER = { recordBalancePayment: recordBalancePayment, portalHtml: portalHtml, ledgerView: ledgerView, balanceText: balanceText, method: method, METHOD: METHOD, statementHtml: statementHtml, csvFor: csvFor, yahrzeitForm: yahrzeitForm, yzStatus: yzStatus };
 })();

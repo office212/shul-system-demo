@@ -33,11 +33,11 @@ then visit `http://localhost:8000/`. On GitHub Pages, serve the repository root.
 
 ## Presentation tools (not system features)
 
-The floating dock at the bottom of every page holds the demo controls (on phones, a single
-"Demo controls" tab in the corner that opens them all). They change the
+The demo bar at the bottom of every page holds the demo controls (on phones it is a
+full-width bar with short labels). They change the
 presentation, never the product:
 
-- **Viewing as**: website visitor, member, finance gabbai, content gabbai, administrator or a new sign-in.
+- **Viewing as**: website visitor, member, finance gabbai, content gabbai, administrator or a new applicant.
 - **Design**: four example designs (Jerusalem, Clear, Warm, Royal); a preview-only brand color is in the design studio. The design is a separate, fully customizable layer over the same system.
 - **What to try?**: five guided tasks (record a payment, change a davening time, enter Shabbat nedarim, see it as a member, post to the screen), each opening the right screen in the right role.
 - The demo bar is hidden on the home page. Moments of the week for the screen are in the screen showroom (`#/screen`).
@@ -78,7 +78,7 @@ presentation, never the product:
 | `#/donate` | Everyone | Donation form: card, Apple Pay, Google Pay, dedication note, cover-the-fee option, tax receipt note |
 | `#/thanks` | Everyone | Thank-you page with the emailed receipt |
 | `#/join` | Signed in, not a member | Join request, pending, declined (send again), welcome |
-| `#/me` | Congregant | My balance, pay by card, payments and charges, statement, CSV, family yahrzeits, times, announcements |
+| `#/me` | Congregant | My balance, pay by card, payments and charges, family yahrzeits, announcements (the statement and CSV are on the gabbai's member card, `#/finance/m/<id>`) |
 | `#/gabbai` | Gabbaim | Gabbai home: tiles by role, alerts, live TV preview, recent actions |
 | `#/gabbai/tv` | Content gabbai, super admin | Davening times editor, TV texts, brightness and remote refresh (super admin) |
 | `#/gabbai/content` | Content gabbai, super admin | Announcements, mazal tov, flyers, dedications, hazkarot, yahrzeits, member yahrzeit requests, weekday and Shabbat preview |
@@ -103,4 +103,5 @@ presentation, never the product:
   proposal, the demo bar and the contact strip). The product screens keep their example designs.
 - `js/experience.js`, `css/experience.css`: the platform tour, showcases, admin shell and portal styles
 - `js/tv.js`, `js/sheet.js`: the TV screen and the Shabbat bulletin
+- `js/vendor/qrcode.js`: QR code generator by Kazuhiko Arase (MIT license), for the screen's donation code
 - `js/views-*.js`: public pages, congregant, finance, gabbai and admin screens

@@ -1,5 +1,5 @@
 /* Shul system sales demo | gabbai system: home, davening times and TV settings, screen content,
-   Shabbat sheet, settings, landing texts, users and roles, broadcast, backup, activity log. */
+   Shabbat bulletin, settings, landing texts, users and roles, broadcast, backup, activity log. */
 (function () {
   "use strict";
   var S = window.SHUL, UI = window.SHUL_UI, L = S.L, esc = S.esc, I = UI.I, B = UI.B;
@@ -203,7 +203,12 @@
     });
   }
 
-  /* ---------- Shabbat sheet ---------- */
+  /* collections a restore checks: lists are matched by id, settings by key. Nothing is ever overwritten. */
+  var RESTORE = ["members", "ledger", "items", "yahrzeits", "yzRequests", "prayers", "users", "joinReqs", "inbox", "recurring", "notifs", "activity"];
+  var RESTORE_OBJ = ["tvDisplay", "tvTexts", "homeTexts", "pushOn"];
+  function rkey(x) { return x && (x.id || x.mid); }
+
+  /* ---------- Shabbat bulletin ---------- */
   UI.route("/gabbai/shabbat", { admin: true,
     need: "content", title: function () { return L("דף השבת", "Shabbat bulletin"); },
     render: function (app, arg, params) {
@@ -213,12 +218,12 @@
         return '<div class="sheet-edit-row ' + (r.hidden ? "off" : "") + '"><button class="icon-btn" style="width:34px;height:34px" data-star="' + r.id + '" title="' + L("הדגשה", "Highlight") + '" aria-pressed="' + !!r.star + '">' + (r.star ? '<span style="color:var(--gold)">★</span>' : "☆") + '</button><div><b>' + esc(S.N(r)) + '</b><div class="src">' + esc(SH.srcLabel(r)) + (sug != null ? ' · <span class="sugg num">' + S.hm(sug, false) + "</span>" : "") + (ch ? ' · <span class="changed">' + L("שונה לשבוע הזה", "Changed for this week") + "</span>" : "") + (r.every != null ? ' · <span class="changed">' + L("קבוע כל שבוע", "Every week") + "</span>" : "") + '</div></div><input type="time" data-time="' + r.id + '" value="' + (t != null ? S.toInputTime(t) : "") + '"><div class="row acts" style="gap:4px"><button class="icon-btn" style="width:34px;height:34px" data-up="' + r.id + '"' + (i === 0 ? " disabled" : "") + ' aria-label="' + L("למעלה", "Up") + '">' + sv(I.up, 16) + '</button><button class="icon-btn" style="width:34px;height:34px" data-down="' + r.id + '"' + (i === arr.length - 1 ? " disabled" : "") + ' aria-label="' + L("למטה", "Down") + '">' + sv(I.down, 16) + '</button><button class="icon-btn" style="width:34px;height:34px" data-size="' + r.id + '" title="' + L("גודל טקסט", "Text size") + '">A' + (r.size ? "+" : "") + '</button><button class="icon-btn" style="width:34px;height:34px" data-hide="' + r.id + '" aria-label="' + L("הסתרה", "Hide") + '">' + sv(r.hidden ? I.eyeOff : I.eye, 16) + "</button>" + (ch ? '<button class="btn ghost sm" data-every="' + r.id + '">' + L("קבוע כל שבוע", "Every week") + "</button>" : "") + "</div></div>";
       };
       app.innerHTML = '<div class="wrap page">' + UI.pageHead(L("דף השבת", "Shabbat Bulletin"), L("הזמנים נמשכים לבד מזמני היום ומזמני התפילה. שינוי כאן חל על השבת הזאת בלבד, אלא אם מסמנים ״קבוע כל שבוע״.", "Times come on their own from the zmanim and davening times. A change here applies to this Shabbat only, unless marked Every week."), UI.crumbGabbai()) +
-        '<div class="grid g2" style="align-items:start"><div class="card"><div class="form-grid"><label class="field"><span>' + L("כותרת", "Title") + '</span><input id="shTitle" value="' + esc(sh.title.he) + '"></label><label class="field"><span>' + L("שורה תחתונה", "Bottom line") + '</span><input id="shNote" value="' + esc(sh.note.he) + '"></label></div>' +
+        '<div class="grid g2" style="align-items:start"><div class="card"><div class="form-grid"><label class="field"><span>' + L("כותרת בעברית", "Hebrew title") + '</span><input id="shTitle" value="' + esc(sh.title.he) + '"></label><label class="field"><span>' + L("כותרת באנגלית", "English title") + '</span><input id="shTitleEn" class="ltr" value="' + esc(sh.title.en || "") + '"></label><label class="field"><span>' + L("שורה תחתונה בעברית", "Hebrew bottom line") + '</span><input id="shNote" value="' + esc(sh.note.he) + '"></label><label class="field"><span>' + L("שורה תחתונה באנגלית", "English bottom line") + '</span><input id="shNoteEn" class="ltr" value="' + esc(sh.note.en || "") + '"></label></div>' +
         '<h3 style="margin-top:16px">' + L("ערב שבת", "Erev Shabbat") + "</h3>" + sh.rows.filter(function (r) { return r.day === "fri"; }).map(rowEd).join("") +
         '<h3 style="margin-top:16px">' + L("שבת", "Shabbat") + "</h3>" + sh.rows.filter(function (r) { return r.day === "sat"; }).map(rowEd).join("") +
         '<div class="row" style="margin-top:12px"><button class="btn sm" id="addRow">' + sv(I.plus, 16) + L("שורה חדשה", "New row") + '</button><button class="btn ghost sm" id="clearWeek">' + L("ביטול השינויים של השבוע", "Clear this week's changes") + "</button></div>" +
         '<hr class="gold-line"><label class="check"><input type="checkbox" id="onTv"' + (sh.onTv ? " checked" : "") + "> <span><b>" + L("הצג בזמני התפילות במסך", "Show in the screen's davening times") + "</b><br><span class=\"small muted\">" + L("בשישי ובשבת המסך יציג את זמני הדף במקום הזמנים הרגילים.", "On Friday and Shabbat the screen shows this bulletin's times instead of the regular ones.") + "</span></span></label>" +
-        (sup ? '<hr class="gold-line"><h3>' + L("שבת שלום לקהילה", "Shabbat Shalom to the community") + '</h3><p class="small muted">' + L("שולח לכל המתפללים את זמני השבת כפי שהם בדף, את נותני הקידוש ואת היארצייטים של השבוע: שורה קצרה לטלפון והודעה מלאה באימייל.", "Sends every member this Shabbat's times exactly as on the sheet, the Kiddush sponsors and this week's yahrzeits: a short line to their phone and the full text by email.") + '</p><button class="btn primary" id="sendShabbat">' + sv(I.mail, 16) + L("שליחה לקהילה", "Send to the community") + "</button>" + (sh.sentAt ? ' <span class="small muted">' + L("נשלח ", "Sent ") + UI.timeAgo(sh.sentAt) + "</span>" : "") : "") + "</div>" +
+        (sup ? '<hr class="gold-line"><h3>' + L("שבת שלום לקהילה", "Shabbat Shalom to the community") + '</h3><p class="small muted">' + L("שולח לכל המתפללים את זמני השבת כפי שהם בדף, את נותני הקידוש ואת היארצייטים של השבוע: שורה קצרה לטלפון והודעה מלאה באימייל.", "Sends every member this Shabbat's times exactly as on the bulletin, the Kiddush sponsors and this week's yahrzeits: a short line to their phone and the full text by email.") + '</p><button class="btn primary" id="sendShabbat">' + sv(I.mail, 16) + L("שליחה לקהילה", "Send to the community") + "</button>" + (sh.sentAt ? ' <span class="small muted">' + L("נשלח ", "Sent ") + UI.timeAgo(sh.sentAt) + "</span>" : "") : "") + "</div>" +
         '<div class="stack" style="position:sticky;top:120px">' + SH.pageHtml({ clean: clean }) + '<div class="row" style="justify-content:center"><button class="btn primary" id="print">' + sv(I.print, 16) + L("הדפסה / PDF", "Print / PDF") + '</button><a class="btn" href="#/gabbai/shabbat' + (clean ? "" : "?clean=1") + '">' + (clean ? L("עם מסגרת", "With frame") : L("נקי להדפסה", "Clean for print")) + '</a><button class="btn" id="jpg">' + sv(I.download, 16) + "JPG</button></div></div></div></div>";
       function row(id) { return sh.rows.filter(function (r) { return r.id === id; })[0]; }
       function done(msg) { S.log("sheet", "עדכן את דף השבת", "Updated the Shabbat bulletin"); S.save(); if (msg) UI.toast(msg); UI.render(); }
@@ -231,7 +236,9 @@
       UI.on(app, "[data-up]", "click", function (e, b) { mv(b.getAttribute("data-up"), -1); });
       UI.on(app, "[data-down]", "click", function (e, b) { mv(b.getAttribute("data-down"), 1); });
       app.querySelector("#shTitle").addEventListener("change", function (e) { sh.title.he = e.target.value; done(); });
-      app.querySelector("#shNote").addEventListener("change", function (e) { sh.note.he = e.target.value; sh.note.en = e.target.value; done(); });
+      app.querySelector("#shTitleEn").addEventListener("change", function (e) { sh.title.en = e.target.value; done(); });
+      app.querySelector("#shNote").addEventListener("change", function (e) { sh.note.he = e.target.value; done(); });
+      app.querySelector("#shNoteEn").addEventListener("change", function (e) { sh.note.en = e.target.value; done(); });
       app.querySelector("#onTv").addEventListener("change", function (e) { sh.onTv = e.target.checked; done(sh.onTv ? L("המסך מציג עכשיו את זמני הדף בשישי ובשבת", "The screen now shows the bulletin's times on Friday and Shabbat") : L("המסך חזר לזמנים הרגילים", "The screen is back to the regular times")); });
       app.querySelector("#clearWeek").addEventListener("click", function () { sh.overrides = {}; done(L("השינויים של השבוע בוטלו", "This week's changes were cleared")); });
       app.querySelector("#addRow").addEventListener("click", function () {
@@ -271,7 +278,7 @@
       y += 26;
     });
     x.textAlign = "center"; x.fillStyle = "#6b5a3c"; x.font = "24px 'Frank Ruhl Libre', serif"; x.fillText(sh.note.he, W / 2, H - 80);
-    c.toBlob(function (b) { var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "shabbat-sheet.jpg"; a.click(); }, "image/jpeg", 0.92);
+    c.toBlob(function (b) { var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "shabbat-bulletin.jpg"; a.click(); }, "image/jpeg", 0.92);
   }
 
   /* ---------- settings ---------- */
@@ -347,15 +354,20 @@
           var out = app.querySelector("#rres");
           try {
             var j = JSON.parse(rd.result), d = j.data || j, rows = [], missing = 0;
-            ["members", "ledger", "items", "yahrzeits", "prayers", "users"].forEach(function (k) {
-              var arr = Array.isArray(d[k]) ? d[k] : [], have = S.db[k].map(function (x) { return x.id || x.mid; });
-              var miss = arr.filter(function (x) { return have.indexOf(x.id || x.mid) < 0; }).length; missing += miss;
+            RESTORE.forEach(function (k) {
+              var arr = Array.isArray(d[k]) ? d[k] : [], have = (S.db[k] || []).map(rkey);
+              var miss = arr.filter(function (x) { return have.indexOf(rkey(x)) < 0; }).length; missing += miss;
               rows.push("<tr><td>" + k + '</td><td class="num">' + arr.length + '</td><td class="num">' + miss + "</td></tr>");
+            });
+            RESTORE_OBJ.forEach(function (k) {
+              var o = d[k] && typeof d[k] === "object" ? d[k] : {}, ks = Object.keys(o), miss = ks.filter(function (x) { return !(x in (S.db[k] || {})); }).length; missing += miss;
+              rows.push("<tr><td>" + k + '</td><td class="num">' + ks.length + '</td><td class="num">' + miss + "</td></tr>");
             });
             out.innerHTML = '<div class="alert ok">' + L("בדיקה הושלמה. שום דבר לא נכתב.", "Dry run complete. Nothing was written.") + '</div><div class="table-wrap" style="margin-top:8px"><table><thead><tr><th>' + L("אוסף", "Collection") + "</th><th>" + L("בקובץ", "In file") + "</th><th>" + L("חסרים", "Missing") + "</th></tr></thead><tbody>" + rows.join("") + '</tbody></table></div><button class="btn" id="imp" style="margin-top:8px"' + (missing ? "" : " disabled") + ">" + L("שלב 2: הוספת החסרים ", "Step 2: add the missing ") + "(" + missing + ")</button>";
             var ib = out.querySelector("#imp");
             if (ib) ib.addEventListener("click", function () {
-              ["members", "ledger", "items", "yahrzeits", "prayers", "users"].forEach(function (k) { var have = S.db[k].map(function (x) { return x.id || x.mid; }); (d[k] || []).forEach(function (x) { if (have.indexOf(x.id || x.mid) < 0) S.db[k].push(x); }); });
+              RESTORE.forEach(function (k) { if (!Array.isArray(S.db[k])) S.db[k] = []; var have = S.db[k].map(rkey); (Array.isArray(d[k]) ? d[k] : []).forEach(function (x) { if (have.indexOf(rkey(x)) < 0) S.db[k].push(x); }); });
+              RESTORE_OBJ.forEach(function (k) { var o = d[k] && typeof d[k] === "object" ? d[k] : {}; S.db[k] = S.db[k] || {}; Object.keys(o).forEach(function (x) { if (!(x in S.db[k])) S.db[k][x] = o[x]; }); });
               S.log("backup", "שחזור: נוספו " + missing + " מסמכים", "Restore: added " + missing + " documents"); S.save(); UI.toast(L("נוספו ", "Added ") + missing); UI.render();
             });
           } catch (e) { out.innerHTML = '<p class="err">' + L("הקובץ אינו קובץ גיבוי תקין.", "This is not a valid backup file.") + "</p>"; }

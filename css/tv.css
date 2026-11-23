@@ -167,3 +167,8 @@ body.bare { background: #000; overflow: hidden; }
 .tv-stage.lang-en .tv-shcard.small .en { font-size: 54px; }
 .tv-stage.lang-en .tv-board.shabbat .tv-li .he { font-size: 17px; }
 .tv-stage.lang-en .tv-board.shabbat .tv-li .en { font-size: 27px; }
+/* halacha of the day, next-minyan label */
+.tv-halacha { text-align: center; padding: 0 50px; }
+.tv-halacha .hb { font-family: var(--tv-font-head); font-size: 46px; }
+.tv-halacha .src { margin-top: 22px; font-size: 22px; opacity: .6; letter-spacing: .04em; }
+.tv-nextlbl { font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .85; margin-bottom: 2px; }

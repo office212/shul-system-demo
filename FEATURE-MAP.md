@@ -12,7 +12,7 @@ Presentation-only tools are listed separately at the end.
 | Join request, approve with role, decline, send again, welcome email | README "Join requests", `src/ui/oh-members.js`, `functions/sendWelcomeEmail` | `#/join`, `#/finance/members` |
 | Member account: balance, pay by card (a balance payment records itself and updates the balance at once), totals, ledger with cancellations | `congregant/index.html` (`renderCong`), `functions/payments` | `#/me`, `portalHtml` in `js/views-member.js` |
 | Family yahrzeit requests, approval to the TV | `src/ui/oh-yahrzeit.js`, `gabbai/tv/content/` | `#/me`, `#/gabbai/content?type=yahrzeit` |
-| Member announcements (announcement and rabbi items) | `congregant/index.html` (`congNews`) | `#/me` |
+| Member announcements | `congregant/index.html` (`congNews`) | `#/me` |
 | Finance home, payment/charge, undo, receipt | `src/ui/oh-fin.js` | `#/finance/home`, `#/finance/pay` |
 | Shabbat nedarim with pledges | `src/ui/oh-fin.js` | `#/finance/nedarim` |
 | Who owes, member card, void as correction, edit details, statement, CSV | `src/ui/oh-fin.js`, `functions/sendStatementEmail` | `#/finance/owes`, `#/finance/m/<id>` |
@@ -22,13 +22,19 @@ Presentation-only tools are listed separately at the end.
 | TV texts editor | `admin/tv-texts-editor.js`, `src/tv/tv-texts.js` | `#/gabbai/tv` |
 | TV brightness (off, manual, automatic) and remote refresh | `admin/tv-brightness-editor.js`, `src/tv/tv-dim.js` | `#/gabbai/tv`, `#/screen` |
 | Screen content with dates, days and weekday/Shabbat preview | `gabbai/tv/content/`, `src/engines/display-engine.js` | `#/gabbai/content`, `#/showcase/tv` |
-| TV: zmanim, davening times, community board, Netz countdown, parasha line, Shabbat block, early Shabbat card, Shabbat mode | `tv/`, `screen/screen.js`, `src/tv/*` | `#/tv` (`js/tv.js`), `#/screen` |
-| Shabbat bulletin: overrides, every week, print, show on screen, Shabbat Shalom to the community | `src/shabbat-sheet/*`, `gabbai/shabbat/` | `#/gabbai/shabbat` (`js/sheet.js`) |
+| TV: zmanim, davening times with the next-minyan label, community board, halacha of the day, Daf Yomi, Netz countdown, parasha line, Shabbat block from Thursday noon, early Shabbat card, Shabbat mode until Shabbat ends, a scannable donation QR code | `tv/`, `screen/screen.js`, `src/tv/*` | `#/tv` (`js/tv.js`), `#/screen` |
+| Shabbat bulletin: Hebrew and English title and bottom line, overrides, every week, print, Daf Yomi, show on screen, Shabbat Shalom to the community | `src/shabbat-sheet/*`, `gabbai/shabbat/` | `#/gabbai/shabbat` (`js/sheet.js`) |
 | Roles: super admin, finance, content, both, member | README "Roles and permissions", `src/firebase/firestore.rules` | Admin sidebar, `#/admin`, `#/showcase/roles` |
 | Activity log | `gabbai/activity/` | `#/gabbai/activity` |
-| Backup download, restore dry run, nightly backup | `backup/`, `restore/`, `functions/dailybackup` | `#/backup` |
+| Backup download, restore dry run (every collection; adds only what is missing), nightly backup | `backup/`, `restore/`, `functions/dailybackup` | `#/backup` |
 | Push notifications and bell, broadcast | `functions/notifications`, `src/ui/oh-shell.js` | Bell in every signed-in view, `#/admin` (simulated) |
 | Hebrew and English | `src/ui/labels.js`, `src/ui/oh-i18n.js` | Everywhere |
+
+## In the real system, described but not simulated here
+
+The gabbai app for Android, printing to the shul's printer from anywhere, and remote screen
+control (screenshot, power, night schedule, offline alert) are part of the real system. The demo
+names them on the home page and in the screen showroom, and the tour marks them "not in this demo".
 
 ## Presentation only (not product features)
 
@@ -41,4 +47,4 @@ These exist to present the product and add no shul management capability.
 
 - `#/times` is a public times page for browsing the demo week. In production the same
   information appears on the TV, and optionally on the landing page.
-- Zmanim are realistic fixed values for one demo week, not a live calendar.
+- Zmanim are realistic fixed values for one demo week, not a live calendar. The demo bar and the screen footer say so ("Demo week").

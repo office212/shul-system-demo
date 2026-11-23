@@ -26,6 +26,20 @@
   var HEB_DAYS = ["ה׳", "ו׳", "ז׳", "ח׳", "ט׳", "י׳", "י״א"];
   var HEB_DAY_NUM = [5, 6, 7, 8, 9, 10, 11];
   var PARASHA = { he: "ויצא", en: "Vayetzei" };
+  /* Daf Yomi for each day of the demo week (checked against the Hebcal calendar library) */
+  var DAF = [["בכורות", "נ״ח", "Bechorot", 58], ["בכורות", "נ״ט", "Bechorot", 59], ["בכורות", "ס׳", "Bechorot", 60], ["בכורות", "ס״א", "Bechorot", 61], ["ערכין", "ב׳", "Arachin", 2], ["ערכין", "ג׳", "Arachin", 3], ["ערכין", "ד׳", "Arachin", 4]];
+  function daf(d, lang) { var x = DAF[Math.max(0, Math.min(6, dayIdx(d)))]; return (lang || prefs.lang) === "en" ? x[2] + " " + x[3] : x[0] + " דף " + x[1]; }
+  /* halacha of the day for the screen's weekday board */
+  var HALACHA = [
+    ["ישכים אדם לבית הכנסת כדי שיימנה עם עשרה הראשונים.", "One should come to shul early, to be counted among the first ten.", "שו״ע או״ח צ, יד", "Shulchan Aruch OC 90:14"],
+    ["לא ישיח שיחת חולין בשעה שהשליח ציבור חוזר את התפילה.", "One may not engage in idle talk while the chazzan repeats the Amidah.", "שו״ע או״ח קכד, ז", "Shulchan Aruch OC 124:7"],
+    ["מצוה לרוץ כשהולכים לבית הכנסת, וכשיוצאים לא ירוץ.", "It is a mitzvah to hurry on the way to shul, and not to rush on the way out.", "שו״ע או״ח צ, יב", "Shulchan Aruch OC 90:12"],
+    ["תפילין של יחיד, שאינן ממשמשות תמיד, צריכות בדיקה פעמיים בשבע שנים.", "An individual's tefillin, if not handled constantly, should be checked twice in seven years.", "שו״ע או״ח לט, י", "Shulchan Aruch OC 39:10"],
+    ["מצוה לקרוא את הפרשה בכל שבוע שנים מקרא ואחד תרגום.", "Each week one reads the parasha twice in the text and once in translation.", "שו״ע או״ח רפה, א", "Shulchan Aruch OC 285:1"],
+    ["ישכים ביום שישי בבוקר להכין צרכי שבת.", "On Friday one rises early to prepare for Shabbat.", "שו״ע או״ח רנ, א", "Shulchan Aruch OC 250:1"],
+    ["לעולם יסדר אדם שולחנו במוצאי שבת, ללוות את השבת.", "One should always set the table on Motzei Shabbat, to escort the Shabbat.", "שו״ע או״ח ש, א", "Shulchan Aruch OC 300:1"]
+  ];
+  function halacha(d) { return HALACHA[Math.max(0, Math.min(6, dayIdx(d)))]; }
   var DAY_HE = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
   var DAY_EN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Shabbat"];
   var DAY_EN_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Shab"];
@@ -110,7 +124,6 @@
     if (!m) return null;
     var h = +m[1], mm = +m[2]; if (mm > 59 || h > 23) return null;
     if (m[3]) { var pm = /pm/i.test(m[3]); if (h === 12) h = 0; if (pm) h += 12; }
-    else if (h < 12 && h >= 1 && h <= 11 && h < 7 === false) { /* keep 24h-ish: 7..11 morning */ }
     if (!m[3] && h >= 1 && h <= 6) h += 12; /* 1:00 to 6:59 without am/pm reads as afternoon */
     return h * 60 + mm;
   }
@@ -121,7 +134,7 @@
   function dayState(d) {
     var dow = d.getDay(), m = d.getHours() * 60 + d.getMinutes(), st = shabbatTimes();
     if (dow === 5 && m >= st.candles) return "shabbat";
-    if (dow === 6 && m < st.rt + 5) return "shabbat";
+    if (dow === 6 && m < st.ends) return "shabbat";
     if (dow === 6) return "motzei";
     if (dow === 5) return "erev";
     return "weekday";
@@ -139,7 +152,7 @@
   var listeners = [];
   var DB = null;
   function load() {
-    try { var s = localStorage.getItem(LS_KEY); if (s) { DB = JSON.parse(s); if (DB && DB.v === 1) return; } } catch (e) {}
+    try { var s = localStorage.getItem(LS_KEY); if (s) { DB = JSON.parse(s); if (DB && DB.v === 2) return; } } catch (e) {}
     DB = window.SHUL_SEED();
     save(true);
   }
@@ -175,7 +188,7 @@
   /* ---------- roles (the role picker is a demo navigation tool only) ---------- */
   var ROLES = {
     visitor: { he: "אורח (לא מחובר)", en: "Visitor (signed out)", home: "#/site" },
-    applicant: { he: "נרשם חדש (עוד לא חבר)", en: "New sign-in (not a member yet)", home: "#/join" },
+    applicant: { he: "נרשם חדש (עוד לא חבר)", en: "New applicant (not a member yet)", home: "#/join" },
     member: { he: "מתפלל", en: "Congregant", home: "#/me" },
     content: { he: "גבאי תוכן וזמנים", en: "Content and Times Gabbai", home: "#/gabbai" },
     finance: { he: "גבאי כספים", en: "Finance Gabbai", home: "#/gabbai" },
@@ -205,7 +218,7 @@
     DAY_HE: DAY_HE, DAY_EN: DAY_EN, DAY_EN_SHORT: DAY_EN_SHORT,
     now: now, pinClock: pinClock, pinned: pinned, dayIdx: dayIdx, iso: iso, todayIso: todayIso, parseIso: parseIso,
     weekDate: weekDate, hday: hday, fmtDate: fmtDate, fmtDateLong: fmtDateLong, hebDate: hebDate, dayName: dayName,
-    HEB_DAY_NUM: HEB_DAY_NUM,
+    HEB_DAY_NUM: HEB_DAY_NUM, daf: daf, halacha: halacha,
     zmanim: zmanim, shabbatTimes: shabbatTimes, hm: hm, parseHm: parseHm, toInputTime: toInputTime, fromInputTime: fromInputTime,
     dayState: dayState, money: money, cents: cents,
     get db() { return DB; }, load: load, save: save, reset: reset, onChange: onChange, uid: uid,

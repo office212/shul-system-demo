@@ -88,7 +88,7 @@ body.pg-nb { background: #f3efe7; }
 .nb-try { background: var(--ink); color: #f3efe7; padding: 90px 24px; text-align: center; }
 .nb-try h2 { color: #fff; font-size: clamp(32px, 4vw, 48px); margin-bottom: 12px; }
 .nb-try > p { font-size: 18px; color: #c9c2b4; margin: 0 0 36px; }
-.nb-try-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; text-align: start; }
+.nb-try-grid { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; text-align: start; }
 .nb-card { display: flex; flex-direction: column; gap: 8px; background: #fffdf8; color: var(--ink); border-radius: 14px; padding: 24px; text-decoration: none; transition: transform .15s, box-shadow .15s; }
 .nb-card:hover { transform: translateY(-3px); box-shadow: 0 16px 30px rgba(0, 0, 0, .35); }
 .nb-card-ic { color: var(--pen); margin-bottom: 6px; }
@@ -119,6 +119,7 @@ body.pg-nb { background: #f3efe7; }
 
 @media (max-width: 900px) {
   .nb-hero, .nb-ch { grid-template-columns: 1fr; gap: 34px; }
+  .nb-try-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .nb-hero { padding: 18px 20px 56px; }
   .nb-ch { padding: 56px 20px; }
   .nb-book { transform: rotate(-1deg); }

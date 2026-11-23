@@ -467,6 +467,7 @@ main { min-height: 70vh; }
 .sheet-page .sh-top { text-align: center; }
 .sheet-page .sh-top svg { width: 7cqw; height: 7cqw; }
 .sheet-page .sh-shul { font-size: 2.4cqw; letter-spacing: .04em; color: #6b5a3c; }
+.sheet-page .sh-title-en { font-size: 2.6cqw; color: #4a3d28; letter-spacing: .04em; margin-top: .4cqw; direction: ltr; }
 .sheet-page .sh-title { font-size: 5.6cqw; font-weight: 700; color: #0e2c4c; margin: 0; line-height: 1.15; }
 .sheet-page .sh-par { font-size: 2.6cqw; color: #6b5a3c; line-height: 1.35; }
 .sheet-page .sh-day { margin-top: 2cqw; font-weight: 700; color: #0e2c4c; border-bottom: 1px solid #c9ad7a; padding-bottom: .4cqw; font-size: 2.8cqw; display: flex; justify-content: space-between; }
@@ -474,6 +475,7 @@ main { min-height: 70vh; }
 .sheet-page .sh-row .en { font-family: "Assistant", sans-serif; font-size: 1.9cqw; color: #7d6d52; margin-inline-start: 1.4cqw; }
 .sheet-page .sh-row b { font-family: "Assistant", sans-serif; font-size: 3cqw; font-variant-numeric: tabular-nums; }
 .sheet-page .sh-row.star b { color: #0e2c4c; font-size: 3.4cqw; }
+.sheet-page .sh-daf { margin-top: 2cqw; text-align: center; font-size: 2.3cqw; color: #4a3d28; font-weight: 600; }
 .sheet-page .sh-note { margin-top: auto; text-align: center; font-size: 2.4cqw; color: #6b5a3c; padding-top: 1.5cqw; }
 .sheet-edit-row { display: grid; grid-template-columns: auto 1fr 140px auto; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
 .sheet-edit-row.off { opacity: .45; }
