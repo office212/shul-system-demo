@@ -350,6 +350,23 @@ html[lang="he"] .dw-kick, [dir="rtl"] .dw-kick { letter-spacing: .06em; font-siz
   .dw-top nav > button[data-enter] { display: inline-flex; font-size: 14px; padding: 8px 6px; }
 }
 
+
+/* ---------- the drawer starts ajar; sound ---------- */
+.dw-drawer.ajar { transform: translateY(-74%); transition: transform 1s cubic-bezier(.22, .8, .16, 1); }
+.dw-drawer.ajar .dw-front { cursor: pointer; }
+.dw-drawer.ajar .dw-pull { animation: dwPull 2.4s ease-in-out infinite; }
+@keyframes dwPull { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.22); } }
+.dw-invite { position: absolute; left: 50%; top: calc(100% + 46px); transform: translateX(-50%); z-index: 3; border: 1px solid rgba(243, 233, 216, .5); background: rgba(243, 233, 216, .08); color: var(--cream); font: 600 16px/1 var(--body); padding: 14px 24px; border-radius: 999px; cursor: pointer; white-space: nowrap; opacity: 0; transition: opacity .5s .4s, background .15s; }
+.dw-drawer.ajar .dw-invite { opacity: 1; }
+.dw-drawer:not(.ajar) .dw-invite { pointer-events: none; transition-delay: 0s; }
+.dw-invite:hover { background: rgba(243, 233, 216, .16); }
+.dw-invite:focus-visible, .dw-snd:focus-visible { outline: 2px solid #d6b06a; outline-offset: 3px; }
+.dw-snd { display: inline-grid; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 8px; background: none; color: rgba(243, 233, 216, .78); cursor: pointer; }
+.dw-snd:hover { color: var(--cream); background: rgba(255, 240, 220, .07); }
+.dw-snd .x { display: none; }
+.dw-snd[aria-pressed="false"] .x { display: inline; }
+.dw-snd[aria-pressed="false"] .w1, .dw-snd[aria-pressed="false"] .w2 { display: none; }
+
 /* ---------- phones and narrow windows ---------- */
 @media (max-width: 1000px) {
   .dw-try-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -362,7 +379,7 @@ html[lang="he"] .dw-kick, [dir="rtl"] .dw-kick { letter-spacing: .06em; font-siz
   .dw-in { aspect-ratio: .56; }
   .dw-obj { left: var(--mx); top: var(--my); width: var(--mw); rotate: var(--mr); }
   .dw-top { padding: 14px 16px; }
-  .dw-top nav > button { display: none; }
+  .dw-top nav > button:not(.dw-snd) { display: none; }
   .dw-mark span { display: none; }
   .dw-intro { padding: 4px 16px 28px; }
   .dw-intro h1 { font-size: 40px; }
