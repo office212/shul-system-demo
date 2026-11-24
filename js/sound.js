@@ -1,5 +1,6 @@
-/* Shul System sales demo | the drawer's sounds, made in the browser (Web Audio), no audio files.
-   A wooden drawer sliding open and shut, paper lifted and put back, keys, a plastic remote.
+/* Shul System sales demo | the drawer's sounds.
+   The drawer is a real recording (audio/, from Pixabay, free to use). Paper lifted and put back, keys
+   and a plastic remote are made in the browser (Web Audio).
    Browsers play sound only after the visitor clicks or presses a key, so unlock() is called from
    a click. The visitor can turn sound off; the choice is kept in this browser. */
 (function () {
@@ -18,7 +19,7 @@
     var d = noiseBuf.getChannelData(0); for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
     return ctx;
   }
-  function unlock() { var c = init(); if (!c) return Promise.resolve(); return c.state === "suspended" ? c.resume().catch(function () {}) : Promise.resolve(); }
+  function unlock() { var c = init(); if (!c) return Promise.resolve(); decodeAll(); return c.state === "suspended" ? c.resume().catch(function () {}) : Promise.resolve(); }
   function live() { return on && ctx && ctx.state === "running"; }
   function rnd(a, b) { return a + Math.random() * (b - a); }
 
@@ -41,30 +42,28 @@
     o.connect(g); g.connect(out); o.start(t0); o.stop(t0 + dur + .02);
   }
 
-  /* wood on wood: grainy friction that follows the drawer's speed, then a soft stop or a knock */
+  /* the drawer: a real recording (audio/drawer-open.mp3, audio/drawer-close.mp3), fetched with the page
+     so it is ready on the first click, decoded once sound is allowed */
+  var FILES = { open: "audio/drawer-open.mp3", close: "audio/drawer-close.mp3" }, raw = {}, bufs = {}, decoding = null;
+  var top = true; try { top = window.self === window.top; } catch (e) { top = false; }
+  Object.keys(FILES).forEach(function (k) { raw[k] = !top ? Promise.resolve(null) : fetch(FILES[k]).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).catch(function () { return null; }); });
+  function decodeAll() {
+    if (decoding) return decoding;
+    decoding = Promise.all(Object.keys(FILES).map(function (k) {
+      return raw[k].then(function (ab) { if (!ab) return; return new Promise(function (res) { ctx.decodeAudioData(ab.slice(0), function (b) { bufs[k] = b; res(); }, function () { res(); }); }); });
+    }));
+    return decoding;
+  }
   function drawer(dir) {
     if (!live()) return;
-    var t0 = ctx.currentTime + .02, D = dir === "open" ? 1.35 : .95, N = Math.round(D * 70);
-    var bp = [["bandpass", 520, .9], ["lowpass", 1600, .7]];
-    var fr = noise(t0, D + .1, bp), rum = noise(t0, D + .1, [["lowpass", 170, .8]]);
-    fr.gain.setValueAtTime(0, t0); rum.gain.setValueAtTime(0, t0); bp[0].node.frequency.setValueAtTime(400, t0);
-    for (var k = 0; k <= N; k++) {
-      var x = k / N, t = t0 + x * D;
-      /* opening slows down to rest (like the page's ease-out); closing speeds up into the frame */
-      var speed = dir === "open" ? Math.pow(1 - x, 1.25) * Math.min(1, x * 9) : Math.pow(x, .8) * Math.min(1, (1 - x) * 30 + .2);
-      var grain = .55 + .45 * Math.random();
-      fr.gain.linearRampToValueAtTime((dir === "open" ? .8 : .45) * speed * grain, t);
-      rum.gain.linearRampToValueAtTime((dir === "open" ? 1.1 : .6) * speed * (.8 + .2 * Math.random()), t);
-      bp[0].node.frequency.linearRampToValueAtTime(320 + 380 * speed + rnd(-40, 40), t);
-    }
-    fr.gain.linearRampToValueAtTime(0, t0 + D + .03); rum.gain.linearRampToValueAtTime(0, t0 + D + .03);
-    /* the things inside shift a little */
-    for (var r = 0; r < 4; r++) burst(t0 + rnd(.05, D * .5), rnd(.02, .05), "highpass", rnd(2500, 4500), .8, rnd(.03, .07));
-    if (dir === "open") { tone(t0 + D - .05, 150, 85, .18, .28); burst(t0 + D - .05, .06, "bandpass", 900, 1.2, .14); }
-    else {
-      tone(t0 + D, 120, 52, .3, .62); burst(t0 + D, .09, "lowpass", 1300, .7, .4);
-      for (var s = 0; s < 3; s++) burst(t0 + D + rnd(.03, .14), rnd(.015, .04), "highpass", rnd(3000, 5000), .8, rnd(.02, .05));
-    }
+    var asked = ctx.currentTime;
+    decodeAll().then(function () {
+      var b = bufs[dir === "open" ? "open" : "close"]; if (!b || !live()) return;
+      var late = ctx.currentTime - asked; if (late > .6) return; /* too late to match the drawer's movement */
+      var src = ctx.createBufferSource(); src.buffer = b;
+      var g = ctx.createGain(); g.gain.value = .85; src.connect(g); g.connect(out);
+      src.start(ctx.currentTime, Math.min(late, b.duration - .05));
+    });
   }
 
   /* paper: a soft swish with small crinkles in it */
