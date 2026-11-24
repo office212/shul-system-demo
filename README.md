@@ -6,7 +6,11 @@ An interactive sales experience for the shul management platform. It opens on th
 gabbai's drawer (`#/`): a walnut desk and an open drawer, seen from above, holding what a gabbai
 carries around (a slip with the new Mincha time, an envelope of dues, the nedarim notebook, a flyer,
 a yahrzeit card, the screen's remote and the keys). Pick one up and the real system, live on the demo
-data, shows what replaces it. When the drawer is empty, it closes. Below it: what else is included,
+data, shows what replaces it. When the drawer is empty, it closes.
+The drawer starts ajar; the visitor's first click pulls it open with the sound of a wooden drawer, and
+picking things up rustles paper, jingles keys or taps the remote. The sounds are made in the browser
+(`js/sound.js`, Web Audio, no audio files); a speaker button in the top bar turns them off. With no
+click, the drawer opens quietly after a few seconds. Below it: what else is included,
 three ways to try the system yourself, "make it yours" (type the shul's name, pick a design, and the
 live website and member account change), and the contact on a business card.
 

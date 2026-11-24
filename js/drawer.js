@@ -151,7 +151,7 @@
         k: ["הודעות ופליירים", "Announcements and flyers"], h: ["מפרסמים פעם אחת. כולם רואים.", "Post it once. Everyone sees it."],
         p: ["ההודעה עולה ללוח הקהילה במסך, בתאריכים ובימים שבחרתם, ועל הודעה חדשה המתפללים מקבלים התראה בטלפון. בשבת ההודעות יורדות מהמסך לבד.", "It goes up on the screen's community board, on the dates and days you choose, and a new announcement sends members a notification on their phone. On Shabbat, announcements leave the screen on their own."],
         vis: "#/gabbai/content", role: "content", dest: "#/gabbai/content" },
-      { id: "yahrzeit", cls: "o-card", html: yahrzeitHtml(), pos: [6, 60, 28, 2.5, 4, 81.0, 60, 2],
+      { id: "yahrzeit", cls: "o-card", html: yahrzeitHtml(), pos: [6, 60, 28, 2.5, 4, 78.5, 60, 2],
         name: ["כרטיס היארצייטים", "The yahrzeit card"],
         k: ["יארצייטים", "Yahrzeits"], h: ["המשפחה מבקשת, אתם מאשרים. המסך זוכר כל שנה.", "The family asks, you approve. The screen remembers every year."],
         p: ["המתפלל מבקש מהחשבון שלו. אחרי לחיצת אישור, היארצייט מוצג במסך בשבוע שלו, בכל שנה.", "The member asks from their account. After one tap to approve, the yahrzeit shows on the screen in its week, every year."],
@@ -202,14 +202,18 @@
   }
 
   /* the desk's top bar, shared with the proposal page */
+  /* sound: the drawer, paper, keys. Played only after the visitor's own click. */
+  var SPK = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="w1" d="M16.5 9.5a3.5 3.5 0 0 1 0 5"/><path class="w2" d="M19 7a7 7 0 0 1 0 10"/><path class="x" d="M17 9.5l5 5M22 9.5l-5 5"/></svg>';
+  function snd(fn) { var A = window.SHUL_SOUND; if (A) A.unlock().then(function () { fn(A); }); }
   function deskTop(page) {
     var lang = '<span class="dw-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-xl="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-xl="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></span>';
     var nav = page === "home"
-      ? '<button type="button" data-open-first>' + L("איך זה עובד", "How it works") + '</button><button type="button" data-go="dwTry">' + L("לנסות", "Try it") + "</button>" + lang + '<a class="dw-cta" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a>"
+      ? '<button type="button" data-open-first>' + L("איך זה עובד", "How it works") + '</button><button type="button" data-go="dwTry">' + L("לנסות", "Try it") + "</button>" + '<button type="button" class="dw-snd" data-snd aria-pressed="' + (!window.SHUL_SOUND || window.SHUL_SOUND.isOn()) + '" aria-label="' + L("צליל", "Sound") + '" title="' + L("צליל", "Sound") + '">' + SPK + "</button>" + lang + '<a class="dw-cta" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a>"
       : '<a class="dw-navl" href="#/">' + L("המגירה", "The drawer") + '</a><button type="button" data-enter>' + L("להיכנס למערכת", "Enter the system") + "</button>" + lang;
     return '<header class="dw-top"><a class="dw-mark" href="#/">' + UI.logo() + "<span>Shul System</span></a><nav>" + nav + "</nav></header>";
   }
   function bindTop(root) {
+    root.querySelectorAll("[data-snd]").forEach(function (b) { b.addEventListener("click", function () { var A = window.SHUL_SOUND; if (!A) return; b.setAttribute("aria-pressed", A.toggle()); }); });
     root.querySelectorAll("[data-xl]").forEach(function (b) { b.addEventListener("click", function () { UI.setLang(b.getAttribute("data-xl")); }); });
     root.querySelectorAll("[data-enter]").forEach(function (b) { b.addEventListener("click", function (e) { e.preventDefault(); X.go("super", "#/gabbai"); }); });
   }
@@ -233,7 +237,7 @@
           var p = o.pos;
           return '<button type="button" class="dw-obj ' + o.cls + (taken[o.id] ? " done" : "") + '" data-i="' + i + '" aria-label="' + esc(L(o.name[0], o.name[1])) + '" style="--x:' + p[0] + "%;--y:" + p[1] + "%;--w:" + p[2] + "%;--r:" + p[3] + "deg;--mx:" + p[4] + "%;--my:" + p[5] + "%;--mw:" + p[6] + "%;--mr:" + p[7] + 'deg"><span class="obj">' + o.html + "</span></button>";
         }).join("") +
-        '</div></div><div class="dw-front"><span class="dw-pull"><i></i><i></i></span></div></div>' +
+        '</div></div><div class="dw-front"><span class="dw-pull"><i></i><i></i></span></div><button type="button" class="dw-invite" id="dwInvite">' + L("לפתוח את המגירה", "Open the drawer") + "</button></div>" +
         '<div class="dw-final" id="dwFinal" hidden><p class="dw-kick">' + L("מוצאי שבת, עם המערכת", "Motzei Shabbat, with the system") + "</p><h2>" + L("המגירה ריקה.", "The drawer is empty.") + "</h2><p>" + L("כל מה שהיה בה, המערכת עושה. בואו נכין אחת כזאת לבית הכנסת שלכם.", "Everything that was in it, the system does. Let's set one up for your shul.") + '</p><div class="dw-btns"><a class="dw-btn" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + '</a><a class="dw-btn ghost" href="tel:' + SALES.tel + '"><bdi dir="ltr">' + esc(SALES.phone) + '</bdi></a></div><button type="button" class="dw-link" id="dwReopen">' + L("לפתוח את המגירה שוב", "Open the drawer again") + "</button></div></div>" +
         '<div class="dw-foot" id="dwFoot"></div></section>' +
 
@@ -250,11 +254,21 @@
 
       var drawer = app.querySelector("#dwDrawer"), foot = app.querySelector("#dwFoot"), fin = app.querySelector("#dwFinal");
 
-      /* the drawer opens once, after the fonts are in */
+      /* the drawer starts ajar. A click anywhere (the visitor's own, so the browser allows sound)
+         pulls it open with its sound; with no click, it opens quietly after a few seconds. */
+      function openNow(withSound) {
+        if (opened) return;
+        opened = true; drawer.classList.remove("ajar"); drawer.classList.add("open");
+        if (withSound) snd(function (A) { A.drawer("open"); });
+        timers.push(setTimeout(function () { var o = app.querySelector(".dw-obj:not(.done)"); if (o) o.classList.add("hint"); }, 1500));
+      }
+      function firstTouch(e) { if (!opened && !(e.target.closest && e.target.closest("a, [data-xl], [data-snd]"))) openNow(true); else snd(function () {}); }
       if (!opened && !reduce) {
-        var go = function () { timers.push(setTimeout(function () { drawer.classList.add("open"); opened = true; timers.push(setTimeout(function () { var o = app.querySelector(".dw-obj:not(.done)"); if (o) o.classList.add("hint"); }, 1500)); }, 250)); };
+        var go = function () { timers.push(setTimeout(function () { if (!opened) drawer.classList.add("ajar"); }, 250)); timers.push(setTimeout(function () { openNow(false); }, 5200)); };
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(go); else go();
+        document.addEventListener("pointerdown", firstTouch, true); document.addEventListener("keydown", firstTouch, true);
       } else opened = true;
+      app.querySelector("#dwInvite").addEventListener("click", function () { openNow(true); });
 
       function renderFoot() {
         var n = left();
@@ -265,12 +279,14 @@
       }
       function closeDrawer() {
         drawer.classList.remove("open"); drawer.classList.add("shut");
+        snd(function (A) { A.drawer("close"); });
         timers.push(setTimeout(function () { fin.hidden = false; requestAnimationFrame(function () { fin.classList.add("on"); }); foot.innerHTML = ""; }, reduce ? 0 : 900));
       }
       app.querySelector("#dwReopen").addEventListener("click", function () {
         taken = {}; fin.classList.remove("on"); fin.hidden = true;
         app.querySelectorAll(".dw-obj").forEach(function (o) { o.classList.remove("done"); });
         drawer.classList.remove("shut"); drawer.classList.add("open"); renderFoot();
+        snd(function (A) { A.drawer("open"); });
       });
       renderFoot();
 
@@ -280,6 +296,7 @@
         var o = OB[i], btn = app.querySelector('.dw-obj[data-i="' + i + '"]');
         if (!btn || hold) return;
         app.querySelectorAll(".dw-obj.hint").forEach(function (x) { x.classList.remove("hint"); });
+        snd(function (A) { A.pick(o.id); });
         var nextI = -1; for (var j = 1; j <= OB.length; j++) { var c = (i + j) % OB.length; if (!taken[OB[c].id] && c !== i) { nextI = c; break; } }
         var ov = document.createElement("div");
         ov.className = "dw-hold"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", L(o.k[0], o.k[1]));
@@ -324,6 +341,7 @@
         if (!hold) return;
         var h = hold; hold = null;
         taken[OB[h.i].id] = true;
+        snd(function (A) { A.pick(OB[h.i].id, true); });
         h.btn.classList.remove("lifted"); h.btn.classList.add("done");
         h.ov.classList.remove("on"); h.ov.classList.add("off");
         document.documentElement.classList.remove("dw-lock");
@@ -394,13 +412,14 @@
         try { history.replaceState(null, "", location.pathname + location.search + "#/"); } catch (e) {}
         if (params.open) {
           var oi = -1; OB.forEach(function (o, k) { if (o.id === params.open) oi = k; });
-          if (oi >= 0) { drawer.classList.add("open"); opened = true; timers.push(setTimeout(function () { openObj(oi); }, 450)); }
+          if (oi >= 0) { drawer.classList.remove("ajar"); drawer.classList.add("open"); opened = true; timers.push(setTimeout(function () { openObj(oi); }, 450)); }
         }
         if (params.to) timers.push(setTimeout(function () { goTo(params.to); }, 120));
       }
 
       function stop() {
-        timers.forEach(clearTimeout); if (lio) lio.disconnect(); document.removeEventListener("keydown", onKey); window.removeEventListener("hashchange", onHash);
+        timers.forEach(clearTimeout); if (lio) lio.disconnect(); document.removeEventListener("keydown", onKey);
+        document.removeEventListener("pointerdown", firstTouch, true); document.removeEventListener("keydown", firstTouch, true); window.removeEventListener("hashchange", onHash);
         if (hold) { hold.ov.remove(); hold = null; }
         document.documentElement.classList.remove("dw-lock"); document.body.classList.remove("pg-dw"); cleanup = null;
       }
