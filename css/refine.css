@@ -96,3 +96,11 @@ th { text-align: start; white-space: nowrap; }
 
 /* numbers and phone numbers never break across lines in a table */
 td bdi, td .num, td.num, td[dir="ltr"] { white-space: nowrap; }
+
+/* the bell's counter reads in every design */
+.icon-btn .dot { background: var(--primary); color: var(--on-primary); }
+
+/* gold as text: a deeper tone of it, so small headings read on stone and white */
+[data-theme="classic"] { --gold-ink: #86662f; --muted: #6c6457; }
+[data-kin="classic"] .eyebrow { color: var(--gold-ink, var(--gold)); }
+[data-theme="warm"] { --gold-ink: var(--accent-ink); --muted: #7a6052; }
