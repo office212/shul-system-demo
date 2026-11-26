@@ -276,9 +276,9 @@
     var sb = head.querySelector("#signinBtn"); if (sb) sb.addEventListener("click", signInModal);
     var ab = head.querySelector("#acctBtn"); if (ab) ab.addEventListener("click", function () { setRole("visitor", true, "#/site"); toast(L("יצאת מהחשבון", "Signed out")); });
     markNav(); renderBell();
-    foot.innerHTML = '<div class="wrap"><div class="row">' + logo().replace("<svg", '<svg width="30" height="30" style="color:var(--primary)"') + "<span><b>" + esc(S.N(S.db.shul)) + "</b><br><bdi dir=\"ltr\">" + esc(S.db.shul.address) + "</bdi></span></div>" +
-      '<div class="small">' + L("הדגמה: שם הקהילה, האנשים והנתונים בדויים. אין תשלומים אמיתיים.", "Demo: the congregation, people and data are fictional. No real payments.") + "<br>" +
-      '<a href="#/">' + L("על המערכת", "About this platform") + "</a></div></div>";
+    foot.innerHTML = '<div class="wrap foot-grid"><div class="foot-brand">' + logo() + "<div><b>" + esc(S.N(S.db.shul)) + '</b><bdi dir="ltr">' + esc(S.db.shul.address) + "</bdi></div></div>" +
+      '<nav class="foot-nav" aria-label="' + L("קישורים", "Links") + '">' + links.map(function (l) { return '<a href="' + l[0] + '">' + l[1] + "</a>"; }).join("") + "</nav>" +
+      '<p class="foot-note">' + L("הדגמה: שם הקהילה, האנשים והנתונים בדויים. אין תשלומים אמיתיים.", "Demo: the congregation, people and data are fictional. No real payments.") + ' <a href="#/">' + L("על Shul System", "About Shul System") + "</a></p></div>";
   }
   function markNav() {
     var h = location.hash || "#/";

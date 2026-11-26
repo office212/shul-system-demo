@@ -293,6 +293,7 @@ css/
   product.css              the modern base for every product screen and each design's personality
   tv.css                   the TV board
   home.css                 the marketing home page and the demo request
+  refine.css               finishing touches for every product screen, the demo bar and each example design
   drawer.css               the gabbai's drawer
   paper.css                the paper-and-ink look of the demo bar and the contact strip
                            (the product screens keep their example designs)

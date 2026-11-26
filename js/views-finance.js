@@ -14,7 +14,8 @@
     return '<nav class="tabs fin-tabs">' + t.map(function (x) { return '<a href="#/finance/' + x[0] + '" class="' + (x[0] === on ? "on" : "") + '">' + x[1] + "</a>"; }).join("") + "</nav>";
   }
   function frame(app, on, inner) {
-    app.innerHTML = '<div class="wrap page">' + UI.pageHead(L("כספים", "Finance"), "", UI.crumbGabbai()) + tabs(on) + inner + "</div>";
+    var names = { home: L("כספים", "Finance"), pay: L("תשלום / חיוב", "Payment / Charge"), nedarim: L("נדרי שבת", "Shabbat nedarim"), owes: L("מי חייב", "Who owes"), members: L("מתפללים", "Members"), inbox: L("תשלומים בכרטיס", "Card payments"), more: L("דוחות ומכתבי מס", "Reports and tax letters") };
+    app.innerHTML = '<div class="wrap page">' + UI.pageHead(names[on] || names.home, "", UI.crumbGabbai()) + tabs(on) + inner + "</div>";
   }
   function monthTotal() {
     var ym = S.todayIso().slice(0, 7), c = 0;
