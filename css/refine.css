@@ -115,3 +115,8 @@ select[data-k="mid"] { min-width: 136px; }
   .dw-top nav > .dw-navl { font-size: 13px; padding: 8px 4px; }
   .dw-top { gap: 8px; }
 }
+
+/* the notifications panel on a phone: the width of the screen, never off its edge */
+@media (max-width: 760px) {
+  .bellpop { position: fixed; top: 70px; left: 10px; right: 10px; inset-inline-end: 10px; width: auto; max-height: calc(100dvh - 96px); overflow: auto; }
+}

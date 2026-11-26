@@ -284,6 +284,8 @@ python3 -m http.server 8000
 
 then visit **http://localhost:8000/**. On GitHub Pages, serve the repository root.
 
+On every release, raise the `?v=` number on the stylesheets and scripts in `index.html` together with `ASSET_V` in `js/ui.js`, so browsers fetch the new files instead of mixing them with cached ones.
+
 ### 📁 Files
 
 ```text

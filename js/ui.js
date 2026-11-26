@@ -414,7 +414,19 @@
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
   }
 
+  /* A browser can hold an older copy of index.html beside newer scripts. The scripts then bring
+     the stylesheets they need, so a page never renders half-styled. Keep the list in index.html's order,
+     and raise ASSET_V together with the ?v= numbers in index.html on every release. */
+  var ASSET_V = "31", STYLES = ["app", "tv", "experience", "product", "drawer", "paper", "home", "refine", "themes"];
+  function ensureStyles() {
+    var have = Array.prototype.map.call(document.querySelectorAll('link[rel="stylesheet"]'), function (l) { return l.getAttribute("href") || ""; });
+    STYLES.forEach(function (n) {
+      if (have.some(function (h) { return h.indexOf("css/" + n + ".css") >= 0; })) return;
+      var l = document.createElement("link"); l.rel = "stylesheet"; l.href = "css/" + n + ".css?v=" + ASSET_V; document.head.appendChild(l);
+    });
+  }
   function start() {
+    ensureStyles();
     S.load();
     var p0 = parseHash().params;
     if (p0.as && S.ROLES[p0.as]) S.over.role = p0.as;
