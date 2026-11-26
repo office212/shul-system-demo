@@ -41,7 +41,7 @@ th { text-align: start; white-space: nowrap; }
 .foot-nav a:hover { color: var(--title-ink); text-decoration: underline; text-underline-offset: 4px; }
 .foot-note { grid-column: 1 / -1; margin: 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
 .foot-note a { color: inherit; }
-[data-theme="royal"] .foot-brand svg { color: var(--gold); }
+[data-kin="royal"] .foot-brand svg { color: var(--gold); }
 @media (max-width: 760px) { .site-foot .foot-grid { grid-template-columns: 1fr; } .foot-nav { justify-content: flex-start; } }
 
 /* ---------- the screen: the parasha line fits under the zmanim ---------- */
@@ -70,29 +70,29 @@ th { text-align: start; white-space: nowrap; }
 .hero .timecard .big .v { font-size: 46px; line-height: 1.1; letter-spacing: -.01em; }
 
 /* Jerusalem: an arched window, as in a shul's wall, with a brass line inside it */
-[data-theme="classic"] .hero { border-bottom: 0; box-shadow: inset 0 -3px 0 var(--gold-soft), inset 0 -4px 0 var(--gold); }
-[data-theme="classic"] .hero .timecard { border-radius: 50% 50% 14px 14px / 168px 168px 14px 14px; padding: 62px 30px 26px; border: 0; outline: 1px solid var(--gold); outline-offset: -10px; box-shadow: 0 2px 4px rgba(40, 30, 10, .06), 0 30px 60px -20px rgba(40, 30, 10, .28); }
-[data-theme="classic"] .hero .timecard > .eyebrow, [data-theme="classic"] .hero .timecard > h3, [data-theme="classic"] .hero .timecard > .muted { text-align: center; }
-[data-theme="classic"] .hero .timecard > h3 { font-size: 24px; }
-[data-theme="classic"] .hero .timecard .big { margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+[data-kin="classic"] .hero { border-bottom: 0; box-shadow: inset 0 -3px 0 var(--gold-soft), inset 0 -4px 0 var(--gold); }
+[data-kin="classic"] .hero .timecard { border-radius: 50% 50% 14px 14px / 168px 168px 14px 14px; padding: 62px 30px 26px; border: 0; outline: 1px solid var(--gold); outline-offset: -10px; box-shadow: 0 2px 4px rgba(40, 30, 10, .06), 0 30px 60px -20px rgba(40, 30, 10, .28); }
+[data-kin="classic"] .hero .timecard > .eyebrow, [data-kin="classic"] .hero .timecard > h3, [data-kin="classic"] .hero .timecard > .muted { text-align: center; }
+[data-kin="classic"] .hero .timecard > h3 { font-size: 24px; }
+[data-kin="classic"] .hero .timecard .big { margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
 
 /* Clear: flat, exact, one blue rule on top and large tabular figures */
-[data-theme="modern"] .hero .timecard { border-radius: 10px; box-shadow: none; border: 1px solid var(--line); border-top: 4px solid var(--primary); padding: 26px; }
-[data-theme="modern"] .hero .timecard .big { text-align: start; padding-top: 14px; }
-[data-theme="modern"] .hero .timecard .big .v { font-size: 56px; font-weight: 700; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
-[data-theme="modern"] .tile, [data-theme="modern"] .card, [data-theme="modern"] .kpi { border-radius: 10px; }
+[data-kin="modern"] .hero .timecard { border-radius: 10px; box-shadow: none; border: 1px solid var(--line); border-top: 4px solid var(--primary); padding: 26px; }
+[data-kin="modern"] .hero .timecard .big { text-align: start; padding-top: 14px; }
+[data-kin="modern"] .hero .timecard .big .v { font-size: 56px; font-weight: 700; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+[data-kin="modern"] .tile, [data-kin="modern"] .card, [data-kin="modern"] .kpi { border-radius: 10px; }
 
 /* Warm: soft, generous corners and a clay glow */
-[data-theme="warm"] .hero .timecard { border-radius: 30px; border: 0; padding: 28px; box-shadow: 0 2px 0 rgba(180, 83, 42, .06), 0 28px 50px -18px rgba(180, 83, 42, .35); }
-[data-theme="warm"] .hero .timecard .big { background: var(--accent-soft); border-radius: 20px; margin: 14px 0 6px; padding: 14px 0 16px; }
-[data-theme="warm"] .hero .timecard .big .v { color: var(--primary); }
+[data-kin="warm"] .hero .timecard { border-radius: 30px; border: 0; padding: 28px; box-shadow: 0 2px 0 color-mix(in srgb, var(--primary) 6%, transparent), 0 28px 50px -18px color-mix(in srgb, var(--primary) 38%, transparent); }
+[data-kin="warm"] .hero .timecard .big { background: var(--accent-soft); border-radius: 20px; margin: 14px 0 6px; padding: 14px 0 16px; }
+[data-kin="warm"] .hero .timecard .big .v { color: var(--primary); }
 
 /* Royal: a formal double frame in champagne, everything centred */
-[data-theme="royal"] .hero .timecard { border-radius: 4px; padding: 34px 32px 28px; outline: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); outline-offset: -9px; border-color: color-mix(in srgb, var(--gold) 55%, transparent); }
-[data-theme="royal"] .hero .timecard > .eyebrow, [data-theme="royal"] .hero .timecard > h3, [data-theme="royal"] .hero .timecard > .muted { text-align: center; }
-[data-theme="royal"] .hero .timecard > .eyebrow { letter-spacing: .16em; }
-[data-theme="royal"] .hero .timecard .big .v { color: var(--gold); font-size: 50px; }
-[data-theme="royal"] .hero .timecard .big { margin-top: 10px; border-top: 1px solid color-mix(in srgb, var(--gold) 30%, transparent); padding-top: 14px; }
+[data-kin="royal"] .hero .timecard { border-radius: 4px; padding: 34px 32px 28px; outline: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); outline-offset: -9px; border-color: color-mix(in srgb, var(--gold) 55%, transparent); }
+[data-kin="royal"] .hero .timecard > .eyebrow, [data-kin="royal"] .hero .timecard > h3, [data-kin="royal"] .hero .timecard > .muted { text-align: center; }
+[data-kin="royal"] .hero .timecard > .eyebrow { letter-spacing: .16em; }
+[data-kin="royal"] .hero .timecard .big .v { color: var(--gold); font-size: 50px; }
+[data-kin="royal"] .hero .timecard .big { margin-top: 10px; border-top: 1px solid color-mix(in srgb, var(--gold) 30%, transparent); padding-top: 14px; }
 
 /* numbers and phone numbers never break across lines in a table */
 td bdi, td .num, td.num, td[dir="ltr"] { white-space: nowrap; }

@@ -172,3 +172,70 @@ body.bare { background: #000; overflow: hidden; }
 .tv-halacha .hb { font-family: var(--tv-font-head); font-size: 46px; }
 .tv-halacha .src { margin-top: 22px; font-size: 22px; opacity: .6; letter-spacing: .04em; }
 .tv-nextlbl { font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .85; margin-bottom: 2px; }
+
+/* ---------- the board, finished: frames, depth and a clearer "next" ---------- */
+.tv-col, .tv-center { position: relative; box-shadow: 0 22px 48px -22px rgba(0, 0, 0, .34), 0 2px 6px rgba(0, 0, 0, .05); outline: var(--tv-frame, 0 solid transparent); outline-offset: -11px; }
+.tv-zrow.past { opacity: .42; }
+.tv-zrow.next { box-shadow: 0 10px 20px -12px color-mix(in srgb, var(--tv-hi) 80%, transparent); }
+.tv-clock { line-height: 1; }
+.tv-foot { border-top: 2px solid var(--gold); }
+.tv-qrcard { border: 1px solid color-mix(in srgb, var(--gold) 38%, transparent); background: color-mix(in srgb, var(--surface) 82%, transparent); }
+.tv-qr { background: #fff; padding: 6px; }
+.tv-li { border-radius: calc(var(--tv-radius) / 2); }
+.tv-next { border-radius: calc(var(--tv-radius) / 1.6); }
+
+/* Jerusalem and its family: a brass hairline inside each panel, a double rule under the head,
+   a small brass diamond beside every panel title */
+[data-kin="classic"] .tv-stage { --tv-frame: 1px solid color-mix(in srgb, var(--gold) 52%, transparent); }
+[data-kin="classic"] .tv-head::after, [data-kin="royal"] .tv-head::after { content: ""; position: absolute; left: 56px; right: 56px; bottom: -10px; height: 1px; background: color-mix(in srgb, var(--gold) 55%, transparent); }
+[data-kin="classic"] .tv-stage:not(.lang-en) .tv-ch .he::before, [data-kin="classic"] .tv-stage.lang-en .tv-ch .en::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-inline-end: 14px; background: var(--gold); transform: translateY(-5px) rotate(45deg); }
+[data-kin="classic"] .tv-zrow.next { border-radius: 8px; box-shadow: inset -7px 0 0 var(--gold), 0 10px 20px -12px color-mix(in srgb, var(--tv-hi) 80%, transparent); }
+[data-kin="classic"] .tv-welcome::after { content: ""; display: block; width: 150px; height: 2px; margin: 34px auto 0; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+
+/* Clear and its family: flat panels, the clock as one solid block, heavy rules */
+[data-kin="modern"] .tv-col, [data-kin="modern"] .tv-center { box-shadow: none; }
+[data-kin="modern"] .tv-head { border-bottom: 1px solid var(--line); }
+[data-kin="modern"] .tv-clock { background: var(--tv-hi); color: var(--tv-hi-ink); padding: 12px 30px 16px; border-radius: var(--tv-radius); font-size: 84px; }
+[data-kin="modern"] .tv-clock small { opacity: .7; }
+[data-kin="modern"] .tv-ch { border-bottom: 3px solid var(--tv-hi); padding-bottom: 10px; }
+[data-kin="modern"] .tv-pgroup { color: var(--tv-accent); }
+[data-kin="modern"] .tv-chips span { background: transparent; border: 1.5px solid var(--tv-ink); }
+[data-kin="modern"] .tv-zrow.next { border-radius: calc(var(--tv-radius) / 2); }
+[data-kin="modern"] .tv-foot { border-top: 0; }
+[data-kin="modern"] .tv-dots i { background: var(--tv-hi); }
+
+/* Warm and its family: a coloured head with the clock in a glass pill, soft tinted depth */
+[data-kin="warm"] .tv-clock { background: rgba(255, 255, 255, .16); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .38); padding: 8px 38px 12px; border-radius: 999px; font-size: 84px; }
+[data-kin="warm"] .tv-col, [data-kin="warm"] .tv-center { box-shadow: 0 30px 54px -26px color-mix(in srgb, var(--tv-hi) 55%, transparent); }
+[data-kin="warm"] .tv-zrow.next, [data-kin="warm"] .tv-next { border-radius: 999px; padding-inline: 28px; }
+[data-kin="warm"] .tv-ch { border-bottom: 3px dotted var(--gold); }
+[data-kin="warm"] .tv-foot { border-top: 0; }
+
+/* Royal and its family: a gold frame with drawn corners, gold numerals, a double rule */
+[data-kin="royal"] .tv-stage { --tv-frame: 1px solid color-mix(in srgb, var(--gold) 34%, transparent); --tvc: var(--gold); }
+[data-kin="royal"] .tv-col::after, [data-kin="royal"] .tv-center::after { content: ""; position: absolute; inset: 17px; pointer-events: none;
+  background:
+    linear-gradient(var(--tvc), var(--tvc)) top left / 38px 2px no-repeat, linear-gradient(var(--tvc), var(--tvc)) top left / 2px 38px no-repeat,
+    linear-gradient(var(--tvc), var(--tvc)) top right / 38px 2px no-repeat, linear-gradient(var(--tvc), var(--tvc)) top right / 2px 38px no-repeat,
+    linear-gradient(var(--tvc), var(--tvc)) bottom left / 38px 2px no-repeat, linear-gradient(var(--tvc), var(--tvc)) bottom left / 2px 38px no-repeat,
+    linear-gradient(var(--tvc), var(--tvc)) bottom right / 38px 2px no-repeat, linear-gradient(var(--tvc), var(--tvc)) bottom right / 2px 38px no-repeat; }
+[data-kin="royal"] .tv-col, [data-kin="royal"] .tv-center { padding: 24px 34px 22px; box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .7); }
+[data-kin="royal"] .tv-head { border-bottom-width: 1px; }
+[data-kin="royal"] .tv-clock { color: var(--gold); }
+[data-kin="royal"] .tv-zrow.next { border-radius: 4px; }
+[data-kin="royal"] .tv-welcome .he, [data-kin="royal"] .tv-stage.lang-en .tv-welcome .en { background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 70%, #fff), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .08em; }
+[data-kin="royal"] .tv-foot { border-top-width: 1px; }
+
+/* from Thursday noon the zmanim share their panel with the Shabbat times: everything fits */
+.compact .tv-zrow { padding-block: 0; }
+.compact .tv-zrow .he { font-size: 20.5px; line-height: 1.1; }
+.compact .tv-zrow .en { font-size: 11.5px; line-height: 1.05; }
+.compact .tv-zrow .t { font-size: 26px; line-height: 1.15; }
+.tv-stage.lang-en .compact .tv-zrow .he { font-size: 11.5px; }
+.tv-stage.lang-en .compact .tv-zrow .en { font-size: 20.5px; }
+.compact .tv-sblock { padding-top: 5px; }
+.compact .tv-sbt { flex-direction: row; align-items: baseline; gap: 14px; flex-wrap: nowrap; white-space: nowrap; overflow: hidden; padding-bottom: 2px; }
+.compact .tv-sbt .he { font-size: 24px; }
+.compact .tv-sbt .en { font-size: 13px; }
+.tv-stage.lang-en .compact .tv-sbt .he { font-size: 13px; }
+.tv-stage.lang-en .compact .tv-sbt .en { font-size: 24px; }

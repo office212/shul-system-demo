@@ -9,7 +9,7 @@
   /* ---------- preferences (language, theme, role) ---------- */
   var prefs = { lang: "he", theme: "classic", role: "visitor" };
   try { Object.assign(prefs, JSON.parse(localStorage.getItem(PREF_KEY) || "{}")); } catch (e) {}
-  if (["classic", "modern", "warm", "royal"].indexOf(prefs.theme) < 0) prefs.theme = "classic";
+  if (!/^[a-z]{3,12}$/.test(prefs.theme || "")) prefs.theme = "classic"; /* an unknown id falls back to the first design in js/ui.js */
   function savePrefs() { try { localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); } catch (e) {} }
 
   function L(he, en) { return prefs.lang === "en" ? en : he; }

@@ -419,7 +419,7 @@ tr.flash td { animation: flashRow 1.6s ease; }
 
 /* ---------- admin shell ---------- */
 .admin { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: 100vh; background: color-mix(in srgb, var(--bg) 70%, #fff); }
-[data-theme="royal"] .admin { background: var(--bg); }
+[data-kin="royal"] .admin { background: var(--bg); }
 .admin-side { position: sticky; top: 0; height: 100vh; overflow: auto; background: var(--surface); border-inline-end: 1px solid var(--line); display: flex; flex-direction: column; padding: 16px 12px; gap: 6px; }
 .side-brand { display: flex; gap: 10px; align-items: center; text-decoration: none; color: var(--head-ink); padding: 6px 8px 16px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
 .side-brand svg { width: 34px; height: 34px; flex: none; }

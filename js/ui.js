@@ -173,20 +173,32 @@
 
   /* ---------- demo bar + header ---------- */
   var THEMES = [
-    { id: "classic", he: "ירושלים", en: "Jerusalem", c: "linear-gradient(135deg,#efe6d6 50%,#1d3a6b 50%)", dhe: "אבן חמה, כחול עמוק ונגיעות נחושת. סריף מודרני בכותרות.", den: "Warm stone, deep blue and brass. A modern serif for headings." },
-    { id: "modern", he: "נקי", en: "Clear", c: "linear-gradient(135deg,#ffffff 50%,#2348d6 50%)", dhe: "לבן חד, כחול אחד חזק וטיפוגרפיה הדוקה. עכשווי ושקט.", den: "Crisp white, one strong blue, tight type. Contemporary and calm." },
-    { id: "warm", he: "חם", en: "Warm", c: "linear-gradient(135deg,#f6e3d1 50%,#b4532a 50%)", dhe: "חול וחימר, כותרות מעוגלות וכפתורים רכים. מזמין ומשפחתי.", den: "Sand and clay, rounded headings, soft pill buttons. Welcoming." },
-    { id: "royal", he: "מלכותי", en: "Royal", c: "linear-gradient(135deg,#0c1628 50%,#e0c48c 50%)", dhe: "כחול לילה ושמפניה, סריף אלגנטי. חגיגי ומכובד.", den: "Night navy and champagne, an elegant serif. Festive and dignified." }
+    { id: "classic", kin: "classic", he: "ירושלים", en: "Jerusalem", c: "linear-gradient(135deg,#efe6d6 50%,#1d3a6b 50%)", dhe: "אבן חמה, כחול עמוק ונגיעות נחושת. סריף מודרני בכותרות.", den: "Warm stone, deep blue and brass. A modern serif for headings." },
+    { id: "modern", kin: "modern", he: "נקי", en: "Clear", c: "linear-gradient(135deg,#ffffff 50%,#2348d6 50%)", dhe: "לבן חד, כחול אחד חזק וטיפוגרפיה הדוקה. עכשווי ושקט.", den: "Crisp white, one strong blue, tight type. Contemporary and calm." },
+    { id: "warm", kin: "warm", he: "חם", en: "Warm", c: "linear-gradient(135deg,#f6e3d1 50%,#b4532a 50%)", dhe: "חול וחימר, כותרות מעוגלות וכפתורים רכים. מזמין ומשפחתי.", den: "Sand and clay, rounded headings, soft pill buttons. Welcoming." },
+    { id: "royal", kin: "royal", dark: true, he: "מלכותי", en: "Royal", c: "linear-gradient(135deg,#0c1628 50%,#e0c48c 50%)", dhe: "כחול לילה ושמפניה, סריף אלגנטי. חגיגי ומכובד.", den: "Night navy and champagne, an elegant serif. Festive and dignified." },
+    { id: "heichal", kin: "royal", dark: true, lux: true, he: "היכל", en: "Heichal", c: "linear-gradient(135deg,#0b0b0d 50%,#d6b36a 50%)", dhe: "שיש שחור ועלי זהב, סריף קלאסי. חגיגי כמו היכל.", den: "Black marble and gold leaf, a classic serif. As solemn as the heichal." },
+    { id: "parochet", kin: "royal", dark: true, lux: true, he: "פרוכת", en: "Parochet", c: "linear-gradient(135deg,#3a0e19 50%,#e2bf7a 50%)", dhe: "קטיפת יין ורקמת זהב, כותרות עבות. חם ומלכותי.", den: "Wine velvet and gold embroidery, bold headings. Warm and regal." },
+    { id: "emerald", kin: "royal", dark: true, lux: true, he: "אזמרגד", en: "Emerald", c: "linear-gradient(135deg,#0d2a21 50%,#dcc07f 50%)", dhe: "ירוק יער עמוק וזהב עתיק. שקט ועשיר.", den: "Deep forest green and antique gold. Quiet and rich." },
+    { id: "platinum", kin: "royal", dark: true, lux: true, he: "פלטינה", en: "Platinum", c: "linear-gradient(135deg,#15181c 50%,#dfe3e8 50%)", dhe: "גרפיט וכסף מוברש, אותיות דקות. עכשווי ויוקרתי.", den: "Graphite and brushed silver, light type. Contemporary and luxurious." },
+    { id: "techelet", kin: "classic", lux: true, he: "תכלת", en: "Techelet", c: "linear-gradient(135deg,#eaf2fb 50%,#1f5fae 50%)", dhe: "לבן ותכלת של פתיל הציצית, עם כסף. נקי ומאיר.", den: "White and the blue of the tzitzit thread, with silver. Clean and bright." },
+    { id: "kotel", kin: "classic", lux: true, he: "כותל", en: "Kotel", c: "linear-gradient(135deg,#e7dcc6 50%,#525a2f 50%)", dhe: "אבן ירושלמית, זית וארד, פינות ישרות כמו אבני גזית.", den: "Jerusalem stone, olive and bronze, square-cut like ashlar." },
+    { id: "sefer", kin: "classic", lux: true, he: "ספר", en: "Sefer", c: "linear-gradient(135deg,#f6f0e1 50%,#1b1712 50%)", dhe: "נייר שמנת ודיו שחור, מסודר כמו שער של ספר.", den: "Cream paper and black ink, set like the title page of a sefer." },
+    { id: "marble", kin: "modern", lux: true, he: "שיש", en: "Marble", c: "linear-gradient(135deg,#ffffff 50%,#1a1a1a 50%)", dhe: "אבן לבנה, שחור וקו זהב דק. אותיות גדולות ושקטות.", den: "White stone, black and a hairline of gold. Large, quiet type." },
+    { id: "argaman", kin: "warm", lux: true, he: "ארגמן", en: "Argaman", c: "linear-gradient(135deg,#f3e6f1 50%,#5a1f5e 50%)", dhe: "שנהב וארגמן עם זהב. נדיב וחגיגי.", den: "Ivory and royal purple with gold. Generous and festive." },
+    { id: "erez", kin: "classic", lux: true, he: "ארז", en: "Erez", c: "linear-gradient(135deg,#ead9c2 50%,#6b3f22 50%)", dhe: "ארז ואגוז, העץ של הבימה, עם שמנת ופליז.", den: "Cedar and walnut, the wood of the bimah, with cream and brass." }
   ];
+  function themeById(id) { return THEMES.filter(function (t) { return t.id === id; })[0] || THEMES[0]; }
   var BRANDS = { navy: "#1b3a5c", emerald: "#1f5f4a", plum: "#4b2e5a", slate: "#334155", teal: "#0f5e6b" };
   function curTheme() { return S.over.theme || S.prefs.theme; }
   function applyPrefs() {
     var h = document.documentElement, th = curTheme();
     h.lang = S.prefs.lang; h.dir = S.prefs.lang === "he" ? "rtl" : "ltr";
-    h.setAttribute("data-theme", th);
+    var TH = themeById(th); th = TH.id;
+    h.setAttribute("data-theme", th); h.setAttribute("data-kin", TH.kin);
     ["--primary", "--primary-hover", "--title-ink", "--head-ink", "--tv-head", "--tv-hi"].forEach(function (v) { h.style.removeProperty(v); });
     var c = BRANDS[S.prefs.brand];
-    if (c && th !== "royal") {
+    if (c && !TH.dark && !TH.lux) {
       h.style.setProperty("--primary", c); h.style.setProperty("--primary-hover", "color-mix(in srgb, " + c + " 82%, #ffffff)");
       h.style.setProperty("--title-ink", c); h.style.setProperty("--tv-head", c); h.style.setProperty("--tv-hi", c);
       h.style.setProperty("--head-ink", c);
@@ -421,7 +433,7 @@
   window.SHUL_UI = {
     I: I, logo: logo, mark: mark, wordmark: wordmark, B: B, timeAgo: timeAgo, modal: modal, closeModal: closeModal, confirmBox: confirmBox,
     toast: toast, pushToast: pushToast, customItemsHtml: customItemsHtml, scopeNote: scopeNote, themePickerHtml: themePickerHtml, renameHtml: renameHtml, bindCustom: bindCustom, route: route, render: render, setRole: setRole, setLang: setLang, setTheme: setTheme,
-    h: h, on: on, pageHead: pageHead, crumbGabbai: crumbGabbai, download: download, customModal: customModal, THEMES: THEMES,
+    h: h, on: on, pageHead: pageHead, crumbGabbai: crumbGabbai, download: download, customModal: customModal, THEMES: THEMES, themeById: themeById,
     start: start, renderChrome: renderChrome, SALES: SALES, ctaDemo: ctaDemo, signInModal: signInModal, setBrand: setBrand, BRANDS: BRANDS, flash: flash, applyPrefs: applyPrefs, curTheme: curTheme
   };
 })();
