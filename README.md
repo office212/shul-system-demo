@@ -6,7 +6,7 @@
 <div align="center">
 
 <a href="https://office212.github.io/shul-system-demo/">
-  <img src=".github/readme/banner.svg" alt="Shul System · Your Shul. Your System. · בית הכנסת שלכם. המערכת שלכם." width="100%">
+  <img src=".github/readme/banner.svg" alt="Shul System · One system for the whole shul" width="100%">
 </a>
 
 <h1>Shul System Demo</h1>
@@ -31,6 +31,12 @@
 </p>
 
 <br>
+
+<a href="https://office212.github.io/shul-system-demo/">
+  <img src=".github/readme/shot-home.jpg" alt="The home page: Your whole shul, in one system" width="88%">
+</a>
+
+<br><br>
 
 <a href="https://office212.github.io/shul-system-demo/#/drawer">
   <img src=".github/readme/drawer.gif" alt="The gabbai's drawer opens; the Mincha slip is picked up and the real system moves Mincha by five minutes, live on the screen" width="88%">
