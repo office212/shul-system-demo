@@ -1,0 +1,98 @@
+/* Shul System sales demo | refinements over the product base, for every example design.
+   Small things that decide whether a screen looks finished: links, chips, tables, numbers,
+   the footer, the screen's last line, and the demo bar as a proper bar instead of a float. */
+
+/* ---------- links, chips and tables ---------- */
+a.chip, a.btn, .tabs a, .quick a, .tile, .side-a { text-decoration: none; }
+td a, .list-row a { text-decoration: none; font-weight: 600; color: var(--title-ink); border-bottom: 1px solid color-mix(in srgb, var(--title-ink) 22%, transparent); }
+td a:hover, .list-row a:hover { border-bottom-color: currentColor; }
+td .btn, td a.btn { border-bottom: 1px solid var(--line); font-weight: 600; }
+td a.btn.ghost, td .btn.ghost { border-color: transparent; }
+td.num, td .num, .kpi .v, .mp-amt, .list-row .num { font-feature-settings: "tnum" 1, "lnum" 1; }
+tbody tr:last-child td { border-bottom: 0; }
+th { text-align: start; white-space: nowrap; }
+.table-wrap { overflow: auto; background: var(--surface); }
+.amt-pos { color: var(--ok); }
+@media (min-width: 1181px) { .site-head .menu-btn { display: none; } }
+
+/* ---------- headings and page rhythm ---------- */
+.page-head h1 { text-wrap: balance; }
+.hero h1, .mk h1, .mk h2 { text-wrap: balance; }
+.card-head h3, .card h3 { letter-spacing: 0; }
+.kpi .l, .kpi .k { font-weight: 500; }
+.kpi { transition: box-shadow .15s, border-color .15s; }
+.kpis { gap: 14px; }
+.quick { gap: 12px; }
+.quick a { min-height: 50px; }
+.mbar { height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.mbar i { display: block; height: 100%; border-radius: 3px; background: var(--primary); }
+.dash-grid > .stack > * + * { margin-top: 16px; }
+.dash-grid { gap: 16px; }
+
+/* ---------- the sample shul's footer ---------- */
+.site-foot { padding: 34px 0 30px; border-top: 1px solid var(--line); background: var(--surface); font-size: 14.5px; }
+.site-foot .foot-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr); gap: 18px 40px; align-items: center; }
+.foot-brand { display: flex; align-items: center; gap: 14px; color: var(--title-ink); }
+.foot-brand svg { width: 44px; height: 44px; flex: none; color: var(--primary); }
+.foot-brand b { display: block; font-family: var(--font-head); font-weight: var(--head-weight); font-size: 19px; line-height: 1.2; }
+.foot-brand bdi { color: var(--muted); font-size: 14px; }
+.foot-nav { display: flex; flex-wrap: wrap; gap: 6px 22px; justify-content: flex-end; }
+.foot-nav a { color: var(--ink-soft); text-decoration: none; font-weight: 500; }
+.foot-nav a:hover { color: var(--title-ink); text-decoration: underline; text-underline-offset: 4px; }
+.foot-note { grid-column: 1 / -1; margin: 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+.foot-note a { color: inherit; }
+[data-theme="royal"] .foot-brand svg { color: var(--gold); }
+@media (max-width: 760px) { .site-foot .foot-grid { grid-template-columns: 1fr; } .foot-nav { justify-content: flex-start; } }
+
+/* ---------- the screen: the parasha line fits under the zmanim ---------- */
+.tv-parline { padding: 6px 4px 0; flex-direction: row; justify-content: center; align-items: baseline; gap: 12px; flex-wrap: nowrap; white-space: nowrap; overflow: hidden; }
+.tv-parline .he { font-size: 20px; line-height: 1.2; }
+.tv-parline .en { font-size: 12.5px; line-height: 1.2; }
+.tv-stage.lang-en .tv-parline .he { font-size: 12.5px; }
+.tv-stage.lang-en .tv-parline .en { font-size: 20px; }
+
+/* ---------- the demo bar: a bar along the bottom on wide screens, so it covers nothing ---------- */
+@media (min-width: 981px) {
+  body:not(.bare):not(.framed):not(.layout-xp) { padding-bottom: 56px; }
+  .dock { left: 0; right: 0; bottom: 0; transform: none; }
+  .dock-bar { justify-content: center; gap: 6px; padding: 6px 16px; min-height: 56px; border-radius: 0; border-width: 1px 0 0; border-color: #0e2140; box-shadow: 0 -10px 30px -18px rgba(14, 33, 64, .5); }
+  .dock-pop { bottom: calc(100% + 8px); }
+  .dock-home { margin-inline-end: 10px; padding-inline-end: 16px; border-inline-end: 1px solid #d5d9e2; border-radius: 0; }
+  .dock-cta { margin-inline-start: 10px; padding: 10px 18px; font-size: 14px; }
+  .admin-side { height: calc(100vh - 56px); min-height: 0; }
+  .admin { min-height: calc(100vh - 56px); }
+  .salesbar { padding-bottom: 12px; }
+  .toasts { bottom: 72px; }
+}
+
+/* ---------- each example design, sharpened: the Shabbat card on the shul's home page ---------- */
+.hero .timecard .eyebrow { font-weight: 700; }
+.hero .timecard .big .v { font-size: 46px; line-height: 1.1; letter-spacing: -.01em; }
+
+/* Jerusalem: an arched window, as in a shul's wall, with a brass line inside it */
+[data-theme="classic"] .hero { border-bottom: 0; box-shadow: inset 0 -3px 0 var(--gold-soft), inset 0 -4px 0 var(--gold); }
+[data-theme="classic"] .hero .timecard { border-radius: 50% 50% 14px 14px / 168px 168px 14px 14px; padding: 62px 30px 26px; border: 0; outline: 1px solid var(--gold); outline-offset: -10px; box-shadow: 0 2px 4px rgba(40, 30, 10, .06), 0 30px 60px -20px rgba(40, 30, 10, .28); }
+[data-theme="classic"] .hero .timecard > .eyebrow, [data-theme="classic"] .hero .timecard > h3, [data-theme="classic"] .hero .timecard > .muted { text-align: center; }
+[data-theme="classic"] .hero .timecard > h3 { font-size: 24px; }
+[data-theme="classic"] .hero .timecard .big { margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+/* Clear: flat, exact, one blue rule on top and large tabular figures */
+[data-theme="modern"] .hero .timecard { border-radius: 10px; box-shadow: none; border: 1px solid var(--line); border-top: 4px solid var(--primary); padding: 26px; }
+[data-theme="modern"] .hero .timecard .big { text-align: start; padding-top: 14px; }
+[data-theme="modern"] .hero .timecard .big .v { font-size: 56px; font-weight: 700; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+[data-theme="modern"] .tile, [data-theme="modern"] .card, [data-theme="modern"] .kpi { border-radius: 10px; }
+
+/* Warm: soft, generous corners and a clay glow */
+[data-theme="warm"] .hero .timecard { border-radius: 30px; border: 0; padding: 28px; box-shadow: 0 2px 0 rgba(180, 83, 42, .06), 0 28px 50px -18px rgba(180, 83, 42, .35); }
+[data-theme="warm"] .hero .timecard .big { background: var(--accent-soft); border-radius: 20px; margin: 14px 0 6px; padding: 14px 0 16px; }
+[data-theme="warm"] .hero .timecard .big .v { color: var(--primary); }
+
+/* Royal: a formal double frame in champagne, everything centred */
+[data-theme="royal"] .hero .timecard { border-radius: 4px; padding: 34px 32px 28px; outline: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); outline-offset: -9px; border-color: color-mix(in srgb, var(--gold) 55%, transparent); }
+[data-theme="royal"] .hero .timecard > .eyebrow, [data-theme="royal"] .hero .timecard > h3, [data-theme="royal"] .hero .timecard > .muted { text-align: center; }
+[data-theme="royal"] .hero .timecard > .eyebrow { letter-spacing: .16em; }
+[data-theme="royal"] .hero .timecard .big .v { color: var(--gold); font-size: 50px; }
+[data-theme="royal"] .hero .timecard .big { margin-top: 10px; border-top: 1px solid color-mix(in srgb, var(--gold) 30%, transparent); padding-top: 14px; }
+
+/* numbers and phone numbers never break across lines in a table */
+td bdi, td .num, td.num, td[dir="ltr"] { white-space: nowrap; }
