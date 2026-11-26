@@ -93,34 +93,34 @@ tbody tr:hover td { background: color-mix(in srgb, var(--surface-2) 70%, transpa
 .toast { border-radius: 12px; background: #16181d; font-size: 14.5px; }
 
 /* ---------- each design's personality ---------- */
-[data-theme="classic"] .eyebrow { color: var(--gold); }
-[data-theme="classic"] .hero h1 { font-weight: 700; }
-[data-theme="classic"] .timecard .big .v { font-weight: 700; }
+[data-kin="classic"] .eyebrow { color: var(--gold); }
+[data-kin="classic"] .hero h1 { font-weight: 700; }
+[data-kin="classic"] .timecard .big .v { font-weight: 700; }
 
-[data-theme="modern"] .site-head { box-shadow: 0 1px 0 var(--head-line); border-bottom: 0; }
-[data-theme="modern"] .hero { border-bottom: 1px solid var(--line); }
-[data-theme="modern"] .hero h1 { font-size: clamp(38px, 6vw, 68px); letter-spacing: -.035em; }
-[data-theme="modern"] .nav a.on { background: var(--accent-soft); color: var(--accent-ink); }
-[data-theme="modern"] .tile .ic { background: var(--accent-soft); color: var(--accent-ink); }
-[data-theme="modern"] .card, [data-theme="modern"] .tile, [data-theme="modern"] .kpi { box-shadow: 0 1px 2px rgba(16, 24, 40, .04); }
+[data-kin="modern"] .site-head { box-shadow: 0 1px 0 var(--head-line); border-bottom: 0; }
+[data-kin="modern"] .hero { border-bottom: 1px solid var(--line); }
+[data-kin="modern"] .hero h1 { font-size: clamp(38px, 6vw, 68px); letter-spacing: -.035em; }
+[data-kin="modern"] .nav a.on { background: var(--accent-soft); color: var(--accent-ink); }
+[data-kin="modern"] .tile .ic { background: var(--accent-soft); color: var(--accent-ink); }
+[data-kin="modern"] .card, [data-kin="modern"] .tile, [data-kin="modern"] .kpi { box-shadow: 0 1px 2px rgba(16, 24, 40, .04); }
 
-[data-theme="warm"] .nav a.on, [data-theme="warm"] .nav a:hover { background: var(--accent-soft); color: var(--accent-ink); border-radius: 999px; }
-[data-theme="warm"] .tile .ic { background: linear-gradient(135deg, #c66436, #e0915a); color: #fff; border-radius: 16px; }
-[data-theme="warm"] .eyebrow { color: var(--primary); }
-[data-theme="warm"] .hero h1 { font-size: clamp(36px, 5.6vw, 64px); }
-[data-theme="warm"] .chip, [data-theme="warm"] .lang { border-radius: 999px; }
-[data-theme="warm"] .tv-head { border-bottom: 0; }
-[data-theme="warm"] .tv-brand svg { color: #fff; }
+[data-kin="warm"] .nav a.on, [data-kin="warm"] .nav a:hover { background: var(--accent-soft); color: var(--accent-ink); border-radius: 999px; }
+[data-kin="warm"] .tile .ic { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; border-radius: 16px; }
+[data-kin="warm"] .eyebrow { color: var(--primary); }
+[data-kin="warm"] .hero h1 { font-size: clamp(36px, 5.6vw, 64px); }
+[data-kin="warm"] .chip, [data-kin="warm"] .lang { border-radius: 999px; }
+[data-kin="warm"] .tv-head { border-bottom: 0; }
+[data-kin="warm"] .tv-brand svg { color: #fff; }
 
-[data-theme="royal"] .site-head { border-bottom: 1px solid var(--head-line); }
-[data-theme="royal"] .nav a { color: #c9cfdb; }
-[data-theme="royal"] .nav a.on, [data-theme="royal"] .nav a:hover { background: transparent; color: var(--gold); box-shadow: inset 0 -2px 0 var(--gold); border-radius: 0; }
-[data-theme="royal"] .card, [data-theme="royal"] .tile, [data-theme="royal"] .stat, [data-theme="royal"] .timecard, [data-theme="royal"] .kpi { border-color: rgba(224, 196, 140, .2); }
-[data-theme="royal"] .tile .ic { background: transparent; border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; }
-[data-theme="royal"] .hero .btn:not(.primary) { background: transparent; color: var(--gold); border-color: rgba(224, 196, 140, .5); }
-[data-theme="royal"] .btn.accent { color: #0c1628; }
-[data-theme="royal"] .eyebrow { color: var(--gold); letter-spacing: .12em; }
-[data-theme="royal"] .tv-ch .en, [data-theme="royal"] .tv-bhead .en { color: var(--gold); opacity: .8; }
+[data-kin="royal"] .site-head { border-bottom: 1px solid var(--head-line); }
+[data-kin="royal"] .nav a { color: var(--ink-soft); }
+[data-kin="royal"] .nav a.on, [data-kin="royal"] .nav a:hover { background: transparent; color: var(--gold); box-shadow: inset 0 -2px 0 var(--gold); border-radius: 0; }
+[data-kin="royal"] .card, [data-kin="royal"] .tile, [data-kin="royal"] .stat, [data-kin="royal"] .timecard, [data-kin="royal"] .kpi { border-color: color-mix(in srgb, var(--gold) 22%, transparent); }
+[data-kin="royal"] .tile .ic { background: transparent; border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; }
+[data-kin="royal"] .hero .btn:not(.primary) { background: transparent; color: var(--gold); border-color: color-mix(in srgb, var(--gold) 50%, transparent); }
+[data-kin="royal"] .btn.accent { color: var(--on-primary); }
+[data-kin="royal"] .eyebrow { color: var(--gold); letter-spacing: .12em; }
+[data-kin="royal"] .tv-ch .en, [data-kin="royal"] .tv-bhead .en { color: var(--gold); opacity: .8; }
 
 /* ---------- polish pass: calmer, more product-like ---------- */
 /* notices: one compact row each, no underlines, an arrow at the end */

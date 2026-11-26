@@ -1,0 +1,594 @@
+/* Shul System sales demo | the collection: ten more example designs for Orthodox shuls.
+   Each is a set of tokens over the same system (see app.css for the first four). A design also
+   names its family (data-kin on <html>, set in js/ui.js): the family gives it the structural
+   personality of one of the first four, and the few rules at the end give it a face of its own. */
+
+/* ---- Heichal: black marble and gold leaf, a classic serif ---- */
+[data-theme="heichal"] {
+  --font-head: "Frank Ruhl Libre", "Noto Serif Hebrew", Georgia, serif;
+  --font-body: "Heebo", "Assistant", Arial, sans-serif;
+  --head-weight: 500;
+  --head-track: 0;
+  --radius-card: 6px;
+  --radius-btn: 4px;
+  --bg: #0b0b0d;
+  --bg-tex: none;
+  --hero: radial-gradient(900px 460px at 70% -10%, #2a2416 0%, #121114 60%, #0b0b0d 100%);
+  --hero-ink: #f0dfb4;
+  --hero-sub: #d2cdc2;
+  --head-bg: rgba(11, 11, 13, .94);
+  --head-ink: #f0dfb4;
+  --head-line: rgba(214, 179, 106, .28);
+  --surface: #151517;
+  --surface-2: #1d1d21;
+  --ink: #f2efe8;
+  --ink-soft: #d2cdc2;
+  --muted: #948e82;
+  --line: #2b2b31;
+  --primary: #d6b36a;
+  --primary-hover: #e4c88c;
+  --on-primary: #14110a;
+  --title-ink: #f0dfb4;
+  --accent: #d6b36a;
+  --accent-soft: #231f15;
+  --accent-ink: #e6cc8f;
+  --gold: #d6b36a;
+  --gold-soft: #231f15;
+  --ok: #8fd4b2; --ok-soft: color-mix(in srgb, #8fd4b2 16%, var(--surface));
+  --warn: #ecc77c; --warn-soft: color-mix(in srgb, #ecc77c 16%, var(--surface));
+  --bad: #eaa98d; --bad-soft: color-mix(in srgb, #eaa98d 16%, var(--surface));
+  --shadow: 0 1px 0 color-mix(in srgb, var(--gold) 10%, transparent), 0 14px 34px rgba(0, 0, 0, .38);
+  --tv-font-head: "Frank Ruhl Libre", "Noto Serif Hebrew", Georgia, serif;
+  --tv-bg: radial-gradient(1500px 820px at 50% -12%, #2c2616 0%, #111013 55%, #060607 100%);
+  --tv-tex: repeating-linear-gradient(115deg, rgba(255,255,255,.022) 0 2px, transparent 2px 190px), repeating-linear-gradient(64deg, rgba(214,179,106,.03) 0 1px, transparent 1px 260px);
+  --tv-panel: rgba(18, 18, 21, .9);
+  --tv-panel-border: 1px solid rgba(214, 179, 106, .42);
+  --tv-radius: 6px;
+  --tv-ink: #f2efe8;
+  --tv-head: #f0dfb4;
+  --tv-head-bg: transparent;
+  --tv-head-ink: #f0dfb4;
+  --tv-accent: #d6b36a;
+  --tv-hi: #d6b36a;
+  --tv-hi-ink: #14110a;
+  --tv-foot-bg: #000000;
+  --tv-foot-ink: #f0dfb4;
+  color-scheme: dark;
+}
+
+/* ---- Parochet: wine velvet and gold embroidery, a bold display serif ---- */
+[data-theme="parochet"] {
+  --font-head: "Suez One", "Frank Ruhl Libre", Georgia, serif;
+  --font-body: "Assistant", "Heebo", Arial, sans-serif;
+  --head-weight: 400;
+  --head-track: 0;
+  --radius-card: 10px;
+  --radius-btn: 8px;
+  --bg: #2a0a12;
+  --bg-tex: none;
+  --hero: radial-gradient(900px 480px at 70% -10%, #6a1a2d 0%, #3a0e19 60%, #2a0a12 100%);
+  --hero-ink: #f3dfae;
+  --hero-sub: #e3cfc6;
+  --head-bg: rgba(36, 8, 15, .95);
+  --head-ink: #f3dfae;
+  --head-line: rgba(226, 191, 122, .3);
+  --surface: #3a1019;
+  --surface-2: #471521;
+  --ink: #f7ece6;
+  --ink-soft: #e3cfc6;
+  --muted: #bb9c94;
+  --line: #5c2531;
+  --primary: #e2bf7a;
+  --primary-hover: #eed29c;
+  --on-primary: #2a0a12;
+  --title-ink: #f3dfae;
+  --accent: #e2bf7a;
+  --accent-soft: #4c1b26;
+  --accent-ink: #efd59d;
+  --gold: #e2bf7a;
+  --gold-soft: #4c1b26;
+  --ok: #8fd4b2; --ok-soft: color-mix(in srgb, #8fd4b2 16%, var(--surface));
+  --warn: #ecc77c; --warn-soft: color-mix(in srgb, #ecc77c 16%, var(--surface));
+  --bad: #eaa98d; --bad-soft: color-mix(in srgb, #eaa98d 16%, var(--surface));
+  --shadow: 0 1px 0 color-mix(in srgb, var(--gold) 10%, transparent), 0 14px 34px rgba(0, 0, 0, .38);
+  --tv-font-head: "Suez One", "Frank Ruhl Libre", Georgia, serif;
+  --tv-bg: radial-gradient(1500px 860px at 50% -10%, #6e1c30 0%, #3a0e19 55%, #1c060c 100%);
+  --tv-tex: repeating-linear-gradient(90deg, rgba(0,0,0,.11) 0 2px, transparent 2px 7px);
+  --tv-panel: rgba(52, 13, 22, .9);
+  --tv-panel-border: 1px solid rgba(226, 191, 122, .45);
+  --tv-radius: 12px;
+  --tv-ink: #f7ece6;
+  --tv-head: #f3dfae;
+  --tv-head-bg: transparent;
+  --tv-head-ink: #f3dfae;
+  --tv-accent: #e2bf7a;
+  --tv-hi: #e2bf7a;
+  --tv-hi-ink: #2a0a12;
+  --tv-foot-bg: #1a050a;
+  --tv-foot-ink: #f3dfae;
+  color-scheme: dark;
+}
+
+/* ---- Emerald: deep forest green and antique gold ---- */
+[data-theme="emerald"] {
+  --font-head: "Bona Nova", "Frank Ruhl Libre", Georgia, serif;
+  --font-body: "Assistant", "Heebo", Arial, sans-serif;
+  --head-weight: 700;
+  --head-track: 0;
+  --radius-card: 14px;
+  --radius-btn: 10px;
+  --bg: #0a1f19;
+  --bg-tex: none;
+  --hero: radial-gradient(900px 480px at 70% -10%, #1d5241 0%, #0e2a21 60%, #0a1f19 100%);
+  --hero-ink: #efdfb0;
+  --hero-sub: #cddbd2;
+  --head-bg: rgba(8, 26, 21, .95);
+  --head-ink: #efdfb0;
+  --head-line: rgba(220, 192, 127, .28);
+  --surface: #112b22;
+  --surface-2: #17382c;
+  --ink: #eef3ee;
+  --ink-soft: #cddbd2;
+  --muted: #8fa89b;
+  --line: #214638;
+  --primary: #dcc07f;
+  --primary-hover: #e9d29d;
+  --on-primary: #0a1f19;
+  --title-ink: #efdfb0;
+  --accent: #dcc07f;
+  --accent-soft: #1b3a2e;
+  --accent-ink: #ead6a2;
+  --gold: #dcc07f;
+  --gold-soft: #1b3a2e;
+  --ok: #8fd4b2; --ok-soft: color-mix(in srgb, #8fd4b2 16%, var(--surface));
+  --warn: #ecc77c; --warn-soft: color-mix(in srgb, #ecc77c 16%, var(--surface));
+  --bad: #eaa98d; --bad-soft: color-mix(in srgb, #eaa98d 16%, var(--surface));
+  --shadow: 0 1px 0 color-mix(in srgb, var(--gold) 10%, transparent), 0 14px 34px rgba(0, 0, 0, .38);
+  --tv-font-head: "Bona Nova", "Frank Ruhl Libre", Georgia, serif;
+  --tv-bg: radial-gradient(1500px 860px at 50% -10%, #1f5a47 0%, #0d2a21 55%, #061510 100%);
+  --tv-tex: none;
+  --tv-panel: rgba(14, 38, 30, .9);
+  --tv-panel-border: 1px solid rgba(220, 192, 127, .4);
+  --tv-radius: 16px;
+  --tv-ink: #eef3ee;
+  --tv-head: #efdfb0;
+  --tv-head-bg: transparent;
+  --tv-head-ink: #efdfb0;
+  --tv-accent: #dcc07f;
+  --tv-hi: #dcc07f;
+  --tv-hi-ink: #0a1f19;
+  --tv-foot-bg: #05120e;
+  --tv-foot-ink: #efdfb0;
+  color-scheme: dark;
+}
+
+/* ---- Platinum: graphite and brushed silver, light modern type ---- */
+[data-theme="platinum"] {
+  --font-head: "Heebo", "Assistant", Arial, sans-serif;
+  --font-body: "Heebo", "Assistant", Arial, sans-serif;
+  --head-weight: 300;
+  --head-track: -.01em;
+  --radius-card: 4px;
+  --radius-btn: 2px;
+  --bg: #121417;
+  --bg-tex: none;
+  --hero: linear-gradient(160deg, #23272d 0%, #15181c 55%, #121417 100%);
+  --hero-ink: #f6f8fa;
+  --hero-sub: #cfd4da;
+  --head-bg: rgba(18, 20, 23, .95);
+  --head-ink: #f6f8fa;
+  --head-line: rgba(223, 227, 232, .2);
+  --surface: #1a1d21;
+  --surface-2: #23272c;
+  --ink: #f1f3f5;
+  --ink-soft: #cfd4da;
+  --muted: #8d949d;
+  --line: #2e3339;
+  --primary: #e3e7ec;
+  --primary-hover: #ffffff;
+  --on-primary: #121417;
+  --title-ink: #f6f8fa;
+  --accent: #a9bdd1;
+  --accent-soft: #20272f;
+  --accent-ink: #c9d8e6;
+  --gold: #b9c0c8;
+  --gold-soft: #23272c;
+  --ok: #8fd4b2; --ok-soft: color-mix(in srgb, #8fd4b2 16%, var(--surface));
+  --warn: #ecc77c; --warn-soft: color-mix(in srgb, #ecc77c 16%, var(--surface));
+  --bad: #eaa98d; --bad-soft: color-mix(in srgb, #eaa98d 16%, var(--surface));
+  --shadow: 0 1px 0 rgba(255, 255, 255, .05), 0 14px 34px rgba(0, 0, 0, .4);
+  --tv-font-head: "Heebo", "Assistant", Arial, sans-serif;
+  --tv-bg: linear-gradient(160deg, #262a31 0%, #14171a 50%, #0b0d0f 100%);
+  --tv-tex: repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 1px, transparent 1px 4px);
+  --tv-panel: rgba(24, 27, 31, .92);
+  --tv-panel-border: 1px solid rgba(223, 227, 232, .28);
+  --tv-radius: 4px;
+  --tv-ink: #f1f3f5;
+  --tv-head: #f6f8fa;
+  --tv-head-bg: transparent;
+  --tv-head-ink: #f6f8fa;
+  --tv-accent: #a9bdd1;
+  --tv-hi: #e3e7ec;
+  --tv-hi-ink: #121417;
+  --tv-foot-bg: #0a0b0d;
+  --tv-foot-ink: #e3e7ec;
+  color-scheme: dark;
+}
+
+/* ---- Techelet: white and the blue of the tzitzit thread, with silver ---- */
+[data-theme="techelet"] {
+  --font-head: "David Libre", "Frank Ruhl Libre", Georgia, serif;
+  --font-body: "Assistant", "Heebo", Arial, sans-serif;
+  --head-weight: 700;
+  --head-track: 0;
+  --radius-card: 12px;
+  --radius-btn: 8px;
+  --bg: #f3f7fc;
+  --bg-tex: none;
+  --hero: linear-gradient(180deg, #dfeaf7 0%, #f3f7fc 100%);
+  --hero-ink: #123a6e;
+  --hero-sub: #34495f;
+  --head-bg: rgba(255, 255, 255, .93);
+  --head-ink: #123a6e;
+  --head-line: #d5e2ef;
+  --surface: #ffffff;
+  --surface-2: #e9f1fa;
+  --ink: #10233b;
+  --ink-soft: #34495f;
+  --muted: #6a7d92;
+  --line: #d9e5f0;
+  --primary: #1f5fae;
+  --primary-hover: #2c70c2;
+  --on-primary: #ffffff;
+  --title-ink: #123a6e;
+  --accent: #2a67b8;
+  --accent-soft: #e3eefa;
+  --accent-ink: #1d4f93;
+  --gold: #9aa7b6;
+  --gold-soft: #eef2f6;
+  --ok: #2f7a5a; --ok-soft: #e5f2eb;
+  --warn: #96661a; --warn-soft: #faf0dc;
+  --bad: #a3442b; --bad-soft: #f8e7e1;
+  --shadow: 0 1px 2px rgba(18, 58, 110, .06), 0 8px 24px rgba(18, 58, 110, .07);
+  --tv-font-head: "David Libre", "Frank Ruhl Libre", Georgia, serif;
+  --tv-bg: linear-gradient(180deg, #e6f0fa 0%, #cfdff1 100%);
+  --tv-tex: none;
+  --tv-panel: rgba(255, 255, 255, .95);
+  --tv-panel-border: 1px solid #c6d6e8;
+  --tv-radius: 18px;
+  --tv-ink: #10233b;
+  --tv-head: #123a6e;
+  --tv-head-bg: linear-gradient(100deg, #123a6e 0%, #1f5fae 100%);
+  --tv-head-ink: #ffffff;
+  --tv-accent: #2a67b8;
+  --tv-hi: #1f5fae;
+  --tv-hi-ink: #ffffff;
+  --tv-foot-bg: #0e2c55;
+  --tv-foot-ink: #eaf2fb;
+  color-scheme: light;
+}
+
+/* ---- Kotel: Jerusalem stone, olive and bronze, square-cut like ashlar ---- */
+[data-theme="kotel"] {
+  --font-head: "Frank Ruhl Libre", "Noto Serif Hebrew", Georgia, serif;
+  --font-body: "Assistant", "Heebo", Arial, sans-serif;
+  --head-weight: 700;
+  --head-track: -.005em;
+  --radius-card: 4px;
+  --radius-btn: 4px;
+  --bg: #f2eadb;
+  --bg-tex: none;
+  --hero: linear-gradient(180deg, #e7dcc6 0%, #f2eadb 100%);
+  --hero-ink: #383d1f;
+  --hero-sub: #524a3c;
+  --head-bg: rgba(250, 245, 235, .94);
+  --head-ink: #383d1f;
+  --head-line: #dfd2ba;
+  --surface: #fbf7ee;
+  --surface-2: #eee4d1;
+  --ink: #2a251c;
+  --ink-soft: #524a3c;
+  --muted: #857a66;
+  --line: #e0d4bd;
+  --primary: #525a2f;
+  --primary-hover: #646d3b;
+  --on-primary: #ffffff;
+  --title-ink: #383d1f;
+  --accent: #8a6a2f;
+  --accent-soft: #f0e6ce;
+  --accent-ink: #6f5320;
+  --gold: #a9843f;
+  --gold-soft: #f0e6ce;
+  --ok: #2f7a5a; --ok-soft: #e5f2eb;
+  --warn: #96661a; --warn-soft: #faf0dc;
+  --bad: #a3442b; --bad-soft: #f8e7e1;
+  --shadow: 0 1px 2px rgba(60, 45, 15, .07), 0 8px 22px rgba(60, 45, 15, .08);
+  --tv-font-head: "Frank Ruhl Libre", "Noto Serif Hebrew", Georgia, serif;
+  --tv-bg: linear-gradient(180deg, #ecdfc7 0%, #dccba9 100%);
+  --tv-tex: repeating-linear-gradient(0deg, rgba(90,70,30,.10) 0 2px, transparent 2px 180px), repeating-linear-gradient(90deg, rgba(90,70,30,.07) 0 2px, transparent 2px 340px);
+  --tv-panel: rgba(252, 248, 240, .95);
+  --tv-panel-border: 1px solid #cdbb98;
+  --tv-radius: 4px;
+  --tv-ink: #2a251c;
+  --tv-head: #383d1f;
+  --tv-head-bg: transparent;
+  --tv-head-ink: #383d1f;
+  --tv-accent: #8a6a2f;
+  --tv-hi: #525a2f;
+  --tv-hi-ink: #ffffff;
+  --tv-foot-bg: #383d1f;
+  --tv-foot-ink: #f2eadb;
+  color-scheme: light;
+}
+
+/* ---- Sefer: cream paper and black ink, set like the title page of a sefer ---- */
+[data-theme="sefer"] {
+  --font-head: "Frank Ruhl Libre", "David Libre", Georgia, serif;
+  --font-body: "David Libre", "Frank Ruhl Libre", Georgia, serif;
+  --head-weight: 800;
+  --head-track: -.01em;
+  --radius-card: 2px;
+  --radius-btn: 2px;
+  --bg: #f6f0e1;
+  --bg-tex: none;
+  --hero: linear-gradient(180deg, #efe6d1 0%, #f6f0e1 100%);
+  --hero-ink: #1b1712;
+  --hero-sub: #3d362b;
+  --head-bg: rgba(255, 252, 244, .95);
+  --head-ink: #1b1712;
+  --head-line: #1b1712;
+  --surface: #fffdf6;
+  --surface-2: #f0e8d5;
+  --ink: #1b1712;
+  --ink-soft: #3d362b;
+  --muted: #766b59;
+  --line: #e2d7bf;
+  --primary: #1b1712;
+  --primary-hover: #3a3228;
+  --on-primary: #fffdf6;
+  --title-ink: #1b1712;
+  --accent: #8c2f23;
+  --accent-soft: #f4e3dc;
+  --accent-ink: #7a261b;
+  --gold: #8c2f23;
+  --gold-soft: #f4e3dc;
+  --ok: #2f7a5a; --ok-soft: #e5f2eb;
+  --warn: #96661a; --warn-soft: #faf0dc;
+  --bad: #a3442b; --bad-soft: #f8e7e1;
+  --shadow: 0 1px 0 rgba(27, 23, 18, .06), 0 8px 20px rgba(60, 45, 15, .07);
+  --tv-font-head: "Frank Ruhl Libre", "David Libre", Georgia, serif;
+  --tv-bg: linear-gradient(180deg, #f8f2e3 0%, #ece2c9 100%);
+  --tv-tex: none;
+  --tv-panel: #fffdf6;
+  --tv-panel-border: 2px solid #1b1712;
+  --tv-radius: 2px;
+  --tv-ink: #1b1712;
+  --tv-head: #1b1712;
+  --tv-head-bg: transparent;
+  --tv-head-ink: #1b1712;
+  --tv-accent: #8c2f23;
+  --tv-hi: #1b1712;
+  --tv-hi-ink: #fffdf6;
+  --tv-foot-bg: #1b1712;
+  --tv-foot-ink: #f6f0e1;
+  color-scheme: light;
+}
+
+/* ---- Marble: white stone, black and a hairline of gold; large quiet type ---- */
+[data-theme="marble"] {
+  --font-head: "Bona Nova", "Frank Ruhl Libre", Georgia, serif;
+  --font-body: "Heebo", "Assistant", Arial, sans-serif;
+  --head-weight: 400;
+  --head-track: -.01em;
+  --radius-card: 0px;
+  --radius-btn: 0px;
+  --bg: #f5f5f3;
+  --bg-tex: none;
+  --hero: linear-gradient(120deg, #ffffff 0%, #f1f0ec 100%);
+  --hero-ink: #111111;
+  --hero-sub: #444444;
+  --head-bg: rgba(255, 255, 255, .95);
+  --head-ink: #111111;
+  --head-line: #e2e0da;
+  --surface: #ffffff;
+  --surface-2: #f0efeb;
+  --ink: #1a1a1a;
+  --ink-soft: #444444;
+  --muted: #7d7b76;
+  --line: #e4e2dd;
+  --primary: #1a1a1a;
+  --primary-hover: #383838;
+  --on-primary: #ffffff;
+  --title-ink: #111111;
+  --accent: #a8894f;
+  --accent-soft: #f5efe2;
+  --accent-ink: #7f6532;
+  --gold: #b8975a;
+  --gold-soft: #f5efe2;
+  --ok: #2f7a5a; --ok-soft: #e5f2eb;
+  --warn: #96661a; --warn-soft: #faf0dc;
+  --bad: #a3442b; --bad-soft: #f8e7e1;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .04), 0 10px 30px rgba(0, 0, 0, .05);
+  --tv-font-head: "Bona Nova", "Frank Ruhl Libre", Georgia, serif;
+  --tv-bg: linear-gradient(135deg, #fbfbfa 0%, #ecebe7 100%);
+  --tv-tex: linear-gradient(118deg, transparent 0 31%, rgba(120,115,105,.10) 31.2%, transparent 31.6% 58%, rgba(120,115,105,.07) 58.2%, transparent 58.5%), linear-gradient(72deg, transparent 0 44%, rgba(120,115,105,.06) 44.2%, transparent 44.5% 81%, rgba(120,115,105,.08) 81.2%, transparent 81.5%);
+  --tv-panel: rgba(255, 255, 255, .94);
+  --tv-panel-border: 1px solid #dcd9d1;
+  --tv-radius: 0px;
+  --tv-ink: #1a1a1a;
+  --tv-head: #111111;
+  --tv-head-bg: transparent;
+  --tv-head-ink: #111111;
+  --tv-accent: #a8894f;
+  --tv-hi: #1a1a1a;
+  --tv-hi-ink: #ffffff;
+  --tv-foot-bg: #111111;
+  --tv-foot-ink: #f5f5f3;
+  color-scheme: light;
+}
+
+/* ---- Argaman: ivory and royal purple with gold, generous and festive ---- */
+[data-theme="argaman"] {
+  --font-head: "Suez One", "Frank Ruhl Libre", Georgia, serif;
+  --font-body: "Assistant", "Heebo", Arial, sans-serif;
+  --head-weight: 400;
+  --head-track: 0;
+  --radius-card: 18px;
+  --radius-btn: 999px;
+  --bg: #faf6f0;
+  --bg-tex: none;
+  --hero: linear-gradient(135deg, #f3e6f1 0%, #f7ecdf 100%);
+  --hero-ink: #43154a;
+  --hero-sub: #4a3a4d;
+  --head-bg: rgba(255, 252, 248, .94);
+  --head-ink: #43154a;
+  --head-line: #ecdfe6;
+  --surface: #fffdfb;
+  --surface-2: #f5ecf2;
+  --ink: #241726;
+  --ink-soft: #4a3a4d;
+  --muted: #84748a;
+  --line: #ebdfe6;
+  --primary: #5a1f5e;
+  --primary-hover: #702a75;
+  --on-primary: #ffffff;
+  --title-ink: #43154a;
+  --accent: #8a3f8f;
+  --accent-soft: #f5e8f4;
+  --accent-ink: #5a1f5e;
+  --gold: #b8935a;
+  --gold-soft: #f6eedd;
+  --ok: #2f7a5a; --ok-soft: #e5f2eb;
+  --warn: #96661a; --warn-soft: #faf0dc;
+  --bad: #a3442b; --bad-soft: #f8e7e1;
+  --shadow: 0 2px 6px rgba(67, 21, 74, .05), 0 12px 28px rgba(67, 21, 74, .08);
+  --tv-font-head: "Suez One", "Frank Ruhl Libre", Georgia, serif;
+  --tv-bg: linear-gradient(180deg, #f8eef5 0%, #ecdbe9 100%);
+  --tv-tex: none;
+  --tv-panel: #fffdfb;
+  --tv-panel-border: 0 solid transparent;
+  --tv-radius: 28px;
+  --tv-ink: #241726;
+  --tv-head: #43154a;
+  --tv-head-bg: linear-gradient(100deg, #43154a 0%, #7a2f80 100%);
+  --tv-head-ink: #ffffff;
+  --tv-accent: #8a3f8f;
+  --tv-hi: #5a1f5e;
+  --tv-hi-ink: #ffffff;
+  --tv-foot-bg: #2d0d33;
+  --tv-foot-ink: #f8eef5;
+  color-scheme: light;
+}
+
+/* ---- Erez: cedar and walnut, the wood of the bimah, with cream and brass ---- */
+[data-theme="erez"] {
+  --font-head: "Bona Nova", "Frank Ruhl Libre", Georgia, serif;
+  --font-body: "IBM Plex Sans Hebrew", "Assistant", Arial, sans-serif;
+  --head-weight: 700;
+  --head-track: 0;
+  --radius-card: 10px;
+  --radius-btn: 8px;
+  --bg: #f4eee4;
+  --bg-tex: none;
+  --hero: linear-gradient(180deg, #ead9c2 0%, #f4eee4 100%);
+  --hero-ink: #4a2a14;
+  --hero-sub: #51402f;
+  --head-bg: rgba(255, 250, 243, .94);
+  --head-ink: #4a2a14;
+  --head-line: #e3d3bd;
+  --surface: #fffaf3;
+  --surface-2: #efe3d2;
+  --ink: #2b1e14;
+  --ink-soft: #51402f;
+  --muted: #8a7662;
+  --line: #e6d8c4;
+  --primary: #6b3f22;
+  --primary-hover: #80502d;
+  --on-primary: #ffffff;
+  --title-ink: #4a2a14;
+  --accent: #a0672f;
+  --accent-soft: #f3e3cf;
+  --accent-ink: #7c4c1e;
+  --gold: #b98a4a;
+  --gold-soft: #f5e9d6;
+  --ok: #2f7a5a; --ok-soft: #e5f2eb;
+  --warn: #96661a; --warn-soft: #faf0dc;
+  --bad: #a3442b; --bad-soft: #f8e7e1;
+  --shadow: 0 1px 2px rgba(74, 42, 20, .07), 0 10px 26px rgba(74, 42, 20, .09);
+  --tv-font-head: "Bona Nova", "Frank Ruhl Libre", Georgia, serif;
+  --tv-bg: linear-gradient(180deg, #f1e6d6 0%, #e2cfb4 100%);
+  --tv-tex: none;
+  --tv-panel: rgba(255, 250, 243, .96);
+  --tv-panel-border: 1px solid #d6c2a4;
+  --tv-radius: 12px;
+  --tv-ink: #2b1e14;
+  --tv-head: #4a2a14;
+  --tv-head-bg: linear-gradient(rgba(40, 22, 10, .25), rgba(40, 22, 10, .45)), #4a2f1d url(../img/desk.jpg) center / cover;
+  --tv-head-ink: #f6ead6;
+  --tv-accent: #a0672f;
+  --tv-hi: #6b3f22;
+  --tv-hi-ink: #ffffff;
+  --tv-foot-bg: #33200f;
+  --tv-foot-ink: #f4eee4;
+  color-scheme: light;
+}
+
+/* ---------- a face of its own for each ---------- */
+/* Platinum: thin type and cool steel, no warmth anywhere */
+[data-theme="platinum"] .tv-clock { font-weight: 300; color: var(--tv-head-ink); letter-spacing: -.03em; }
+[data-theme="platinum"] .tv-brand .he, [data-theme="platinum"] .tv-title .he, [data-theme="platinum"] .tv-ch .he, [data-theme="platinum"] .tv-welcome .he { font-weight: 300; }
+[data-theme="platinum"] .hero h1 { font-weight: 300; letter-spacing: -.02em; }
+[data-theme="platinum"] h1, [data-theme="platinum"] h2 { font-weight: 400; }
+[data-theme="platinum"] h3 { font-weight: 500; }
+[data-theme="platinum"] .hero .timecard .big .v { font-weight: 300; color: var(--title-ink); }
+
+/* Parochet: a fringe of gold under the head, like the hem of the curtain */
+[data-theme="parochet"] .tv-head { border-bottom: 3px solid var(--gold); }
+[data-theme="parochet"] .tv-head::after { bottom: -16px; height: 8px; background: repeating-linear-gradient(90deg, var(--gold) 0 3px, transparent 3px 11px); opacity: .7; }
+[data-theme="parochet"] .tv-cols { padding-top: 30px; padding-bottom: 14px; }
+
+/* Techelet: a blue head with white letters, silver rules */
+[data-theme="techelet"] .tv-head { border-bottom: 3px solid #c9d3de; }
+[data-theme="techelet"] .tv-head::after { display: none; }
+[data-theme="techelet"] .tv-stage { --tv-frame: 1px solid #c9d7e6; }
+[data-theme="techelet"] .tv-ch { border-bottom-color: var(--tv-hi); }
+[data-theme="techelet"] .tv-stage .tv-ch .he::before, [data-theme="techelet"] .tv-stage .tv-ch .en::before { background: var(--tv-hi); }
+[data-theme="techelet"] .tv-zrow.next { box-shadow: inset -7px 0 0 #b9c6d5, 0 10px 20px -12px color-mix(in srgb, var(--tv-hi) 80%, transparent); }
+
+/* Kotel: square-cut stone; the Shabbat card is a block, not an arch */
+[data-theme="kotel"] .hero .timecard { border-radius: 4px; padding: 34px 32px 28px; outline-offset: -9px; }
+[data-theme="kotel"] .hero { background-image: repeating-linear-gradient(0deg, rgba(90, 70, 30, .07) 0 1px, transparent 1px 96px), repeating-linear-gradient(90deg, rgba(90, 70, 30, .05) 0 1px, transparent 1px 190px), var(--hero); }
+
+/* Sefer: black double rules, as on a printed title page */
+[data-theme="sefer"] .tv-stage { --tv-frame: 1px solid #1b1712; }
+[data-theme="sefer"] .tv-col, [data-theme="sefer"] .tv-center { outline-offset: -9px; box-shadow: none; }
+[data-theme="sefer"] .tv-head { border-bottom: 3px solid #1b1712; }
+[data-theme="sefer"] .tv-head::after { background: #1b1712; bottom: -8px; }
+[data-theme="sefer"] .tv-ch { border-bottom: 2px solid #1b1712; }
+[data-theme="sefer"] .tv-welcome .he { font-weight: 800; }
+[data-theme="sefer"] .tv-zrow.next { border-radius: 2px; box-shadow: none; }
+[data-theme="sefer"] .tv-foot { border-top: 0; }
+[data-theme="sefer"] .hero .timecard { border-radius: 2px; border: 2px solid var(--ink); outline: 1px solid var(--ink); outline-offset: -8px; box-shadow: none; padding: 34px 32px 28px; }
+[data-theme="sefer"] .hero { box-shadow: inset 0 -3px 0 var(--ink); }
+[data-theme="sefer"] .card, [data-theme="sefer"] .tile, [data-theme="sefer"] .kpi { box-shadow: none; border-color: color-mix(in srgb, var(--ink) 28%, var(--line)); }
+[data-theme="sefer"] .site-head { border-bottom: 2px solid var(--ink); }
+
+/* Marble: no corners, no shadows, a hairline of gold */
+[data-theme="marble"] .tv-stage { --tv-frame: 1px solid color-mix(in srgb, var(--gold) 60%, transparent); }
+[data-theme="marble"] .tv-ch { border-bottom: 1px solid var(--tv-ink); }
+[data-theme="marble"] .tv-head { border-bottom: 1px solid var(--gold); }
+[data-theme="marble"] .tv-welcome .he { font-weight: 400; letter-spacing: .02em; }
+[data-theme="marble"] .hero .timecard { border-radius: 0; border: 0; border-top: 1px solid var(--gold); outline: 1px solid var(--line); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .18); }
+[data-theme="marble"] .hero .timecard .big .v { font-family: var(--font-head); font-weight: 400; letter-spacing: 0; }
+[data-theme="marble"] .hero h1 { font-weight: 400; letter-spacing: -.01em; font-size: clamp(38px, 5.6vw, 66px); }
+[data-theme="marble"] .tile .ic { background: transparent; border: 1px solid var(--gold); color: var(--accent-ink); border-radius: 0; }
+[data-theme="marble"] .tile, [data-theme="marble"] .card, [data-theme="marble"] .kpi { border-radius: 0; box-shadow: none; }
+
+/* Argaman: the head in purple, gold dots under the titles */
+[data-theme="argaman"] .tv-brand svg { color: #fff; }
+[data-theme="argaman"] .tv-head { border-bottom: 0; }
+
+/* Erez: the head is the wood itself */
+[data-theme="erez"] .tv-head { border-bottom: 3px solid var(--gold); box-shadow: 0 10px 22px -10px rgba(40, 22, 10, .55); }
+[data-theme="erez"] .tv-head::after { display: none; }
+[data-theme="erez"] .tv-brand svg { color: #f6ead6; }

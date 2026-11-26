@@ -65,7 +65,7 @@
     }
     if (kind === "design") {
       var brands = UI().BRANDS;
-      return head(L("עיצוב", "Design"), L("אלה רק ארבע דוגמאות. העיצוב ניתן להתאמה מלאה: לוגו, צבעים, גופנים, צורות וכל מילה. המערכת עצמה נשארת זהה.", "These are only four examples. The design is fully customizable: logo, colors, fonts, shapes and every word. The system itself stays the same.")) +
+      return head(L("עיצוב", "Design"), L("אלה 14 דוגמאות. העיצוב ניתן להתאמה מלאה: לוגו, צבעים, גופנים, צורות וכל מילה. המערכת עצמה נשארת זהה.", "These are 14 examples. The design is fully customizable: logo, colors, fonts, shapes and every word. The system itself stays the same.")) +
         '<div class="pop-themes">' + UI().THEMES.map(function (t) { return '<button class="pop-theme" data-theme-pick="' + t.id + '" aria-pressed="' + (S.prefs.theme === t.id) + '"><span class="sw" style="background:' + t.c + '"></span><b>' + esc(S.N(t)) + "</b></button>"; }).join("") + "</div>" +
         '<div class="pop-links"><a href="#/?to=looks">' + L("לנסות עם השם שלכם", "Try it with your name") + "</a></div>";
     }

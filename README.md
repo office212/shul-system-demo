@@ -26,7 +26,7 @@
   <img alt="No backend" src="https://img.shields.io/badge/backend-none-3b2416?style=flat-square&labelColor=24160c">
   <img alt="Data" src="https://img.shields.io/badge/data-in_your_browser-3b2416?style=flat-square&labelColor=24160c">
   <img alt="Languages" src="https://img.shields.io/badge/עברית_%7C_English-0e2c4c?style=flat-square">
-  <img alt="Designs" src="https://img.shields.io/badge/designs-4_examples-0e2c4c?style=flat-square">
+  <img alt="Designs" src="https://img.shields.io/badge/designs-14_examples-0e2c4c?style=flat-square">
   <img alt="Fictional" src="https://img.shields.io/badge/data-100%25_fictional-0e2c4c?style=flat-square">
 </p>
 
@@ -176,7 +176,7 @@ An always-on board for the shul's TV. It shows the **zmanim**, the **davening ti
 
 ## 🎨 It looks like your shul
 
-The design is a separate layer over the same system, and every part of it can be customized. Four example designs show the range. On the drawer page you can also type in the shul's name and watch the website and member account change live.
+The design is a separate layer over the same system, and every part of it can be customized. Fourteen example designs show the range: the first four (Jerusalem, Clear, Warm, Royal) and a collection of ten for Orthodox shuls (Heichal, Parochet, Emerald, Platinum, Techelet, Kotel, Sefer, Marble, Argaman, Erez). Each one restyles the shul screen, the website, the member account and the gabbai system. On the home page and the drawer page you can also type in the shul's name and watch the website and member account change live.
 
 <table>
 <tr>
@@ -200,7 +200,7 @@ The demo bar at the bottom of every page holds the demo controls. On phones it i
 | Control | What it does |
 |:--|:--|
 | 👁️ **Viewing as** | Switch between website visitor, member, finance gabbai, content gabbai, administrator or a new applicant |
-| 🎨 **Design** | Four example designs: Jerusalem, Clear, Warm and Royal. The shul's name and the design can also be tried at the end of the drawer page |
+| 🎨 **Design** | Fourteen example designs. The shul's name and the design can also be tried on the home page |
 | 🧭 **What to try?** | Five guided tasks, each opening the right screen in the right role: record a payment, change a davening time, enter Shabbat nedarim, see it as a member, post to the screen |
 | 🌍 **Language** | Hebrew or English |
 | ↺ **Reset** | Restores the fictional data, the name, the design and the time |
@@ -289,7 +289,8 @@ then visit **http://localhost:8000/**. On GitHub Pages, serve the repository roo
 ```text
 index.html                 the shell
 css/
-  app.css                  site styles and the four example designs (tokens)
+  app.css                  site styles and the first four example designs (tokens)
+  themes.css               the collection: ten more example designs, each a set of tokens and a family
   product.css              the modern base for every product screen and each design's personality
   tv.css                   the TV board
   home.css                 the marketing home page and the demo request
