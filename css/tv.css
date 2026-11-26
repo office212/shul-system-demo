@@ -239,3 +239,16 @@ body.bare { background: #000; overflow: hidden; }
 .compact .tv-sbt .en { font-size: 13px; }
 .tv-stage.lang-en .compact .tv-sbt .he { font-size: 13px; }
 .tv-stage.lang-en .compact .tv-sbt .en { font-size: 24px; }
+
+/* English-primary: a long shul name stays inside the head */
+.tv-stage.lang-en .tv-brand .en { font-size: 37px; line-height: 1.04; text-wrap: balance; }
+.tv-stage.lang-en .tv-brand .he { font-size: 20px; line-height: 1.1; }
+.tv-brand > div { min-width: 0; }
+.tv-stage.lang-en .tv-parline .en { font-size: 17px; }
+.tv-stage.lang-en .tv-parline .he { font-size: 11px; }
+.tv-stage.lang-en .compact .tv-sbt .en { font-size: 18.5px; }
+.tv-stage.lang-en .compact .tv-sbt .he { font-size: 11px; }
+.tv-parline, .compact .tv-sbt { justify-content: center; }
+.tv-stage.lang-en .tv-parline .en { font-size: 16px; }
+.tv-stage.lang-en .tv-parline .he { display: none; }
+.tv-stage.lang-en .tv-ch .he { font-size: 17px; letter-spacing: .06em; }

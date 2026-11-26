@@ -104,3 +104,14 @@ td bdi, td .num, td.num, td[dir="ltr"] { white-space: nowrap; }
 [data-theme="classic"] { --gold-ink: #86662f; --muted: #6c6457; }
 [data-kin="classic"] .eyebrow { color: var(--gold-ink, var(--gold)); }
 [data-theme="warm"] { --gold-ink: var(--accent-ink); --muted: #7a6052; }
+
+/* ---------- phones, in both languages ---------- */
+select[data-k="mid"] { min-width: 136px; }
+.dw-navl { white-space: nowrap; }
+@media (max-width: 520px) {
+  .site-head .brand { flex: 1 1 0; min-width: 0; }
+  .site-head .brand b { max-width: none; font-size: 14.5px; line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .site-head .spacer { display: none; }
+  .dw-top nav > .dw-navl { font-size: 13px; padding: 8px 4px; }
+  .dw-top { gap: 8px; }
+}
