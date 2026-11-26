@@ -242,7 +242,7 @@
   function renderChrome() {
     if (window.SHUL_PRESENTER) window.SHUL_PRESENTER.render();
     var head = document.getElementById("sitehead"), foot = document.getElementById("sitefoot"), sb = document.getElementById("salesbar");
-    var pg = (location.hash || "#/").split("?")[0], salesPage = pg === "#/" || pg === "#" || pg === "" || pg === "#/proposal";
+    var pg = (location.hash || "#/").split("?")[0], salesPage = pg === "#/" || pg === "#" || pg === "" || pg === "#/proposal" || pg === "#/drawer";
     if (sb) { sb.hidden = layout === "bare" || salesPage; sb.innerHTML = sb.hidden ? "" : salesbarHtml(); }
     if (layout !== "site") { head.innerHTML = ""; foot.innerHTML = ""; renderBell(); return; }
     var r = S.role(), u = S.currentUser();

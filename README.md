@@ -32,7 +32,7 @@
 
 <br>
 
-<a href="https://office212.github.io/shul-system-demo/">
+<a href="https://office212.github.io/shul-system-demo/#/drawer">
   <img src=".github/readme/drawer.gif" alt="The gabbai's drawer opens; the Mincha slip is picked up and the real system moves Mincha by five minutes, live on the screen" width="88%">
 </a>
 
@@ -44,7 +44,7 @@
 
 ## 🗄️ The gabbai's drawer
 
-The demo opens on the gabbai's drawer (`#/`): a walnut desk and an open drawer, seen from above, holding
+The site opens on the marketing home page (`#/`): what the system is, its six parts shown as live product frames, what it replaces, how a shul gets started, common questions and the demo request. The gabbai's drawer tells the same story another way at `#/drawer`: a walnut desk and an open drawer, seen from above, holding
 what a gabbai carries around. **Pick one up and the real system, running on the demo data, shows what replaces it.**
 When the drawer is empty, it closes.
 
@@ -218,7 +218,8 @@ The demo bar at the bottom of every page holds the demo controls. On phones it i
 
 | Address | What |
 |---|---|
-| `#/` | The gabbai's drawer: seven objects (davening times, dues, Shabbat nedarim, a flyer, yahrzeits, the screen, the keys to roles and backup); each one, picked up, opens the live system that replaces it; what else is included; try it; make it yours (the shul's name and a design, live); contact |
+| `#/` | The home page: the offer, the six parts of the system running live (the screen, davening times and bulletin, finance and nedarim, the member account, website and donations, permissions and backup), today versus with the system, getting started, make it yours, try it, questions, contact |
+| `#/drawer` | The gabbai's drawer: seven objects (davening times, dues, Shabbat nedarim, a flyer, yahrzeits, the screen, the keys to roles and backup); each one, picked up, opens the live system that replaces it; what else is included; try it; make it yours (the shul's name and a design, live); contact |
 | `#/proposal` | Personalized demo and proposal request |
 
 </details>
@@ -285,6 +286,7 @@ css/
   app.css                  site styles and the four example designs (tokens)
   product.css              the modern base for every product screen and each design's personality
   tv.css                   the TV board
+  home.css                 the marketing home page and the demo request
   drawer.css               the gabbai's drawer
   paper.css                the paper-and-ink look of the demo bar and the contact strip
                            (the product screens keep their example designs)
@@ -295,15 +297,16 @@ js/
   ui.js                    router and layouts (site, admin shell, experience, TV), header,
                            modals, toasts, simulated push, bell
   presenter.js             the presentation dock
-  drawer.js                the gabbai's drawer (#/)
+  home.js                  the marketing home page (#/) and the demo request (#/proposal)
+  drawer.js                the gabbai's drawer (#/drawer)
   sound.js                 paper, keys and remote sounds (Web Audio)
   experience.js            shared live-frame helpers, the shul-name and design control,
-                           older addresses, and the proposal page (#/proposal)
+                           and older addresses
   tv.js, sheet.js          the TV screen and the Shabbat bulletin
   views-*.js               public pages, congregant, finance, gabbai and admin screens
   vendor/qrcode.js         QR code generator by Kazuhiko Arase (MIT license),
                            for the screen's donation code
-img/                       desk.jpg, oak.jpg, liner.jpg, grain.png: the drawer's generated
+img/                       drawer.jpg (the drawer, pictured on the home page) · desk.jpg, oak.jpg, liner.jpg, grain.png: the drawer's generated
                            wood and paper textures · icon.svg · og.png (link preview)
 audio/                     drawer-open.mp3, drawer-close.mp3 (Pixabay Content License)
 .github/readme/            the art and screenshots on this page
