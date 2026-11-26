@@ -39,7 +39,7 @@ names them on the drawer (the remote, and the list below it, marked "not in this
 ## Presentation only (not product features)
 
 Perspective switcher, example designs and brand color, the shul-name field, the demo clock,
-reset, the gabbai's drawer (`#/`, its notes and objects are fictional; every answer in it is a row of the table above),
+reset, the marketing home page (`#/`; every claim on it is a row of the table above), the gabbai's drawer (`#/drawer`, its notes and objects are fictional; every answer in it is a row of the table above),
 "make it yours" (the shul's name and design) and the proposal request.
 These exist to present the product and add no shul management capability.
 

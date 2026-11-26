@@ -1,4 +1,4 @@
-/* Shul System sales demo | #/ the gabbai's drawer.
+/* Shul System sales demo | #/drawer the gabbai's drawer.
    One idea, for a buyer: a desk drawer, seen from above, holding what a gabbai carries around:
    a slip with the new Mincha time, an envelope of dues, the nedarim notebook, a flyer to put up,
    a yahrzeit card, the screen's remote and the keys. Pick one up and the real system (live, on
@@ -208,9 +208,9 @@
   function deskTop(page) {
     var lang = '<span class="dw-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-xl="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-xl="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></span>';
     var nav = page === "home"
-      ? '<button type="button" data-open-first>' + L("איך זה עובד", "How it works") + '</button><button type="button" data-go="dwTry">' + L("לנסות", "Try it") + "</button>" + '<button type="button" class="dw-snd" data-snd aria-pressed="' + (!window.SHUL_SOUND || window.SHUL_SOUND.isOn()) + '" aria-label="' + L("צליל", "Sound") + '" title="' + L("צליל", "Sound") + '">' + SPK + "</button>" + lang + '<a class="dw-cta" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a>"
-      : '<a class="dw-navl" href="#/">' + L("המגירה", "The drawer") + '</a><button type="button" data-enter>' + L("להיכנס למערכת", "Enter the system") + "</button>" + lang;
-    return '<header class="dw-top"><a class="dw-mark" href="#/">' + UI.logo() + "<span>Shul System</span></a><nav>" + nav + "</nav></header>";
+      ? '<button type="button" data-open-first>' + L("איך זה עובד", "How it works") + '</button><a class="dw-navl" href="#/">' + L("לאתר הראשי", "Main site") + "</a>" + '<button type="button" class="dw-snd" data-snd aria-pressed="' + (!window.SHUL_SOUND || window.SHUL_SOUND.isOn()) + '" aria-label="' + L("צליל", "Sound") + '" title="' + L("צליל", "Sound") + '">' + SPK + "</button>" + lang + '<a class="dw-cta" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a>"
+      : '<a class="dw-navl" href="#/drawer">' + L("המגירה", "The drawer") + '</a><button type="button" data-enter>' + L("להיכנס למערכת", "Enter the system") + "</button>" + lang;
+    return '<header class="dw-top"><a class="dw-mark" href="#/" title="' + L("לאתר הראשי", "Main site") + '">' + UI.logo() + "<span>Shul System</span></a><nav>" + nav + "</nav></header>";
   }
   function bindTop(root) {
     root.querySelectorAll("[data-snd]").forEach(function (b) { b.addEventListener("click", function () { var A = window.SHUL_SOUND; if (!A) return; b.setAttribute("aria-pressed", A.toggle()); }); });
@@ -219,7 +219,7 @@
   }
   window.SHUL_DW = { top: deskTop, bindTop: bindTop };
 
-  UI.route("/", {
+  UI.route("/drawer", {
     layout: "xp", live: false, title: function () { return L("המגירה של הגבאי", "The gabbai's drawer"); },
     render: function (app, arg, params) {
       if (cleanup) cleanup();
@@ -409,7 +409,7 @@
 
       /* arriving with ?open=<object> or ?to=<section> (also from older addresses) */
       if (params.open || params.to) {
-        try { history.replaceState(null, "", location.pathname + location.search + "#/"); } catch (e) {}
+        try { history.replaceState(null, "", location.pathname + location.search + "#/drawer"); } catch (e) {}
         if (params.open) {
           var oi = -1; OB.forEach(function (o, k) { if (o.id === params.open) oi = k; });
           if (oi >= 0) { drawer.classList.remove("ajar"); drawer.classList.add("open"); opened = true; timers.push(setTimeout(function () { openObj(oi); }, 450)); }
@@ -423,7 +423,7 @@
         if (hold) { hold.ov.remove(); hold = null; }
         document.documentElement.classList.remove("dw-lock"); document.body.classList.remove("pg-dw"); cleanup = null;
       }
-      function onHash() { var h = (location.hash || "#/").split("?")[0]; if (h !== "#/" && h !== "#" && h !== "") stop(); }
+      function onHash() { var h = (location.hash || "#/").split("?")[0]; if (h !== "#/drawer") stop(); }
       window.addEventListener("hashchange", onHash);
       cleanup = stop;
     }

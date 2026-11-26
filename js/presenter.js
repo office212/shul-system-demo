@@ -25,19 +25,19 @@
   function render() {
     var dock = document.getElementById("dock"); if (!dock) return;
     var b = document.body;
-    var home = (location.hash || "#/").split("?")[0]; home = home === "#/" || home === "#" || home === "" || home === "#/proposal";
+    var home = (location.hash || "#/").split("?")[0]; home = home === "#/" || home === "#" || home === "" || home === "#/proposal" || home === "#/drawer";
     if (b.classList.contains("bare") || b.classList.contains("framed") || home) { dock.innerHTML = ""; dock.hidden = true; return; }
     dock.hidden = false;
     var th = UI().THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0];
     var p = curPersp();
     dock.innerHTML = '<div class="dock-bar" role="toolbar" aria-label="' + L("פקדי הדגמה", "Demo controls") + '">' +
-      '<a class="dock-home" href="#/" title="' + L("חזרה לדף הבית", "Back to the home page") + '"><span class="dock-mark">S</span><span class="dock-lbl">' + L("חזרה", "Home") + "</span></a>" +
+      '<a class="dock-home" href="#/" title="' + L("חזרה לאתר הראשי", "Back to the main site") + '"><span class="dock-mark">S</span><span class="dock-lbl">' + L("לאתר הראשי", "Main site") + "</span></a>" +
       '<button class="dock-btn" data-pop="persp" aria-haspopup="true">' + ic(p.ic) + '<span class="dock-k">' + L("צפייה בתור", "Viewing as") + "</span><b>" + esc(L(p.he, p.en)) + "</b></button>" +
       '<button class="dock-btn" data-pop="design" aria-haspopup="true"><span class="dock-sw" style="background:' + th.c + '"></span><span class="dock-k">' + L("עיצוב", "Design") + "</span><b>" + esc(S.N(th)) + "</b></button>" +
       '<button class="dock-btn dock-try" data-pop="try" aria-haspopup="true">' + ic("sparkle") + '<b>' + L("מה לנסות?", "What to try?") + "</b></button>" +
       '<div class="dock-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-lang="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-lang="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></div>' +
       '<button class="dock-btn dock-more" data-pop="more" aria-label="' + L("פקדי הדגמה", "Demo controls") + '">' + ic("menu") + '<span class="dock-tabl">' + L("פקדי הדגמה", "Demo controls") + "</span></button>" +
-      '<a class="dock-cta hide-md" href="#/proposal">' + L("בקשת הצעה", "Request a proposal") + "</a></div>" +
+      '<a class="dock-cta hide-md" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a></div>" +
       '<div class="dock-pop" id="dockPop" hidden></div>';
     dock.querySelectorAll("[data-pop]").forEach(function (btn) { btn.addEventListener("click", function (e) { e.stopPropagation(); toggle(btn.getAttribute("data-pop"), btn); }); });
     dock.querySelectorAll("[data-lang]").forEach(function (btn) { btn.addEventListener("click", function () { UI().setLang(btn.getAttribute("data-lang")); }); });
@@ -61,13 +61,13 @@
       return head(L("פרספקטיבה", "Perspective"), L("מחליף את התפקיד בהדגמה בלבד. במערכת האמיתית הכניסה היא עם Google והתפקיד נקבע על ידי המנהל.", "Changes the role in the demo only. In the real system sign-in is with Google and the administrator assigns roles.")) +
         '<div class="pop-list">' + PERSP.map(function (p) {
           return '<button class="pop-item" data-role="' + p.id + '" aria-pressed="' + (S.prefs.role === p.id) + '">' + ic(p.ic, 20) + "<span><b>" + esc(L(p.he, p.en)) + "</b><small>" + esc(L(p.dhe, p.den)) + "</small></span></button>";
-        }).join("") + '</div><div class="pop-links"><a href="#/">' + L("חזרה למגירה", "Back to the drawer") + "</a></div>";
+        }).join("") + '</div><div class="pop-links"><a href="#/">' + L("חזרה לאתר הראשי", "Back to the main site") + "</a></div>";
     }
     if (kind === "design") {
       var brands = UI().BRANDS;
       return head(L("עיצוב", "Design"), L("אלה רק ארבע דוגמאות. העיצוב ניתן להתאמה מלאה: לוגו, צבעים, גופנים, צורות וכל מילה. המערכת עצמה נשארת זהה.", "These are only four examples. The design is fully customizable: logo, colors, fonts, shapes and every word. The system itself stays the same.")) +
         '<div class="pop-themes">' + UI().THEMES.map(function (t) { return '<button class="pop-theme" data-theme-pick="' + t.id + '" aria-pressed="' + (S.prefs.theme === t.id) + '"><span class="sw" style="background:' + t.c + '"></span><b>' + esc(S.N(t)) + "</b></button>"; }).join("") + "</div>" +
-        '<div class="pop-links"><a href="#/?to=dwLooks">' + L("לנסות עם השם שלכם", "Try it with your name") + "</a></div>";
+        '<div class="pop-links"><a href="#/?to=looks">' + L("לנסות עם השם שלכם", "Try it with your name") + "</a></div>";
     }
     return head(L("פקדי הדגמה", "Demo controls"), L("משנים את ההצגה בלבד, לא את המוצר.", "These change the presentation, not the product.")) +
       '<div class="pop-list">' +
@@ -76,7 +76,7 @@
       '<div class="pop-item compact pop-m pop-lang"><span><b>' + L("שפה", "Language") + '</b></span><span class="dock-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-lang="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-lang="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></span></div>' +
       '<a class="pop-item compact" href="#/proposal">' + ic("mail") + "<span><b>" + L("בקשת הדגמה אישית והצעה", "Request a personal demo and proposal") + "</b></span></a>" +
       '<button class="pop-item compact pop-m" data-act="try">' + ic("sparkle") + "<span><b>" + L("מה לנסות?", "What to try?") + "</b></span></button>" +
-      '<a class="pop-item compact" href="#/?to=dwLooks">' + ic("palette") + "<span><b>" + L("עם השם והעיצוב שלכם", "With your name and design") + "</b></span></a>" +
+      '<a class="pop-item compact" href="#/?to=looks">' + ic("palette") + "<span><b>" + L("עם השם והעיצוב שלכם", "With your name and design") + "</b></span></a>" +
       '<button class="pop-item compact" data-act="reset">' + ic("refresh") + "<span><b>" + L("איפוס ההדגמה", "Reset the demo") + "</b><small>" + L("מחזיר את כל הנתונים המדומים, השם והעיצוב", "Restores all fictional data, the name and the design") + "</small></span></button></div>";
   }
   function toggle(kind, btn, keep) {
