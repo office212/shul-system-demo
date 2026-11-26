@@ -286,7 +286,7 @@
     need: "gabbai", title: function () { return L("הגדרות", "Settings"); },
     render: function (app) {
       var sup = S.role() === "super", con = S.can("content");
-      var cards = [[I.sparkle, L("שפת הממשק", "Interface language"), L("עברית או English. נשמר במכשיר הזה.", "Hebrew or English. Saved on this device."), '<div class="lang"><button aria-pressed="' + (S.prefs.lang === "he") + '" data-l="he">עברית</button><button aria-pressed="' + (S.prefs.lang === "en") + '" data-l="en">English</button></div>']];
+      var cards = [[I.globe, L("שפת הממשק", "Interface language"), L("עברית או English. נשמר במכשיר הזה.", "Hebrew or English. Saved on this device."), '<div class="lang"><button aria-pressed="' + (S.prefs.lang === "he") + '" data-l="he">עברית</button><button aria-pressed="' + (S.prefs.lang === "en") + '" data-l="en">English</button></div>']];
       if (con) cards.push([I.clock, L("זמני תפילה", "Davening times"), L("חול (א׳-ה׳), שישי ושבת", "Weekdays (Sun-Thu), Friday and Shabbat"), '<a class="btn sm" href="#/gabbai/tv">' + L("לזמני התפילה", "To davening times") + "</a>"],
         [I.tv, L("המסך", "The screen"), L("כל מילה על המסך" + (sup ? ", בהירות ורענון מרחוק" : ""), "Every word on the screen" + (sup ? ", brightness and remote refresh" : "")), '<a class="btn sm" href="#/gabbai/tv">' + L("להגדרות המסך", "To screen settings") + "</a>"]);
       if (sup) cards.push([I.edit, L("דף הנחיתה", "Landing page"), L("כל מילה בדף הבית, בעברית ובאנגלית", "Every word on the home page, in Hebrew and English"), '<a class="btn sm" href="#/gabbai/landing">' + L("לטקסטים", "To the texts") + "</a>"],

@@ -23,7 +23,7 @@
   function header(page) {
     var links = NAV.map(function (n) { return '<a href="#/?to=' + n[0] + '" data-to="' + n[0] + '">' + L(n[1], n[2]) + "</a>"; }).join("");
     return '<header class="mk-head" id="mkHead"><div class="mk-wrap mk-head-in">' +
-      '<a class="mk-brand" href="#/" data-to="top">' + UI.logo() + "<span><b>Shul System</b><small>" + L("מערכת לניהול בית הכנסת", "Shul management software") + "</small></span></a>" +
+      '<a class="mk-brand" href="#/" data-to="top">' + UI.mark() + "<span>" + UI.wordmark() + "<small>" + L("מערכת לניהול בית הכנסת", "Shul management software") + "</small></span></a>" +
       '<nav class="mk-nav" id="mkNav" aria-label="' + L("ניווט ראשי", "Main") + '">' + links +
       '<a class="mk-nav-demo" href="#/gabbai" data-enter>' + L("הדגמה חיה", "Live demo") + "</a>" +
       '<div class="mk-nav-extra">' + tel("mk-nav-tel") + '<a class="mk-btn" href="#/proposal">' + L("בקשת הדגמה אישית", "Request a personal demo") + "</a></div></nav>" +
@@ -34,7 +34,7 @@
   function footer() {
     var tryLinks = [["super", "#/gabbai", "מערכת הגבאים", "The gabbai system"], ["member", "#/me", "החשבון של המתפלל", "The member account"], ["", "#/tv", "המסך באולם", "The shul screen"], ["visitor", "#/site", "אתר בית הכנסת", "The shul website"]];
     return '<footer class="mk-foot"><div class="mk-wrap mk-foot-grid">' +
-      '<div class="mk-foot-brand"><a class="mk-brand" href="#/" data-to="top">' + UI.logo() + "<span><b>Shul System</b><small>" + L("מערכת לניהול בית הכנסת", "Shul management software") + "</small></span></a><p>" + L("המסך באולם, זמני התפילה, דף השבת, התרומות והחשבונות, במקום אחד.", "The screen, davening times, the Shabbat bulletin, donations and accounts, in one place.") + "</p></div>" +
+      '<div class="mk-foot-brand"><a class="mk-brand" href="#/" data-to="top">' + UI.mark() + "<span>" + UI.wordmark() + "<small>" + L("מערכת לניהול בית הכנסת", "Shul management software") + "</small></span></a><p>" + L("המסך באולם, זמני התפילה, דף השבת, התרומות והחשבונות, במקום אחד.", "The screen, davening times, the Shabbat bulletin, donations and accounts, in one place.") + "</p></div>" +
       "<div><h3>" + L("באתר", "On this site") + "</h3>" + NAV.map(function (n) { return '<a href="#/?to=' + n[0] + '" data-to="' + n[0] + '">' + L(n[1], n[2]) + "</a>"; }).join("") + '<a href="#/drawer">' + L("המגירה של הגבאי", "The gabbai's drawer") + "</a></div>" +
       "<div><h3>" + L("ההדגמה החיה", "The live demo") + "</h3>" + tryLinks.map(function (t) { return '<a href="' + t[1] + '"' + (t[0] ? ' data-role="' + t[0] + '"' : "") + ">" + L(t[2], t[3]) + "</a>"; }).join("") + "</div>" +
       "<div><h3>" + L("יצירת קשר", "Contact") + "</h3>" + tel() + mail() + '<a href="#/proposal">' + L("בקשת הדגמה אישית", "Request a personal demo") + "</a></div></div>" +

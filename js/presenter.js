@@ -31,10 +31,10 @@
     var th = UI().THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0];
     var p = curPersp();
     dock.innerHTML = '<div class="dock-bar" role="toolbar" aria-label="' + L("פקדי הדגמה", "Demo controls") + '">' +
-      '<a class="dock-home" href="#/" title="' + L("חזרה לאתר הראשי", "Back to the main site") + '"><span class="dock-mark">S</span><span class="dock-lbl">' + L("לאתר הראשי", "Main site") + "</span></a>" +
+      '<a class="dock-home" href="#/" title="' + L("חזרה לאתר הראשי", "Back to the main site") + '"><span class="dock-mark">' + UI().mark() + "</span>" + '<span class="dock-lbl">' + L("לאתר הראשי", "Main site") + "</span></a>" +
       '<button class="dock-btn" data-pop="persp" aria-haspopup="true">' + ic(p.ic) + '<span class="dock-k">' + L("צפייה בתור", "Viewing as") + "</span><b>" + esc(L(p.he, p.en)) + "</b></button>" +
       '<button class="dock-btn" data-pop="design" aria-haspopup="true"><span class="dock-sw" style="background:' + th.c + '"></span><span class="dock-k">' + L("עיצוב", "Design") + "</span><b>" + esc(S.N(th)) + "</b></button>" +
-      '<button class="dock-btn dock-try" data-pop="try" aria-haspopup="true">' + ic("sparkle") + '<b>' + L("מה לנסות?", "What to try?") + "</b></button>" +
+      '<button class="dock-btn dock-try" data-pop="try" aria-haspopup="true">' + ic("play") + '<b>' + L("מה לנסות?", "What to try?") + "</b></button>" +
       '<div class="dock-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-lang="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-lang="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></div>' +
       '<button class="dock-btn dock-more" data-pop="more" aria-label="' + L("פקדי הדגמה", "Demo controls") + '">' + ic("menu") + '<span class="dock-tabl">' + L("פקדי הדגמה", "Demo controls") + "</span></button>" +
       '<a class="dock-cta hide-md" href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + "</a></div>" +
@@ -75,7 +75,7 @@
       '<button class="pop-item compact pop-m" data-act="design"><span class="dock-sw" style="background:' + UI().THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0].c + '"></span><span><small>' + L("עיצוב", "Design") + "</small><b>" + esc(S.N(UI().THEMES.filter(function (t) { return t.id === S.prefs.theme; })[0])) + "</b></span></button>" +
       '<div class="pop-item compact pop-m pop-lang"><span><b>' + L("שפה", "Language") + '</b></span><span class="dock-lang" role="group" aria-label="' + L("שפה", "Language") + '"><button data-lang="he" aria-pressed="' + (S.prefs.lang === "he") + '">עב</button><button data-lang="en" aria-pressed="' + (S.prefs.lang === "en") + '">EN</button></span></div>' +
       '<a class="pop-item compact" href="#/proposal">' + ic("mail") + "<span><b>" + L("בקשת הדגמה אישית והצעה", "Request a personal demo and proposal") + "</b></span></a>" +
-      '<button class="pop-item compact pop-m" data-act="try">' + ic("sparkle") + "<span><b>" + L("מה לנסות?", "What to try?") + "</b></span></button>" +
+      '<button class="pop-item compact pop-m" data-act="try">' + ic("play") + "<span><b>" + L("מה לנסות?", "What to try?") + "</b></span></button>" +
       '<a class="pop-item compact" href="#/?to=looks">' + ic("palette") + "<span><b>" + L("עם השם והעיצוב שלכם", "With your name and design") + "</b></span></a>" +
       '<button class="pop-item compact" data-act="reset">' + ic("refresh") + "<span><b>" + L("איפוס ההדגמה", "Reset the demo") + "</b><small>" + L("מחזיר את כל הנתונים המדומים, השם והעיצוב", "Restores all fictional data, the name and the design") + "</small></span></button></div>";
   }

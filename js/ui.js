@@ -37,7 +37,9 @@
     eye: ic('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
     eyeOff: ic('<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4M6.3 6.3C3.6 8.1 2 12 2 12s3.5 7 10 7a9.6 9.6 0 0 0 4.2-1"/>'),
     trash: ic('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'),
-    sparkle: ic('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/>'),
+    sparkle: ic('<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>'),
+    play: ic('<circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/>'),
+    globe: ic('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.8 2.6 15.2 0 18M12 3c-2.6 2.8-2.6 15.2 0 18"/>'),
     palette: ic('<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1-.8-1.4-.8-2.3 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10.5" cy="7.2" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/>'),
     map: ic('<path d="M12 21s-6-5.4-6-11a6 6 0 0 1 12 0c0 5.6-6 11-6 11z"/><circle cx="12" cy="10" r="2.3"/>'),
     phone: ic('<path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/>'),
@@ -54,6 +56,16 @@
       '<path d="M24 16v22M24 22c-3-1-5-3-5.5-6M24 22c3-1 5-3 5.5-6M24 28c-3.4-.8-6-3-6.8-6.2M24 28c3.4-.8 6-3 6.8-6.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
       '<path d="M5 44h38" stroke="var(--gold)" stroke-width="1.6"/></svg>';
   }
+
+  /* the Shul System mark: a shul's arch, a gold inner arch and an open door. The sample
+     congregation keeps its own logo (logo(), above), as each shul's identity is its own. */
+  function mark(cls) {
+    return '<svg class="bm ' + (cls || "") + '" viewBox="0 0 48 48" aria-hidden="true">' +
+      '<path d="M6.5 43.5V22a17.5 17.5 0 0 1 35 0v21.5z" fill="currentColor"/>' +
+      '<path d="M14 43.5V22.5a10 10 0 0 1 20 0v21" fill="none" stroke="var(--bm-gold, #e0a92e)" stroke-width="2.6"/>' +
+      '<path d="M20.4 43.5V23a3.6 3.6 0 0 1 7.2 0v20.5z" fill="var(--bm-door, #fff)"/></svg>';
+  }
+  function wordmark() { return '<b class="bm-word" dir="ltr">Shul <span>System</span></b>'; }
 
   function B(s) { var p = String(s == null ? "" : s).split("|"); return S.prefs.lang === "en" ? (p[1] || p[0]) : p[0]; }
   function timeAgo(isoStr) {
@@ -233,10 +245,10 @@
   /* ---------- sales contact: verified by the owner, shown on every page except the screen itself ---------- */
   var SALES = window.SHUL_SALES_CONTACT || { email: "hanochhason@gmail.com", phone: "347-244-9382", tel: "+13472449382" };
   function ctaDemo(cls) {
-    return '<a class="cta-demo' + (cls ? " " + cls : "") + '" href="#/proposal" aria-label="' + L("בקשת הדגמה", "Request a demo") + '">' + I.sparkle.replace("<svg", '<svg width="16" height="16"') + "<span class=\"cta-l\">" + L("בקשת הדגמה", "Request a demo") + '</span><span class="cta-s">' + L("הדגמה", "Demo") + "</span></a>";
+    return '<a class="cta-demo' + (cls ? " " + cls : "") + '" href="#/proposal" aria-label="' + L("בקשת הדגמה", "Request a demo") + '">' + "<span class=\"cta-l\">" + L("בקשת הדגמה", "Request a demo") + '</span><span class="cta-s">' + L("הדגמה", "Demo") + "</span></a>";
   }
   function salesbarHtml() {
-    return '<div class="sb-in"><span class="sb-brand">Shul System</span><span class="sb-dot" aria-hidden="true">·</span><a href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + '</a><span class="sb-dot" aria-hidden="true">·</span><a href="mailto:' + SALES.email + '">' + I.mail.replace("<svg", '<svg width="14" height="14"') + '<bdi dir="ltr">' + esc(SALES.email) + '</bdi></a><span class="sb-dot" aria-hidden="true">·</span><a href="tel:' + SALES.tel + '">' + I.phone.replace("<svg", '<svg width="14" height="14"') + '<bdi dir="ltr">' + esc(SALES.phone) + '</bdi></a><span class="sb-dot" aria-hidden="true">·</span><span class="sb-week">' + L("שבוע ההדגמה: 15 עד 21 בנובמבר 2026, נתונים בדויים", "Demo week: Nov 15 to 21, 2026, fictional data") + "</span></div>";
+    return '<div class="sb-in"><a class="sb-brand" href="#/">' + mark() + "Shul System</a>" + '<span class="sb-dot" aria-hidden="true">·</span><a href="#/proposal">' + L("בקשת הדגמה", "Request a demo") + '</a><span class="sb-dot" aria-hidden="true">·</span><a href="mailto:' + SALES.email + '">' + I.mail.replace("<svg", '<svg width="14" height="14"') + '<bdi dir="ltr">' + esc(SALES.email) + '</bdi></a><span class="sb-dot" aria-hidden="true">·</span><a href="tel:' + SALES.tel + '">' + I.phone.replace("<svg", '<svg width="14" height="14"') + '<bdi dir="ltr">' + esc(SALES.phone) + '</bdi></a><span class="sb-dot" aria-hidden="true">·</span><span class="sb-week">' + L("שבוע ההדגמה: 15 עד 21 בנובמבר 2026, נתונים בדויים", "Demo week: Nov 15 to 21, 2026, fictional data") + "</span></div>";
   }
   var layout = "site";
   function renderChrome() {
@@ -361,8 +373,8 @@
     renderChrome();
     if (!ok) {
       var want = NEED_ROLE[def.need] || "super";
-      app.innerHTML = '<div class="wrap page"><div class="card" style="max-width:560px;margin:40px auto;text-align:center"><div style="width:56px;height:56px;margin:0 auto 10px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center">' + I.lock + "</div><h2>" + L("אין הרשאה", "No permission") + '</h2><p class="muted">' +
-        L("המסך הזה מיועד ל", "This screen is for ") + esc(S.N(S.ROLES[want])) + L(". כל אחד רואה רק את מה שמותר לו.", ". Everyone sees only what they may use.") + '</p><button class="btn primary" id="switchRole">' + L("הדגמה: צפייה בתור ", "Demo: view as ") + esc(S.N(S.ROLES[want])) + "</button></div></div>";
+      app.innerHTML = '<div class="wrap page"><div class="card" style="max-width:560px;margin:40px auto;text-align:center"><div style="width:56px;height:56px;margin:0 auto 10px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center">' + I.lock + "</div><h2>" + L("המסך הזה פתוח ל", "This screen is open to the ") + esc(S.N(S.ROLES[want])) + '</h2><p class="muted">' +
+        L("במערכת כל אחד רואה רק את מה שמותר לו. בהדגמה אפשר להחליף תפקיד בלחיצה.", "In the system everyone sees only what they may use. In the demo you can switch roles in one press.") + '</p><div class="row" style="justify-content:center;gap:10px;flex-wrap:wrap"><button class="btn primary" id="switchRole">' + L("להמשיך בתור ", "Continue as ") + esc(S.N(S.ROLES[want])) + '</button><a class="btn" href="#/">' + L("חזרה לאתר הראשי", "Back to the main site") + "</a></div></div></div>";
       app.querySelector("#switchRole").addEventListener("click", function () { setRole(want, false); });
       markNav(); return;
     }
@@ -407,7 +419,7 @@
   }
 
   window.SHUL_UI = {
-    I: I, logo: logo, B: B, timeAgo: timeAgo, modal: modal, closeModal: closeModal, confirmBox: confirmBox,
+    I: I, logo: logo, mark: mark, wordmark: wordmark, B: B, timeAgo: timeAgo, modal: modal, closeModal: closeModal, confirmBox: confirmBox,
     toast: toast, pushToast: pushToast, customItemsHtml: customItemsHtml, scopeNote: scopeNote, themePickerHtml: themePickerHtml, renameHtml: renameHtml, bindCustom: bindCustom, route: route, render: render, setRole: setRole, setLang: setLang, setTheme: setTheme,
     h: h, on: on, pageHead: pageHead, crumbGabbai: crumbGabbai, download: download, customModal: customModal, THEMES: THEMES,
     start: start, renderChrome: renderChrome, SALES: SALES, ctaDemo: ctaDemo, signInModal: signInModal, setBrand: setBrand, BRANDS: BRANDS, flash: flash, applyPrefs: applyPrefs, curTheme: curTheme
