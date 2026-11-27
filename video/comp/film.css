@@ -1,4 +1,4 @@
-/* The film: 1920 x 1080, drawn by film.js on engine.js. */
+/* The film: 1920 x 1080, drawn by film.js on engine.js. The portrait cut (1080 x 1920) is at the end. */
 :root {
   --navy: #0a1730; --navy2: #10244a; --navy3: #1b3a6b;
   --gold: #f2bc3d; --gold2: #ffd98a; --brass: #b98a2c;
@@ -113,6 +113,7 @@ html, body { margin: 0; background: #000; overflow: hidden; }
 .s1-world { position: absolute; inset: 0; transform-origin: 960px 420px; }
 .s1-floor { position: absolute; inset: 0; background: linear-gradient(rgba(14, 8, 4, .88), rgba(8, 5, 2, .96)), url("../../img/desk.jpg") center / cover; }
 .s1-spot { position: absolute; left: 160px; right: 160px; top: 200px; bottom: -80px; background: radial-gradient(ellipse 60% 62% at 50% 46%, rgba(255, 214, 150, .16), transparent 70%); }
+.s1-wrap { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
 .s1-drw { position: absolute; left: 380px; top: 258px; width: 1160px; height: 729px; will-change: transform; }
 .s1-drw .box { position: absolute; left: -30px; top: 0; width: 1220px; }
 .dwo { position: absolute; will-change: transform; }
@@ -183,3 +184,56 @@ html, body { margin: 0; background: #000; overflow: hidden; }
 .s9-contact span { display: inline-flex; align-items: center; gap: 12px; font: 500 31px/1 "Inter", var(--sans); color: #fff; padding: 17px 28px; border-radius: 999px; background: #14264a; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .16); letter-spacing: .005em; }
 .s9-contact svg { width: 26px; height: 26px; stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .s9-fine { position: absolute; left: 0; right: 0; top: 930px; text-align: center; font: 400 24px/1 var(--sans); color: rgba(247, 242, 232, .56); letter-spacing: .02em; }
+
+/* =====================================================================
+   the portrait cut: 1080 x 1920  (#stage.v, from ?fmt=v)
+   Words and anything that matters stay between y = 200 and y = 1600,
+   clear of what the social apps draw over the top and the foot of a video.
+   ===================================================================== */
+#stage.v { width: 1080px; height: 1920px; }
+.v #arches { width: 1080px; height: 1920px; transform-origin: 540px 1920px; }
+.v .kicker { font-size: 28px; } .v .kicker b { font-size: 28px; }
+.v[dir="ltr"] .kicker { font-size: 23px; }
+.v .sub { font-size: 38px; text-wrap: balance; } .v[dir="ltr"] .sub { font-size: 34px; }
+.v .txt { align-items: center; text-align: center; gap: 26px; }
+.v .txt .sub { margin-left: auto; margin-right: auto; }
+.v .swap { align-self: stretch; }
+.v .chips { justify-content: center; }
+.v .chip { font-size: 29px; }
+.v .tag, .v .lbl { font-size: 27px; }
+.v[dir="ltr"] .cap { font-size: 25px; }
+.v #bug .wordmark { font-size: 32px; } .v #bug svg { width: 44px; height: 44px; }
+
+/* 1 · the drawer: the desk above, the drawer under it at nine tenths */
+.v .s1-world { transform-origin: 540px 1090px; }
+.v .s1-spot { left: -120px; right: -120px; top: 730px; bottom: -120px; }
+.v .s1-wrap { transform: translate(18px, 872px) scale(.9); }
+.v .s1-drw { left: 0; top: 0; }
+.v .s1-desk { height: 890px; }
+.v .s1-copy, .v .s1-after { top: 214px; height: 656px; }
+.v .s1-copy { gap: 26px; }
+.v .s1-h { font-size: 128px; line-height: 1.14; white-space: normal; }
+.v .s1-h .w { display: block; margin: 0; }
+.v[dir="ltr"] .s1-h { font-size: 88px; }
+.v .s1-after .s1-h { font-size: 106px; } .v[dir="ltr"] .s1-after .s1-h { font-size: 82px; }
+.v .s1-sub { font-size: 42px; } .v[dir="ltr"] .s1-sub { font-size: 35px; }
+
+/* 2 · the mark */
+.v .s2-halo, .v .s2-rays, .v .s2-mark { left: 540px; top: 690px; }
+.v .s2-mark { width: 280px; height: 280px; margin: -140px 0 0 -140px; }
+.v .s2-word { top: 888px; } .v .s2-word .wordmark { font-size: 76px; } .v .s2-word small { font-size: 28px; margin-top: 18px; }
+.v .s2-tag { top: 1100px; } .v .s2-tag .h { font-size: 124px; line-height: 1.12; } .v .s2-tag .ln { display: block; }
+.v[dir="ltr"] .s2-tag .h { font-size: 104px; }
+
+/* 6 · the label under the second phone */
+.v .wrapchip { white-space: normal; text-align: center; line-height: 1.32; border-radius: 26px; font-size: 22px; justify-content: center; padding: 14px 18px 15px; display: inline-block; }
+
+/* 8 · two columns of cards */
+.v .card8 { width: 484px; height: 276px; } .v .card8 .th { height: 176px; } .v .card8 .t { height: 76px; font-size: 27px; }
+
+/* 9 · the call */
+.v .s9-mark { top: 404px; } .v .s9-mark svg { width: 96px; height: 96px; } .v .s9-mark .wordmark { font-size: 64px; }
+.v .s9-h { top: 572px; }
+.v .s9-btn { top: 978px; }
+.v .s9-contact { top: 1150px; flex-direction: column; align-items: center; gap: 18px; }
+.v .s9-fine { top: 1446px; }

@@ -1,22 +1,26 @@
 /* The film itself: nine scenes on one timeline.
    Laid out once for Hebrew (text on the right); English mirrors the layout.
+   ?fmt=v is the portrait cut (1080 x 1920): the same timeline, with the words centred on top and
+   the device under them. Each scene gives its portrait geometry beside the landscape one (V ? a : b).
    The product screens are real captures of the demo (video/scripts/capture.mjs). */
 (async function () {
   "use strict";
   var qs = new URLSearchParams(location.search);
   var LANG = qs.get("lang") === "en" ? "en" : "he";
   var HE = LANG === "he", M = HE ? 1 : -1;
+  var V = qs.get("fmt") === "v";                           /* the portrait cut */
+  var SW = V ? 1080 : 1920, SHT = V ? 1920 : 1080;         /* the stage */
   var C = window.COPY[LANG], CT = window.COPY.contact;
   var stage = document.getElementById("stage");
-  stage.dir = C.dir; stage.lang = LANG;
+  stage.dir = C.dir; stage.lang = LANG; if (V) stage.classList.add("v");
   stage.style.setProperty("--o-start", HE ? "right" : "left");
   var tw = FX.tw, set = FX.set, show = FX.show, hook = FX.hook, E = FX.E;
 
   var META = await (await fetch("../shots/" + LANG + "/meta.json")).json();
   function SH(n, l) { return "../shots/" + (l || LANG) + "/" + n + ".png"; }
   function IMG(n, cls, style, l) { return '<img class="' + (cls || "") + '" decoding="sync" src="' + SH(n, l) + '"' + (style ? ' style="' + style + '"' : "") + ">"; }
-  function mx(x, w) { return HE ? x : 1920 - x - (w || 0); }      /* mirror a left edge */
-  function gx(x) { return HE ? x : 1920 - x; }                    /* mirror a point */
+  function mx(x, w) { return HE ? x : SW - x - (w || 0); }        /* mirror a left edge */
+  function gx(x) { return HE ? x : SW - x; }                      /* mirror a point */
   function el(html) { var d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstElementChild; }
   function add(parent, html) { var e = el(html); parent.appendChild(e); return e; }
   function box(e, x, y, w, h) { e.style.left = mx(x, w) + "px"; e.style.top = y + "px"; if (w != null) e.style.width = w + "px"; if (h != null) e.style.height = h + "px"; return e; }
@@ -73,6 +77,7 @@
       pt: function (r) { return [(r[0] + r[2] / 2) * k, (r[1] + r[3] / 2) * k + oy]; },
       to: function (t, dur, r, Z, ease) {
         var cx = (r[0] + r[2] / 2) * k, cy = (r[1] + r[3] / 2) * k, W = shot.w * k, H = shot.h * k;
+        Z = Math.max(Z, vw / W, vh / H);                 /* never past the edge of the capture */
         var x = vw / 2 - cx * Z, y = vh / 2 - cy * Z;
         x = Math.min(0, Math.max(vw - W * Z, x)); y = Math.min(0, Math.max(vh - H * Z, y));
         tw(camEl, t, dur, { x: x, y: y, zm: Z }, ease || "cam");
@@ -80,6 +85,8 @@
       ring: function (ringEl, r, pad) { pad = pad == null ? 6 : pad; return { "--x": r[0] * k - pad, "--y": r[1] * k - pad + oy, "--w": r[2] * k + pad * 2, "--h": r[3] * k + pad * 2 }; }
     };
   }
+  /* a zoom: as given in landscape; in portrait, the size the capture should have on the stage (1 = its CSS size) */
+  function Zs(k, zl, sv) { return V ? sv / k : zl; }
   function union(a, b) { var x = Math.min(a[0], b[0]), y = Math.min(a[1], b[1]); return [x, y, Math.max(a[0] + a[2], b[0] + b[2]) - x, Math.max(a[1] + a[3], b[1] + b[3]) - y]; }
   /* a pointer that lives inside a camera, in the screen's own coordinates */
   function Pointer(cam, kind) {
@@ -121,6 +128,11 @@
         sc.style.background = "rgb(" + d[0] + "," + d[1] + "," + d[2] + ")"; $(".sb", sc).style.color = lum > 140 ? "#10182b" : "#fff"; } catch (e) {}
     });
   }
+  /* portrait: the "saved" toast sits at the foot of the window itself, whatever the camera is looking at */
+  function pinToast(img, win, W, m) {
+    var w = m.w * 0.9; img.style.cssText = "position:absolute;z-index:9;left:" + (W - w) / 2 + "px;bottom:-2px;width:" + w + "px";
+    $(".view", win).appendChild(img);
+  }
   function browser(url, viewH) {
     return '<div class="bw"><div class="bw-bar"><i></i><i></i><i></i><span class="bw-url">' + IC.lock + url + '</span></div><div class="view" style="height:' + viewH + 'px"><div class="cam"></div></div></div>';
   }
@@ -128,18 +140,21 @@
   /* =====================================================================
      the backdrop
      ===================================================================== */
-  var archD = [260, 420, 580, 740, 900].map(function (a, i) { return '<path' + (i === 1 ? ' class="g"' : "") + ' d="M' + (960 - a) + " 1090V" + (800 - a * 0.1) + "A" + a + " " + a + " 0 0 1 " + (960 + a) + " " + (800 - a * 0.1) + 'V1090"/>'; }).join("");
+  var archD = (V ? [220, 360, 500, 640, 800, 980] : [260, 420, 580, 740, 900]).map(function (a, i) {
+    var cx = SW / 2, top = (V ? 1560 : 800) - a * 0.1, bot = SHT + 10;
+    return '<path' + (i === 1 ? ' class="g"' : "") + ' d="M' + (cx - a) + " " + bot + "V" + top + "A" + a + " " + a + " 0 0 1 " + (cx + a) + " " + top + "V" + bot + '"/>';
+  }).join("");
   add(stage, '<div id="bg"></div>');
   var glowA = add(stage, '<div class="glow" id="glowA"></div>'), glowB = add(stage, '<div class="glow" id="glowB"></div>'), glowC = add(stage, '<div class="glow" id="glowC"></div>');
   var tints = add(stage, '<div id="tints"></div>');
-  add(stage, '<svg id="arches" viewBox="0 0 1920 1080">' + archD + "</svg>");
+  add(stage, '<svg id="arches" viewBox="0 0 ' + SW + " " + SHT + '">' + archD + "</svg>");
   var dust = add(stage, '<div id="dust"></div>');
   add(stage, '<div id="vig"></div>'); add(stage, '<div id="grain"></div>'); add(stage, '<div id="black"></div>');
   var seed = 11; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
-  var motes = []; for (var i = 0; i < 34; i++) { var m = add(dust, "<i></i>"); motes.push({ el: m, x: rnd() * 1920, y: rnd() * 1180, sp: 9 + rnd() * 22, ph: rnd() * 6.28, sz: 0.5 + rnd() * 1.5, tw: 0.4 + rnd() * 0.9 }); }
+  var motes = []; for (var i = 0; i < 34; i++) { var m = add(dust, "<i></i>"); motes.push({ el: m, x: rnd() * SW, y: rnd() * (SHT + 100), sp: 9 + rnd() * 22, ph: rnd() * 6.28, sz: 0.5 + rnd() * 1.5, tw: 0.4 + rnd() * 0.9 }); }
   hook(function (t) {
     for (var i = 0; i < motes.length; i++) {
-      var m = motes[i], y = ((m.y - t * m.sp) % 1180 + 1180) % 1180 - 50, x = m.x + 34 * Math.sin(t * 0.32 + m.ph);
+      var m = motes[i], MH = SHT + 100, y = ((m.y - t * m.sp) % MH + MH) % MH - 50, x = m.x + 34 * Math.sin(t * 0.32 + m.ph);
       m.el.style.transform = "translate3d(" + x.toFixed(2) + "px," + y.toFixed(2) + "px,0) scale(" + m.sz + ")";
       m.el.style.opacity = (0.16 + 0.34 * (0.5 + 0.5 * Math.sin(t * m.tw + m.ph * 3))).toFixed(3);
     }
@@ -147,11 +162,12 @@
   tw(dust, 8, 1.2, { o: [0, 1] });
   tw("#arches", 8, 64, { s: [1, 1.16] }, "linear");
   /* where the two soft lights sit in each scene: [time, ax, ay, bx, by] */
-  [[8, 960, 380, 960, 900], [12.4, 560, 470, 1560, 930], [22.4, 1330, 500, 330, 960], [31.2, 600, 500, 1600, 190], [41.2, 800, 560, 1640, 900], [50, 960, 640, 960, 60], [57.4, 960, 250, 960, 1040], [62.4, 960, 400, 960, 760]].forEach(function (g, i) {
+  (V ? [[8, 540, 640, 540, 1560], [12.4, 540, 1060, 880, 1740], [22.4, 540, 1080, 170, 330], [31.2, 540, 1130, 910, 1780], [41.2, 540, 1140, 910, 420], [50, 540, 1020, 540, 170], [57.4, 540, 520, 540, 1750], [62.4, 540, 760, 540, 1290]]
+     : [[8, 960, 380, 960, 900], [12.4, 560, 470, 1560, 930], [22.4, 1330, 500, 330, 960], [31.2, 600, 500, 1600, 190], [41.2, 800, 560, 1640, 900], [50, 960, 640, 960, 60], [57.4, 960, 250, 960, 1040], [62.4, 960, 400, 960, 760]]).forEach(function (g, i) {
     if (i === 0) { set(glowA, 0, { x: gx(g[1]), y: g[2] }); set(glowB, 0, { x: gx(g[3]), y: g[4] }); return; }
     tw(glowA, g[0], 1.6, { x: gx(g[1]), y: g[2] }, "inOut"); tw(glowB, g[0], 1.6, { x: gx(g[3]), y: g[4] }, "inOut");
   });
-  set(glowC, 0, { x: gx(660), y: 520, o: 0 });
+  set(glowC, 0, { x: gx(V ? 540 : 660), y: V ? 1090 : 520, o: 0 });
 
   /* =====================================================================
      1 · the gabbai's drawer  (0 - 8.9)
@@ -159,7 +175,7 @@
   (function () {
     var D = META.drawer;
     var s = add(stage, '<section class="scene" id="s1"><div class="s1-world"><div class="s1-floor"></div><div class="s1-spot"></div>' +
-      '<div class="s1-drw">' + IMG("dw-box", "box") + "</div><div class=\"s1-desk\"></div></div>" +
+      '<div class="s1-wrap"><div class="s1-drw">' + IMG("dw-box", "box") + "</div></div><div class=\"s1-desk\"></div></div>" +
       '<div class="s1-copy"><div class="kicker"><i></i><span>' + C.s1.kicker + "</span><i></i></div>" +
       '<h1 class="s1-h">' + C.s1.words.map(function (w) { return '<span class="w">' + w + "</span>"; }).join("") + "</h1>" +
       '<p class="s1-sub">' + C.s1.sub + "</p></div>" +
@@ -201,14 +217,14 @@
       '<div class="s2-halo"></div><div class="s2-rays"></div><div class="s2-mark">' + MARK() + "</div>" +
       '<div class="s2-word">' + WORD + "<small>" + C.brandSub + "</small></div>" +
       '<div class="s2-tag"><h1 class="h">' + lines(C.s2.tag, ["", "goldgrad"]).replace("</span></span><span", "</span></span> <span") + "</h1></div></section>");
-    var iris = add(stage, '<svg id="iris" viewBox="0 0 1920 1080"><path d=""/></svg>'), ip = $("path", iris);
+    var iris = add(stage, '<svg id="iris" viewBox="0 0 ' + SW + " " + SHT + '"><path d=""/></svg>'), ip = $("path", iris);
     var T0 = 8.1, T1 = 9.0, ease = FX.bezier(0.7, 0, 0.3, 1);
     show(s, T0, 12.66); show(iris, T0, T1 + 0.05);
     hook(function (t) {
       if (t < T0 || t > T1 + 0.05) { if (s.style.clipPath) s.style.clipPath = ""; return; }
       var p = ease(Math.min(1, (t - T0) / (T1 - T0)));
-      var r = 4 + 1800 * p, cy = 372 + 830 * p, by = cy + r * 1.25;
-      var d = "M" + (960 - r).toFixed(1) + " " + by.toFixed(1) + "L" + (960 - r).toFixed(1) + " " + cy.toFixed(1) + "A" + r.toFixed(1) + " " + r.toFixed(1) + " 0 0 1 " + (960 + r).toFixed(1) + " " + cy.toFixed(1) + "L" + (960 + r).toFixed(1) + " " + by.toFixed(1) + "Z";
+      var r = 4 + (V ? 1900 : 1800) * p, cx = SW / 2, cy = V ? 690 + 1050 * p : 372 + 830 * p, by = cy + r * 1.25;
+      var d = "M" + (cx - r).toFixed(1) + " " + by.toFixed(1) + "L" + (cx - r).toFixed(1) + " " + cy.toFixed(1) + "A" + r.toFixed(1) + " " + r.toFixed(1) + " 0 0 1 " + (cx + r).toFixed(1) + " " + cy.toFixed(1) + "L" + (cx + r).toFixed(1) + " " + by.toFixed(1) + "Z";
       s.style.clipPath = p >= 1 ? "" : 'path("' + d + '")';
       ip.setAttribute("d", d); ip.style.opacity = Math.max(0, 1 - Math.max(0, p - 0.55) / 0.4).toFixed(3);
     });
@@ -231,7 +247,8 @@
   /* the small mark that stays in the corner through the product scenes */
   (function () {
     var b = add(stage, '<div id="bug">' + MARK() + WORD + "</div>");
-    if (HE) b.style.left = "72px"; else b.style.right = "72px";
+    if (V) { b.style.left = "0"; b.style.right = "0"; b.style.top = "126px"; b.style.justifyContent = "center"; }
+    else if (HE) b.style.left = "72px"; else b.style.right = "72px";
     show(b, 12.6, 62.7);
     tw(b, 12.75, 0.8, { o: [0, 0.94], y: [-16, 0] }, "out"); tw(b, 62.2, 0.4, { o: 0 });
   })();
@@ -247,7 +264,7 @@
      ===================================================================== */
   (function () {
     var a = 12.5, s = add(stage, '<section class="scene" id="s3"></section>');
-    var W = 1150, VW = W - 24, k = VW / 1920, VH = 1080 * k, H = VH + 24, X = 84, Y = 190;
+    var W = V ? 1010 : 1150, VW = W - 24, k = VW / 1920, VH = 1080 * k, H = VH + 24, X = V ? 35 : 84, Y = V ? 850 : 190;
     var R = META["tv-day"].rects, cr = R.center;
     var p = box(add(s, '<div class="p3d"><div class="body">' + IMG("tv-day", "amb a1") + IMG("tv-shabbat", "amb a2") +
       '<div class="tvf"><div class="view"><div class="cam" style="width:' + VW + "px;height:" + VH + 'px">' + IMG("tv-day", "st") +
@@ -257,13 +274,15 @@
       '<svg class="dimmer" viewBox="0 0 ' + VW + " " + VH + '"><path fill-rule="evenodd"/></svg><div class="ring">' + C.s3.tags.map(function (t) { return '<span class="tag" style="transform:translateX(-50%)"><span>' + t + "</span></span>"; }).join("") + "</div>" +
       '<div class="sheen"></div><div class="off"></div></div></div></div></div></div>'), X, Y, W, H);
     var body = $(".body", p), cam = Cam($(".cam", p), META["tv-day"], k, VW, VH), ring = $(".ring", p), tags = $$(".tag", p);
-    var txt = textBlock(s, 1296, 300, 540, "01", C.s3.kicker, C.s3.h.concat([C.s3.also]), HE ? 100 : 76, ["", "", "goldgrad"]);
+    if (V) { var names = add(s, '<div class="abs" style="left:0;right:0;top:' + (Y - 44) + 'px;height:0"></div>'); tags.forEach(function (t) { names.appendChild(t); }); }
+    var txt = V ? textBlock(s, 60, 256, 960, "01", C.s3.kicker, C.s3.h.concat([C.s3.also]), HE ? 116 : 98, ["", "", "goldgrad"])
+                : textBlock(s, 1296, 300, 540, "01", C.s3.kicker, C.s3.h.concat([C.s3.also]), HE ? 100 : 76, ["", "", "goldgrad"]);
     var li = $$(".li", txt);
-    var cap = add(s, '<div class="abs" style="left:' + mx(X, W) + "px;width:" + W + "px;top:" + (Y + H + 40) + 'px;text-align:center"><span class="cap">' + IC.candle + "<span>" + C.s3.cap + "</span></span></div>");
+    var cap = add(s, '<div class="abs" style="left:' + mx(X, W) + "px;width:" + W + "px;top:" + (Y + H + (V ? 50 : 40)) + 'px;text-align:center"><span class="cap">' + IC.candle + "<span>" + C.s3.cap + "</span></span></div>");
     show(s, a - 0.15, 22.95);
     /* the screen comes on */
-    tw(body, a, 1.5, { o: [0, 1], s: [1.12, 1], ry: [17 * M, 8 * M], rx: [5, 2], x: [-70 * M, 0] }, "out");
-    tw(body, a + 1.5, 8.4, { ry: 4.5 * M, rx: 1.2 }, "inOutSoft");
+    if (V) { tw(body, a, 1.5, { o: [0, 1], s: [1.1, 1], ry: [10 * M, 4 * M], rx: [7, 2], y: [80, 0] }, "out"); tw(body, a + 1.5, 8.4, { ry: 2 * M, rx: 1 }, "inOutSoft"); }
+    else { tw(body, a, 1.5, { o: [0, 1], s: [1.12, 1], ry: [17 * M, 8 * M], rx: [5, 2], x: [-70 * M, 0] }, "out"); tw(body, a + 1.5, 8.4, { ry: 4.5 * M, rx: 1.2 }, "inOutSoft"); }
     tw($(".off", p), a + 0.3, 0.7, { o: [1, 0] }, "inOutSoft"); cue(a + 0.3, "on");
     tw($(".a1", p), a + 0.4, 1.3, { o: [0, 0.5] }); set($(".a2", p), 0, { o: 0 });
     kickIn($(".kicker", txt), a + 0.5); tw([li[0], li[1]], a + 0.65, 0.95, { y: [150, 0] }, "out", 0.12); set(li[2], 0, { y: 150 });
@@ -273,6 +292,13 @@
     tw(ring, st[0], 0.4, { o: 1, "--dim": 1 }); cue(st[0], "tick");
     spots.forEach(function (r, i) { if (i) { tw(ring, st[i], 0.6, cam.ring(ring, r, -4), "inOut"); cue(st[i], "tick"); } tw(tags[i], st[i] + (i ? 0.32 : 0.15), 0.3, { o: [0, 1] }); tw(tags[i], (st[i + 1] || 19.1) - 0.06, 0.2, { o: 0 }); });
     tw(ring, 19.1, 0.35, { o: 0, "--dim": 0 });
+    if (V) {
+      var col = function (r) { return [r[0], 150, r[2], 856]; };
+      cam.to(st[0] - 0.45, 0.85, col(spots[0]), 1.28);
+      cam.to(st[1], 0.6, col(spots[1]), 1.28, "inOut"); cam.to(st[2], 0.6, col(spots[2]), 1.28, "inOut");
+      cam.to(st[3], 0.6, [0, 560, 640, 520], 1.5, "inOut");
+      cam.to(19.0, 0.75, [0, 0, 1920, 1080], 1, "inOut");
+    }
     var dpath = $(".dimmer path", p);
     hook(function (t) {
       if (t < 14 || t > 19.6) { dpath.style.opacity = 0; return; }
@@ -282,14 +308,14 @@
     });
     tw($(".b1", p), 17.2, 0.4, { o: [0, 1] }); tw($(".b2", p), 17.8, 0.4, { o: [0, 1] });
     /* candle lighting: the screen turns to Shabbat on its own */
-    var sheen = $(".sheen", p); tw(sheen, 19.3, 1.25, { x: [-620, 1300], o: [0, 1] }, "inOutSoft"); tw(sheen, 20.3, 0.3, { o: 0 });
+    var sheen = $(".sheen", p); tw(sheen, 19.3, 1.25, { x: [-620, V ? 1150 : 1300], o: [0, 1] }, "inOutSoft"); tw(sheen, 20.3, 0.3, { o: 0 });
     tw($(".sh", p), 19.45, 0.85, { o: [0, 1] }, "inOutSoft"); cue(19.375, "shimmer");
     tw($(".a2", p), 19.45, 1.2, { o: 0.62 }); tw($(".a1", p), 19.45, 1.2, { o: 0 });
     tw(glowC, 19.375, 1.4, { o: 1 }, "inOutSoft"); tw(glowC, 21.9, 0.8, { o: 0 });
     tw(li[2], 19.6, 1.0, { y: 0 }, "out");
     fadeUp($(".cap", cap), 20.0, 26, 0.8);
     /* out */
-    tw(body, 21.95, 0.55, { x: -150 * M, o: 0 }, "in"); fadeOut(txt, 21.95, -26, 0.45); fadeOut(cap, 21.95, 20, 0.4);
+    tw(body, 21.95, 0.55, V ? { y: 130, o: 0 } : { x: -150 * M, o: 0 }, "in"); fadeOut(txt, 21.95, -26, 0.45); fadeOut(cap, 21.95, 20, 0.4);
     cue(21.95, "whoosh", 0.7);
   })();
 
@@ -298,61 +324,67 @@
      ===================================================================== */
   (function () {
     var a = 22.5, s = add(stage, '<section class="scene" id="s4"></section>');
-    var W = 1110, k = W / 1360, VH = 860 * k, H = VH + 46, X = 730, Y = 168;
+    /* in portrait the window is taller than the capture is wide, so the camera always stays a little closer */
+    var W = V ? 1000 : 1110, k = W / 1360, IH = 860 * k, VH = V ? 760 : IH, H = VH + 46, X = V ? 40 : 730, Y = V ? 690 : 168, ps = V ? 0.78 : 1;
     var m0 = META["times-0"].rects, m1 = META["times-1"].rects, tt = META["toast-times"];
     var p = box(add(s, '<div class="p3d"><div class="body">' + browser("admin.kehillatnachalathaemek.org", VH) + "</div></div>"), X, Y, W, H);
-    var body = $(".body", p), camEl = $(".cam", p); camEl.style.width = W + "px"; camEl.style.height = VH + "px";
+    var body = $(".body", p), camEl = $(".cam", p); camEl.style.width = W + "px"; camEl.style.height = IH + "px";
     /* the page's small live preview is too coarse for a close-up, so a sharp capture of the very same screen lies over it */
     var ts = m0.tvstage, tvpos = "left:" + ts[0] * k + "px;top:" + ts[1] * k + "px;width:" + ts[2] * k + "px";
     camEl.innerHTML = IMG("times-0", "st") + IMG("tvmin-before", "cut", tvpos) + IMG("times-1", "st s1") + IMG("times-2", "st s2") + IMG("times-3", "st s3") + IMG("tvmin-after", "cut tvhi", tvpos) +
       IMG("toast-times", "cut toast", "left:" + tt.at[0] * k + "px;top:" + tt.at[1] * k + "px;width:" + tt.w * k + "px") +
       '<div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>';
     var cam = Cam(camEl, META["times-0"], k, W, VH), ptr = Pointer(cam);
-    var txt = textBlock(s, 104, 286, 580, "02", C.s4.kicker, C.s4.h, HE ? 100 : 84, ["", "goldgrad", "goldgrad"]);
+    cam.to(0, 0.001, union(m0.row, m0.tv), 0);
+    var txt = V ? textBlock(s, 60, 244, 960, "02", C.s4.kicker, [C.s4.h[0], C.s4.h[1] + " " + C.s4.h[2]], HE ? 112 : 100, ["", "goldgrad"])
+                : textBlock(s, 104, 286, 580, "02", C.s4.kicker, C.s4.h, HE ? 100 : 84, ["", "goldgrad", "goldgrad"]);
     var li = $$(".li", txt);
-    var sub = add(txt, '<p class="sub" style="max-width:520px">' + C.s4.sub + "</p>");
+    var sub = add(txt, '<p class="sub" style="max-width:' + (V ? 900 : 520) + 'px">' + C.s4.sub + "</p>");
     show(s, a - 0.15, 31.7);
-    tw(body, a, 1.3, { o: [0, 1], x: [170 * M, 0], ry: [-16 * M, -7 * M], rx: [4, 1.5], s: [0.94, 1] }, "out");
-    tw(body, a + 1.3, 7.2, { ry: -3.5 * M, rx: 0.8 }, "inOutSoft");
-    kickIn($(".kicker", txt), a + 0.4); tw(li[0], a + 0.55, 0.95, { y: [150, 0] }, "out"); set(li[1], 0, { y: 150 }); set(li[2], 0, { y: 150 });
+    if (V) { tw(body, a, 1.3, { o: [0, 1], y: [150, 0], ry: [-8 * M, -3 * M], rx: [6, 1.5], s: [0.94, 1] }, "out"); tw(body, a + 1.3, 7.2, { ry: -1.5 * M, rx: 0.8 }, "inOutSoft"); }
+    else { tw(body, a, 1.3, { o: [0, 1], x: [170 * M, 0], ry: [-16 * M, -7 * M], rx: [4, 1.5], s: [0.94, 1] }, "out"); tw(body, a + 1.3, 7.2, { ry: -3.5 * M, rx: 0.8 }, "inOutSoft"); }
+    kickIn($(".kicker", txt), a + 0.4); tw(li[0], a + 0.55, 0.95, { y: [150, 0] }, "out"); set(li.slice(1), 0, { y: 150 });
     /* to the Mincha row, and press Edit */
     var edit = cam.pt(m0.edit), start = [edit[0] + 230, edit[1] + 190];
-    cam.to(23.55, 0.9, m0.row, 1.55);
-    ptr.size(0, 0.8).at(0, start).show(23.75).move(23.9, 0.65, edit).click(24.62, edit, 0.8);
+    cam.to(23.55, 0.9, m0.row, Zs(k, 1.55, 1.7));
+    ptr.size(0, 0.8 * ps).at(0, start).show(23.75).move(23.9, 0.65, edit).click(24.62, edit, 0.8 * ps);
     tw($(".s1", camEl), 24.7, 0.2, { o: [0, 1] });
-    cam.to(24.78, 0.75, m1.modal, 1.36);
+    cam.to(24.78, 0.75, m1.modal, Zs(k, 1.36, 1.5));
     /* 4:15 becomes 4:20 */
     var r1 = $(".r1", camEl); set(r1, 0, Object.assign({ o: 0 }, cam.ring(r1, m1.time, 5)));
     var tf = cam.pt([m1.time[0] + m1.time[2] * (HE ? 0.62 : 0.38), m1.time[1], 0, m1.time[3]]);
-    ptr.move(24.92, 0.45, tf).click(25.42, tf, 0.85);
+    ptr.move(24.92, 0.45, tf).click(25.42, tf, 0.85 * ps);
     tw(r1, 25.42, 0.25, { o: 1 }); tw($(".s2", camEl), 25.85, 0.14, { o: [0, 1] }); pulse(r1, 25.85, 0.05); cue(25.85, "type"); tw(r1, 26.3, 0.25, { o: 0 });
     var save = cam.pt(m1.save);
-    ptr.move(26.0, 0.48, save).click(26.58, save, 0.85).hide(26.85);
+    ptr.move(26.0, 0.48, save).click(26.58, save, 0.85 * ps).hide(26.85);
     tw([$(".s3", camEl), $(".tvhi", camEl)], 26.66, 0.22, { o: [0, 1] }); cue(26.7, "save");
-    tw([li[1], li[2]], 26.72, 0.95, { y: 0 }, "out", 0.12);
+    tw(li.slice(1), 26.72, 0.95, { y: 0 }, "out", 0.12);
     /* saved: the row, and the live preview of the screen beside it */
-    cam.to(26.78, 0.85, union(m0.row, m0.tv), 1.16);
-    var toast = $(".toast", camEl); tw(toast, 26.9, 0.5, { o: [0, 1], y: [34, 0] }, "back"); tw(toast, 28.35, 0.3, { o: 0 });
+    cam.to(26.78, 0.85, union(m0.row, m0.tv), Zs(k, 1.16, 0.95));
+    var toast = $(".toast", camEl); if (V) pinToast(toast, p, W, tt);
+    tw(toast, 26.9, 0.5, { o: [0, 1], y: [34, 0] }, "back"); tw(toast, 28.35, 0.3, { o: 0 });
     var r2 = $(".r2", camEl), r3 = $(".r3", camEl);
     set(r2, 0, Object.assign({ o: 0 }, cam.ring(r2, m0.time, 9))); set(r3, 0, Object.assign({ o: 0 }, cam.ring(r3, m0.tv, 7)));
     tw([r2, r3], 27.35, 0.3, { o: 1 }, "out", 0.12); pulse(r2, 27.4, 0.08); cue(27.35, "tick");
     tw(r2, 28.0, 0.3, { o: 0 });
-    cam.to(28.05, 1.0, m0.tv, 2.12);
+    cam.to(28.05, 1.0, m0.tv, Zs(k, 2.12, 2.0));
     fadeUp(sub, 28.3, 22, 0.8);
     tw(r3, 30.6, 0.3, { o: 0 });
     /* and on the shul's website, on a phone */
-    var ta = META["times-m-after"], PV = 262, pk = PV / 430, PX = 1622, PY = 392;
+    var ta = META["times-m-after"], PV = V ? 250 : 262, pk = PV / 430, PX = V ? 778 : 1622, PY = V ? 1052 : 392;
     var ph = box(add(s, '<div class="p3d" style="z-index:5"><div class="body">' + phone("xs", PV, scr("times-m-after") + '<div class="ring r4"></div>') + "</div></div>"), PX, PY, PV + 16, phoneH(PV) + 16);
+    var PM = V ? 1 : M, sideR = V || HE;      /* portrait: the screen's davening times are on its left in both languages, so the phone always stands on the right */
+    if (V) ph.style.left = PX + "px";
     var phb = $(".body", ph), pcam = Cam($(".cam", ph), ta, pk, PV, phoneH(PV), sbH(PV)), r4 = $(".r4", ph);
     set(r4, 0, Object.assign({ o: 0 }, pcam.ring(r4, ta.rects.row, 3))); r4.style.borderRadius = "9px"; r4.style.borderWidth = "2.5px";
-    tw(phb, 28.95, 0.9, { o: [0, 1], y: [120, 0], s: [0.8, 1], r: [7 * M, 2.5 * M] }, "back"); cue(28.95, "pop");
+    tw(phb, 28.95, 0.9, { o: [0, 1], y: [120, 0], s: [0.8, 1], r: [7 * PM, 2.5 * PM] }, "back"); cue(28.95, "pop");
     tw(r4, 29.5, 0.3, { o: 1 }); pulse(r4, 29.55, 0.06);
-    var l1 = add(s, '<span class="lbl">' + C.s4.site + "</span>"); l1.style.top = (PY - 62) + "px"; if (HE) l1.style.right = (1920 - PX - PV - 16) + "px"; else l1.style.left = (1920 - PX - PV - 16) + "px";
+    var l1 = add(s, '<span class="lbl">' + C.s4.site + "</span>"); l1.style.top = (PY - 62) + "px"; if (sideR) l1.style.right = (SW - PX - PV - 16) + "px"; else l1.style.left = (SW - PX - PV - 16) + "px";
     fadeUp(l1, 29.25, 16, 0.6);
-    var l2 = add(s, '<span class="lbl">' + C.s4.screen + "</span>"); l2.style.top = (Y - 34) + "px"; if (HE) l2.style.left = (X + 150) + "px"; else l2.style.right = (X + 150) + "px";
+    var l2 = add(s, '<span class="lbl">' + C.s4.screen + "</span>"); l2.style.top = (Y - 34) + "px"; if (sideR) l2.style.left = (X + (V ? 36 : 150)) + "px"; else l2.style.right = (X + (V ? 36 : 150)) + "px";
     fadeUp(l2, 28.75, 16, 0.6);
     /* out */
-    tw(body, 30.72, 0.55, { x: 160 * M, o: 0 }, "in"); tw(phb, 30.68, 0.5, { y: 140, o: 0 }, "in"); fadeOut([txt, l1, l2], 30.7, -26, 0.45);
+    tw(body, 30.72, 0.55, V ? { y: 160, o: 0 } : { x: 160 * M, o: 0 }, "in"); tw(phb, 30.68, 0.5, { y: 140, o: 0 }, "in"); fadeOut([txt, l1, l2], 30.7, -26, 0.45);
     cue(30.72, "whoosh", 0.7);
   })();
 
@@ -361,48 +393,51 @@
      ===================================================================== */
   (function () {
     var a = 31.25, s = add(stage, '<section class="scene" id="s5"></section>');
-    var W = 1110, k = W / 1360, VH = 860 * k, H = VH + 46, X = 84, Y = 168;
+    var W = V ? 1000 : 1110, k = W / 1360, IH = 860 * k, VH = V ? 760 : IH, H = VH + 46, X = V ? 40 : 84, Y = V ? 770 : 168, ps = V ? 0.85 : 1;
     var n0 = META["ned-0"], rows = n0.rows, nc = META["ned-check"].rects, nr = META["ned-review"].rects, ow = META.owes, tn = META["toast-ned"];
     var p = box(add(s, '<div class="p3d"><div class="body">' + browser("admin.kehillatnachalathaemek.org", VH) + "</div></div>"), X, Y, W, H);
-    var body = $(".body", p), camEl = $(".cam", p); camEl.style.width = W + "px"; camEl.style.height = VH + "px";
+    var body = $(".body", p), camEl = $(".cam", p); camEl.style.width = W + "px"; camEl.style.height = IH + "px";
     var html = IMG("ned-0", "st"); for (var i = 1; i <= 7; i++) html += IMG("ned-" + i, "st n" + i);
     html += IMG("ned-check", "st nc") + IMG("ned-review", "st nrv") + IMG("owes", "st ow");
     html += ow.rows.slice(0, 6).map(function (r) { return '<div class="hl" style="left:' + r[0] * k + "px;top:" + r[1] * k + "px;width:" + r[2] * k + "px;height:" + r[3] * k + 'px"></div>'; }).join("");
     html += IMG("toast-ned", "cut toast", "left:" + tn.at[0] * k + "px;top:" + tn.at[1] * k + "px;width:" + tn.w * k + "px");
     camEl.innerHTML = html;
     var cam = Cam(camEl, n0, k, W, VH), ptr = Pointer(cam);
-    var txt = box(add(s, '<div class="txt">' + kicker("03", C.s5.kicker) + '<div class="swap" style="height:520px"><div class="one" style="width:100%"><p class="line2" style="font-size:' + (HE ? 56 : 46) + 'px;color:rgba(247,242,232,.72);margin-bottom:10px"><span class="ln"><span class="li">' + C.s5.pre + '</span></span></p><h1 class="h" style="font-size:' + (HE ? 100 : 86) + 'px">' + lines(C.s5.h, ["", "goldgrad"]) + '</h1><p class="sub" style="margin-top:34px">' + C.s5.sub + '</p></div><div class="two" style="width:100%"><h1 class="h" style="font-size:' + (HE ? 96 : 80) + 'px">' + lines(C.s5.h2, ["", "goldgrad"]) + '</h1><div class="chips" style="margin-top:40px">' + [["receipt", 0], ["report", 1], ["letter", 2]].map(function (c) { return '<span class="chip">' + IC[c[0]] + C.s5.chips[c[1]] + "</span>"; }).join("") + "</div></div></div></div>"), 1262, 268, 580);
+    var F5 = V ? (HE ? [60, 112, 108] : [50, 98, 92]) : (HE ? [56, 100, 96] : [46, 86, 80]);   /* the lead-in, the first headline, the second */
+    var txt = box(add(s, '<div class="txt">' + kicker("03", C.s5.kicker) + '<div class="swap" style="height:' + (V ? 450 : 520) + 'px"><div class="one" style="width:100%"><p class="line2" style="font-size:' + F5[0] + 'px;color:rgba(247,242,232,.72);margin-bottom:10px"><span class="ln"><span class="li">' + C.s5.pre + '</span></span></p><h1 class="h" style="font-size:' + F5[1] + 'px">' + lines(C.s5.h, ["", "goldgrad"]) + '</h1><p class="sub" style="margin-top:' + (V ? 26 : 34) + 'px">' + C.s5.sub + '</p></div><div class="two" style="width:100%"><h1 class="h" style="font-size:' + F5[2] + 'px">' + lines(C.s5.h2, ["", "goldgrad"]) + '</h1><div class="chips" style="margin-top:40px">' + [["receipt", 0], ["report", 1], ["letter", 2]].map(function (c) { return '<span class="chip">' + IC[c[0]] + C.s5.chips[c[1]] + "</span>"; }).join("") + "</div></div></div></div>"), V ? 60 : 1262, V ? 244 : 268, V ? 960 : 580);
     var one = $$(".one .li", txt), two = $$(".two .li", txt), sub = $(".sub", txt), chips = $$(".chip", txt);
     show(s, a - 0.15, 41.7);
-    tw(body, a, 1.3, { o: [0, 1], x: [-170 * M, 0], ry: [16 * M, 7 * M], rx: [4, 1.5], s: [0.94, 1] }, "out");
-    tw(body, a + 1.3, 8, { ry: 3.5 * M, rx: 0.8 }, "inOutSoft");
+    cam.to(0, 0.001, [n0.rects.table[0], 150, n0.rects.table[2], 560], 0);
+    if (V) { tw(body, a, 1.3, { o: [0, 1], y: [150, 0], ry: [8 * M, 3 * M], rx: [6, 1.5], s: [0.94, 1] }, "out"); tw(body, a + 1.3, 8, { ry: 1.5 * M, rx: 0.8 }, "inOutSoft"); }
+    else { tw(body, a, 1.3, { o: [0, 1], x: [-170 * M, 0], ry: [16 * M, 7 * M], rx: [4, 1.5], s: [0.94, 1] }, "out"); tw(body, a + 1.3, 8, { ry: 3.5 * M, rx: 0.8 }, "inOutSoft"); }
     kickIn($(".kicker", txt), a + 0.4); tw(one, a + 0.55, 0.95, { y: [150, 0] }, "out", 0.11); set(two, 0, { y: 150 }); set(sub, 0, { o: 0 }); set(chips, 0, { o: 0 });
     /* row after row */
-    var table = n0.rects.table, top = [table[0], 150, table[2], 560], bot = [table[0], 300, table[2], 560];
-    cam.to(a + 1.0, 0.9, top, 1.2);
-    cam.to(33.3, 1.9, bot, 1.2, "inOutSoft");
+    var table = V ? n0.rects.card : n0.rects.table, top = [table[0], 150, table[2], 560], bot = [table[0], 300, table[2], 560];   /* portrait: the whole card, so the page's heading is not cut */
+    cam.to(a + 1.0, 0.9, top, Zs(k, 1.2, 0.955));
+    cam.to(33.3, 1.9, bot, Zs(k, 1.2, 0.955), "inOutSoft");
     var t0 = 32.75, step = 0.34, first = cam.pt(rows[0].amt);
-    ptr.size(0, 0.85).at(0, [first[0] + 150, first[1] + 210]).show(32.3).move(32.4, 0.32, first);
+    ptr.size(0, 0.85 * ps).at(0, [first[0] + 150, first[1] + 210]).show(32.3).move(32.4, 0.32, first);
     rows.slice(0, 7).forEach(function (r, i) {
       var t = t0 + i * step, pt = cam.pt(r.amt);
       if (i) ptr.move(t - 0.26, 0.24, pt, "inOutSoft");
       tw($(".n" + (i + 1), camEl), t, 0.1, { o: [0, 1] }); cue(t, "type", 0.7 + i * 0.04);
     });
     /* review, then one save */
-    var tc = 35.3; tw($(".nc", camEl), tc, 0.35, { o: [0, 1] }, "inOutSoft"); cam.to(tc - 0.05, 0.6, [nc.check[0] - 300, nc.check[1] - 330, 760, 520], 1.2);
-    var chk = cam.pt(nc.check); ptr.move(tc + 0.05, 0.5, chk).click(35.95, chk, 0.85);
-    tw($(".nrv", camEl), 36.02, 0.2, { o: [0, 1] }); cam.to(36.05, 0.65, nr.modal, 1.26);
-    var ok = cam.pt(nr.ok); ptr.move(36.3, 0.5, ok).click(37.0, ok, 0.85).hide(37.2);
+    var tc = 35.3; tw($(".nc", camEl), tc, 0.35, { o: [0, 1] }, "inOutSoft"); cam.to(tc - 0.05, 0.6, [nc.check[0] - 300, nc.check[1] - 330, 760, 520], Zs(k, 1.2, 1.12));
+    var chk = cam.pt(nc.check); ptr.move(tc + 0.05, 0.5, chk).click(35.95, chk, 0.85 * ps);
+    tw($(".nrv", camEl), 36.02, 0.2, { o: [0, 1] }); cam.to(36.05, 0.65, nr.modal, Zs(k, 1.26, 1.3));
+    var ok = cam.pt(nr.ok); ptr.move(36.3, 0.5, ok).click(37.0, ok, 0.85 * ps).hide(37.2);
     tw($(".ow", camEl), 37.08, 0.25, { o: [0, 1] }); cue(37.1, "save");
-    cam.to(37.15, 0.9, [ow.rects.table[0], 60, ow.rects.table[2], 640], 1.1);
-    var toast = $(".toast", camEl); tw(toast, 37.3, 0.5, { o: [0, 1], y: [34, 0] }, "back"); tw(toast, 39.3, 0.3, { o: 0 });
+    cam.to(37.15, 0.9, [ow.rects.table[0], 60, ow.rects.table[2], 640], Zs(k, 1.1, 0.93));
+    var toast = $(".toast", camEl); if (V) pinToast(toast, p, W, tn);
+    tw(toast, 37.3, 0.5, { o: [0, 1], y: [34, 0] }, "back"); tw(toast, 39.3, 0.3, { o: 0 });
     fadeUp(sub, 37.35, 20, 0.7);
     /* who owes what, at any moment */
     tw(one, 38.0, 0.45, { y: -150 }, "in", 0.05); fadeOut(sub, 38.0, -20, 0.35); tw(two, 38.3, 0.95, { y: 0 }, "out", 0.11);
     var hl = $$(".hl", camEl); set(hl, 0, { o: 0 }); tw(hl, 38.45, 0.5, { o: [0, 1], sx: [0.2, 1] }, "out", 0.09); tw(hl, 40.2, 0.4, { o: 0 }); cue(38.45, "tick");
     tw(chips, 38.9, 0.6, { o: [0, 1], y: [22, 0], s: [0.9, 1] }, "back", 0.13); [0, 1, 2].forEach(function (i) { cue(38.9 + i * 0.13, "pop", 0.6); });
     /* out */
-    tw(body, 40.72, 0.55, { x: -160 * M, o: 0 }, "in"); fadeOut(txt, 40.7, -26, 0.45);
+    tw(body, 40.72, 0.55, V ? { y: 160, o: 0 } : { x: -160 * M, o: 0 }, "in"); fadeOut(txt, 40.7, -26, 0.45);
     cue(40.72, "whoosh", 0.7);
   })();
 
@@ -411,7 +446,7 @@
      ===================================================================== */
   (function () {
     var a = 41.25, s = add(stage, '<section class="scene" id="s6"></section>');
-    var VW = 372, k = VW / 430, VH = phoneH(VW), PW = VW + 26, PH = VH + 26, X = 606, Y = 100, OY = sbH(VW);
+    var VW = V ? 416 : 372, k = VW / 430, VH = phoneH(VW), PW = VW + 26, PH = VH + 26, X = V ? 319 : 606, Y = V ? 630 : 100, OY = sbH(VW);
     var me = META["me-0"].rects, mp = META["me-pay"].rects, md = META["me-paid"].rects, pp = META["push-paid"];
     var p = box(add(s, '<div class="p3d" style="z-index:3"><div class="body">' + phone("", VW,
       scr("me-0") + scr("me-pay", "s1") + scr("me-paid", "s4") +
@@ -419,15 +454,23 @@
       '<div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>') + "</div></div>"), X, Y, PW, PH);
     var body = $(".body", p), camEl = $(".cam", p), cam = Cam(camEl, META["me-0"], k, VW, VH, OY), tap = Pointer(cam, "tap");
     /* a second phone: the donation form */
-    var V2 = 286, p2 = box(add(s, '<div class="p3d"><div class="body">' + phone("sm", V2, scr("donate-m")) + "</div></div>"), 196, 236, V2 + 20, phoneH(V2) + 20);
+    var V2 = V ? 228 : 286, p2 = box(add(s, '<div class="p3d"><div class="body">' + phone("sm", V2, scr("donate-m")) + "</div></div>"), V ? 170 : 196, V ? 1040 : 236, V2 + 20, phoneH(V2) + 20);
     var body2 = $(".body", p2);
-    var cap2 = add(s, '<div class="abs" style="left:' + mx(86, 530) + 'px;width:530px;top:928px;text-align:center"><span class="chip" style="font-size:24px">' + C.s6.donate + "</span></div>");
-    var txt = textBlock(s, 1090, HE ? 250 : 214, 750, "04", C.s6.kicker, C.s6.h, HE ? 100 : 88, ["", "goldgrad", "goldgrad"]);
-    var sub = add(txt, '<p class="sub">' + C.s6.sub + "</p>"), line = add(txt, '<p class="line2 goldgrad" style="font-size:' + (HE ? 58 : 52) + 'px">' + C.s6.line + "</p>");
+    var cap2 = V ? add(s, '<div class="abs" style="left:' + mx(144, 300) + 'px;width:300px;top:936px;text-align:center"><span class="chip wrapchip">' + C.s6.donateV + "</span></div>")
+                 : add(s, '<div class="abs" style="left:' + mx(86, 530) + 'px;width:530px;top:928px;text-align:center"><span class="chip" style="font-size:24px">' + C.s6.donate + "</span></div>");
+    var txt, sub, line, hOne, hTwo;
+    if (V) {   /* portrait: the closing line takes the headline's place, which leaves the phone more room */
+      txt = box(add(s, '<div class="txt">' + kicker("04", C.s6.kicker) + '<div class="swap" style="height:' + (HE ? 240 : 268) + 'px"><div class="one" style="width:100%"><h1 class="h" style="font-size:' + (HE ? 108 : 82) + 'px">' + lines(C.s6.h, ["", "goldgrad", "goldgrad"]) + '</h1></div><div class="two" style="width:100%"><h1 class="h" style="font-size:' + (HE ? 104 : 96) + 'px">' + lines(C.s6.lineV, "goldgrad") + "</h1></div></div></div>"), 60, HE ? 228 : 206, 960);
+      sub = add(txt, '<p class="sub">' + C.s6.sub + "</p>"); hOne = $$(".one .li", txt); hTwo = $$(".two .li", txt);
+    } else {
+      txt = textBlock(s, 1090, HE ? 250 : 214, 750, "04", C.s6.kicker, C.s6.h, HE ? 100 : 88, ["", "goldgrad", "goldgrad"]);
+      sub = add(txt, '<p class="sub">' + C.s6.sub + "</p>"); line = add(txt, '<p class="line2 goldgrad" style="font-size:' + (HE ? 58 : 52) + 'px">' + C.s6.line + "</p>");
+    }
     show(s, a - 0.15, 50.45);
     tw(body, a, 1.3, { o: [0, 1], y: [260, 0], r: [7 * M, 0], ry: [14 * M, 6 * M], s: [0.9, 1] }, "out");
     tw(body, a + 1.3, 7, { ry: 2 * M }, "inOutSoft");
-    kickIn($(".kicker", txt), a + 0.45); riseLines(txt, a + 0.6, 150, 0.12);
+    kickIn($(".kicker", txt), a + 0.45);
+    if (V) { tw(hOne, a + 0.6, 0.95, { y: [150, 0] }, "out", 0.12); set(hTwo, 0, { y: 160 }); } else riseLines(txt, a + 0.6, 150, 0.12);
     /* the balance, then: pay by card */
     var r1 = $(".r1", camEl), r2 = $(".r2", camEl);
     set(r1, 0, Object.assign({ o: 0 }, cam.ring(r1, me.bal, 4))); tw(r1, 42.6, 0.3, { o: 1 }); pulse(r1, 42.65, 0.04); tw(r1, 43.35, 0.25, { o: 0 }); cue(42.6, "tick");
@@ -443,9 +486,11 @@
     var push = $(".push", camEl); tw(push, 45.15, 0.7, { o: [0, 1], y: [-150, 0] }, "back"); cue(45.15, "notify"); tw(push, 48.6, 0.35, { o: 0, y: -60 }, "in");
     set(r2, 0, Object.assign({ o: 0 }, cam.ring(r2, md.bal, 4))); tw(r2, 45.6, 0.3, { o: 1 }); pulse(r2, 45.65, 0.04); tw(r2, 47.2, 0.3, { o: 0 });
     /* the donation form slides in beside it */
+    if (V) tw(body, 46.6, 1.1, { x: 150 * M }, "inOut");      /* in portrait the first phone makes room */
     tw(body2, 46.6, 1.1, { o: [0, 1], x: [-200 * M, 0], r: [-12 * M, -5 * M], ry: [22 * M, 12 * M], s: [0.86, 1] }, "out"); cue(46.6, "pop");
     fadeUp($(".chip", cap2), 47.05, 20, 0.7);
-    fadeUp(line, 47.0, 24, 0.9); cue(47.0, "swell", 0.6);
+    if (V) { tw(hOne, 47.0, 0.45, { y: -160 }, "in", 0.05); tw(hTwo, 47.3, 0.95, { y: 0 }, "out", 0.11); } else fadeUp(line, 47.0, 24, 0.9);
+    cue(47.0, "swell", 0.6);
     /* out */
     tw(body, 49.45, 0.55, { y: 220, o: 0 }, "in"); tw(body2, 49.4, 0.5, { x: -200 * M, o: 0 }, "in"); fadeOut([txt, cap2], 49.45, -26, 0.45);
     cue(49.45, "whoosh", 0.7);
@@ -466,15 +511,15 @@
     function pstack(prefix) { return TH.map(function (th, i) { return scr(prefix + th, i ? "wipe" : ""); }).join(""); }
     /* the screen, the website and the member account, together */
     var TW = 1000, tk = (TW - 20) / 1920, tvh = 1080 * tk;
-    var tv = box(add(s, '<div class="p3d"><div class="body"><div class="tvf sm" style="padding:10px"><div class="view"><div class="cam" style="width:' + (TW - 20) + "px;height:" + tvh + 'px">' + stack("th-tv-") + "</div></div></div></div></div>"), 460, 318, TW, tvh + 20);
-    var BW = 610, bk = BW / 1280, bvh = 800 * bk;
-    var br = box(add(s, '<div class="p3d" style="z-index:2"><div class="body">' + browser("www.kehillatnachalathaemek.org", bvh) + "</div></div>"), 150, 598, BW, bvh + 38);
+    var tv = box(add(s, '<div class="p3d"><div class="body"><div class="tvf sm" style="padding:10px"><div class="view"><div class="cam" style="width:' + (TW - 20) + "px;height:" + tvh + 'px">' + stack("th-tv-") + "</div></div></div></div></div>"), V ? 40 : 460, V ? 664 : 318, TW, tvh + 20);
+    var BW = V ? 640 : 610, bk = BW / 1280, bvh = 800 * bk;
+    var br = box(add(s, '<div class="p3d" style="z-index:2"><div class="body">' + browser("www.kehillatnachalathaemek.org", bvh) + "</div></div>"), V ? 40 : 150, V ? 1140 : 598, BW, bvh + 38);
     $(".bw-bar", br).style.height = "38px"; $(".bw-url", br).style.cssText = "top:6px;height:26px;min-width:300px;font-size:13px;line-height:26px"; $$(".bw-bar i", br).forEach(function (d) { d.style.width = d.style.height = "11px"; });
     var bc = $(".cam", br); bc.style.width = BW + "px"; bc.style.height = bvh + "px"; bc.innerHTML = stack("th-site-");
-    var PW = 236, pvh = phoneH(PW);
-    var ph = box(add(s, '<div class="p3d" style="z-index:3"><div class="body">' + phone("xs", PW, pstack("th-me-")) + "</div></div>"), 1400, 452, PW + 16, pvh + 16);
-    var head = add(s, '<div class="abs center" style="left:0;right:0;top:62px"><div style="display:flex;justify-content:center;margin-bottom:22px">' + kicker("05", C.s7.kicker) + '</div><h1 class="h" style="font-size:' + (HE ? 94 : 88) + 'px">' + lines([C.s7.h]) + "</h1></div>");
-    var pill = add(s, '<div class="abs center" style="left:0;right:0;top:246px"><span class="pill" style="position:relative"><span class="sw"></span><span>' + C.s7.label + '</span><span class="names" style="width:' + (HE ? 110 : 150) + 'px">' + TH.map(function (th) { return "<b>" + C.s7.themes[th] + "</b>"; }).join("") + '</span><span style="opacity:.45">·</span><span>' + C.s7.sub + "</span></span></div>");
+    var PW = V ? 244 : 236, pvh = phoneH(PW);
+    var ph = box(add(s, '<div class="p3d" style="z-index:3"><div class="body">' + phone("xs", PW, pstack("th-me-")) + "</div></div>"), V ? 780 : 1400, V ? 1030 : 452, PW + 16, pvh + 16);
+    var head = add(s, '<div class="abs center" style="left:0;right:0;top:' + (V ? 236 : 62) + 'px"><div style="display:flex;justify-content:center;margin-bottom:22px">' + kicker("05", C.s7.kicker) + '</div><h1 class="h" style="font-size:' + (V ? (HE ? 110 : 100) : (HE ? 94 : 88)) + 'px">' + lines(V ? C.s7.hv : [C.s7.h]) + "</h1></div>");
+    var pill = add(s, '<div class="abs center" style="left:0;right:0;top:' + (V ? 560 : 246) + 'px"><span class="pill" style="position:relative"><span class="sw"></span><span>' + C.s7.label + '</span><span class="names" style="width:' + (HE ? 110 : 150) + 'px">' + TH.map(function (th) { return "<b>" + C.s7.themes[th] + "</b>"; }).join("") + '</span><span style="opacity:.45">·</span><span>' + C.s7.sub + "</span></span></div>");
     var sw = $(".sw", pill); TH.forEach(function (th) { add(sw, '<span class="abs" style="inset:0;background:linear-gradient(135deg,' + TC[th][1] + " 50%," + TC[th][2] + ' 50%)"></span>'); });
     var sws = $$("span", sw), names = $$(".names b", pill);
     show(s, a - 0.15, 57.95);
@@ -505,16 +550,17 @@
      ===================================================================== */
   (function () {
     var a = 57.5, s = add(stage, '<section class="scene" id="s8"></section>');
-    var head = add(s, '<div class="abs center" style="left:0;right:0;top:128px"><h1 class="h" style="font-size:' + (HE ? 74 : 66) + 'px">' + lines([C.s8.h]) + "</h1></div>");
+    var head = add(s, '<div class="abs center" style="left:0;right:0;top:' + (V ? 218 : 128) + 'px"><h1 class="h" style="font-size:' + (V ? (HE ? 82 : 64) : (HE ? 74 : 66)) + 'px">' + lines(V ? C.s8.hv : [C.s8.h]) + "</h1></div>");
     /* each card shows a piece of a real screen: [capture, the part to show (x, y, w in the capture's CSS px), icon] */
-    function reg(x, w) { return HE ? x : 1360 - x - w; }
+    /* a piece of a gabbai page, w wide, from the page's own edge (the menu is 264 wide, on the right in Hebrew) */
+    function pg(w) { return [HE ? 1096 - w : 264, 70, w]; }
     var cards = [
-      ["sheet", [36, 34, 504], "sheet"], ["tv-board-7", [20, HE ? 396 : 262, 620], "flame"], ["tv-board-4", [20, 150, 620], "horn"], ["admin", [reg(556, 540), 70, 540], "shield"],
-      ["activity", [reg(486, 610), 70, 610], "list"], ["backup", [reg(556, 540), 70, 540], "cloud"], ["fin-more", [reg(486, 610), 70, 610], "report"], ["__lang", null, "globe"]
+      ["sheet", [36, 34, 504], "sheet"], ["tv-board-7", [20, HE ? 396 : 262, 620], "flame"], ["tv-board-4", [20, 150, 620], "horn"], ["admin", pg(540), "shield"],
+      ["activity", pg(610), "list"], ["backup", pg(540), "cloud"], ["fin-more", pg(610), "report"], ["__lang", null, "globe"]
     ];
-    var CW = 402, GAP = 32, X0 = (1920 - (4 * CW + 3 * GAP)) / 2, Y0 = 306, TWd = CW - 24;
+    var NC = V ? 2 : 4, CW = V ? 484 : 402, CH = V ? 276 : 296, GAP = V ? 22 : 32, X0 = (SW - (NC * CW + (NC - 1) * GAP)) / 2, Y0 = V ? 428 : 306, TWd = CW - 24;
     var els = cards.map(function (c, i) {
-      var col = i % 4, row = Math.floor(i / 4), x = X0 + (3 - col) * (CW + GAP), y = Y0 + row * (296 + GAP), th;
+      var col = i % NC, row = Math.floor(i / NC), x = X0 + (NC - 1 - col) * (CW + GAP), y = Y0 + row * (CH + GAP), th;
       if (c[0] === "__lang") {
         /* Hebrew and English: the same screen, in both */
         var z = TWd / 820, he = [1096 - 820 + 14, 70], en = [264 - 14, 70];
@@ -540,10 +586,11 @@
      ===================================================================== */
   (function () {
     var a = 62.5, s = add(stage, '<section class="scene" id="s9"></section>');
-    add(s, '<div class="s2-halo" style="top:520px;width:1500px;height:1500px;margin:-750px 0 0 -750px"></div>');
-    var arch = add(s, '<svg class="abs" viewBox="0 0 1920 1080" style="left:0;top:0;width:1920px;height:1080px"><path d="M330 1100V560A630 630 0 0 1 1590 560V1100" fill="none" stroke="rgba(242,188,61,.5)" stroke-width="2.5" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:calc(var(--d,0)*1)"/><path d="M270 1100V560A690 690 0 0 1 1650 560V1100" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.5" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:calc(var(--d,0)*1)"/></svg>');
+    add(s, '<div class="s2-halo" style="top:' + (V ? 820 : 520) + 'px;width:1500px;height:1500px;margin:-750px 0 0 -750px"></div>');
+    var AR = V ? ["M66 1940V770A474 474 0 0 1 1014 770V1940", "M14 1940V770A526 526 0 0 1 1066 770V1940"] : ["M330 1100V560A630 630 0 0 1 1590 560V1100", "M270 1100V560A690 690 0 0 1 1650 560V1100"];
+    var arch = add(s, '<svg class="abs" viewBox="0 0 ' + SW + " " + SHT + '" style="left:0;top:0;width:' + SW + "px;height:" + SHT + 'px"><path d="' + AR[0] + '" fill="none" stroke="rgba(242,188,61,.5)" stroke-width="2.5" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:calc(var(--d,0)*1)"/><path d="' + AR[1] + '" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.5" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:calc(var(--d,0)*1)"/></svg>');
     var mk = add(s, '<div class="s9-mark">' + MARK() + WORD + "</div>");
-    var hd = add(s, '<div class="s9-h"><h1 class="h" style="font-size:' + (HE ? 96 : 92) + 'px">' + lines(C.s9.h, ["", "goldgrad"]) + "</h1></div>");
+    var hd = add(s, '<div class="s9-h"><h1 class="h" style="font-size:' + (V ? (HE ? 102 : 96) : (HE ? 96 : 92)) + 'px">' + (V ? lines(C.s9.hv, ["", "goldgrad", "goldgrad"]) : lines(C.s9.h, ["", "goldgrad"])) + "</h1></div>");
     var bw = add(s, '<div class="abs" style="left:0;right:0;top:0"><span class="s9-btn" style="transform:translateX(-50%)"><span>' + C.s9.btn + "</span>" + IC.arrow + '<i class="shine"></i></span></div>');
     var ct = add(s, '<div class="s9-contact"><span>' + IC.link + CT.url + "</span><span>" + IC.phone + CT.phone + "</span><span>" + IC.mail + CT.email + "</span></div>");
     var fine = add(s, '<div class="s9-fine">' + C.s9.fine + "</div>");
@@ -562,7 +609,7 @@
   })();
 
   /* ---------- ready ---------- */
-  window.DURATION = 71; window.CUES = CUES.sort(function (x, y) { return x[0] - y[0]; }); window.seek = FX.seek;
+  window.DURATION = 71; window.FORMAT = { w: SW, h: SHT }; window.CUES = CUES.sort(function (x, y) { return x[0] - y[0]; }); window.seek = FX.seek;
   await document.fonts.ready;
   await Promise.all(["700 80px 'Frank Ruhl Libre'", "900 80px 'Frank Ruhl Libre'", "400 30px Heebo", "500 30px Heebo", "600 30px Heebo", "700 30px Heebo", "800 30px Heebo", "400 30px Inter", "500 30px Inter", "800 30px Inter"].map(function (f) { return document.fonts.load(f, "אבגדה Shul 123"); }));
   await Promise.all($$("img", stage).map(function (im) { return im.decode ? im.decode().catch(function () {}) : null; }));
@@ -570,6 +617,6 @@
   FX.seek(parseFloat(qs.get("t") || "0"));
   if (qs.get("play")) { var t0 = performance.now(), st = parseFloat(qs.get("t") || "0"); (function loop() { var t = st + (performance.now() - t0) / 1000; if (t > window.DURATION) return; FX.seek(t); requestAnimationFrame(loop); })(); }
   /* fit the stage to the window when watching in a browser */
-  if (!qs.get("raw")) { var fit = function () { var z = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transformOrigin = "0 0"; stage.style.transform = "scale(" + z + ")"; }; fit(); addEventListener("resize", fit); }
+  if (!qs.get("raw")) { var fit = function () { var z = Math.min(innerWidth / SW, innerHeight / SHT); stage.style.transformOrigin = "0 0"; stage.style.transform = "scale(" + z + ")"; }; fit(); addEventListener("resize", fit); }
   window.READY = true;
 })();

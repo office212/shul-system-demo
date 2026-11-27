@@ -1,13 +1,19 @@
 # The Shul System film
 
-A 71-second marketing film for Shul System, in Hebrew and in English.
+A 71-second marketing film for Shul System, in Hebrew and in English, in a wide cut and a tall one.
 
-| | |
-|---|---|
-| Hebrew | [`shul-system-he.mp4`](shul-system-he.mp4) |
-| English | [`shul-system-en.mp4`](shul-system-en.mp4) |
+| | Wide · 1920 × 1080 | Tall · 1080 × 1920 |
+|---|---|---|
+| Hebrew | [`shul-system-he.mp4`](shul-system-he.mp4) | [`shul-system-he-vertical.mp4`](shul-system-he-vertical.mp4) |
+| English | [`shul-system-en.mp4`](shul-system-en.mp4) | [`shul-system-en-vertical.mp4`](shul-system-en-vertical.mp4) |
 
-1920 × 1080, 60 fps, H.264 + AAC, stereo, about 40 MB each. Posters: [`poster-he.jpg`](poster-he.jpg), [`poster-en.jpg`](poster-en.jpg).
+60 fps, H.264 + AAC, stereo, about 40 MB each. Posters: [`poster-he.jpg`](poster-he.jpg), [`poster-en.jpg`](poster-en.jpg),
+[`poster-he-vertical.jpg`](poster-he-vertical.jpg), [`poster-en-vertical.jpg`](poster-en-vertical.jpg).
+
+The tall cut is for phones: a WhatsApp status, Reels, Shorts, TikTok. It is the same film on the same
+timeline and soundtrack, laid out again rather than cropped: the words sit centred on top, the device under
+them, and the camera goes closer to each screen. Everything that matters stays between 200 and 1600 pixels
+from the top, clear of what those apps draw over the top and the foot of a video.
 
 ## What is in it
 
@@ -41,10 +47,11 @@ function of time; a script asks the page for frame after frame and ffmpeg joins 
 
 ```text
 comp/
-  index.html     the stage: ?lang=he|en   ?t=12.5 to jump   ?play=1 for a rough real-time preview
+  index.html     the stage: ?lang=he|en   ?fmt=v for the tall cut   ?t=12.5 to jump   ?play=1 for a rough real-time preview
   engine.js      a small deterministic animation engine: seek(t) draws any frame, in any order
-  film.js        the nine scenes on one timeline; laid out for Hebrew, mirrored for English
-  film.css       the look: device frames, type, the backdrop
+  film.js        the nine scenes on one timeline; laid out for Hebrew, mirrored for English.
+                 Each scene gives its tall geometry beside the wide one (V ? tall : wide)
+  film.css       the look: device frames, type, the backdrop; the tall cut is the last block
   copy.js        every word, in Hebrew and English, and the contact details
 scripts/
   lib.mjs        opening the demo in Chromium, with the demo-only chrome hidden
@@ -68,13 +75,16 @@ node video/scripts/render.mjs he --draft --noencode      # writes out/cues-he.js
 python3 video/scripts/soundtrack.py                      # out/soundtrack.wav, placed on the film's cues
 node video/scripts/render.mjs he --audio video/out/soundtrack.wav --out video/shul-system-he.mp4
 node video/scripts/render.mjs en --audio video/out/soundtrack.wav --out video/shul-system-en.mp4
+node video/scripts/render.mjs he --fmt v --audio video/out/soundtrack.wav --out video/shul-system-he-vertical.mp4
+node video/scripts/render.mjs en --fmt v --audio video/out/soundtrack.wav --out video/shul-system-en-vertical.mp4
 ```
 
 To watch it while changing it, open
-`http://127.0.0.1:8765/video/comp/index.html?lang=he&play=1`.
+`http://127.0.0.1:8765/video/comp/index.html?lang=he&play=1` (add `&fmt=v` for the tall cut).
+Both cuts share the timeline and the sound cues, so one soundtrack serves all four files.
 
 `shots/` and `out/` are not committed: both are rebuilt from the demo by the commands above.
-A full render draws 4,260 frames at twice the size (about 7 minutes on four cores) and needs about 7 GB of disk for them.
+A full render of one file draws 4,260 frames at twice the size (about 7 minutes on four cores) and needs about 7 GB of disk for them.
 
 The frames are brought down to 1080p at 16 bits, debanded and dithered with a fixed pattern before encoding,
 so the dark gradients of the backdrop stay smooth in an 8-bit H.264 file (`render.mjs`, the encode step).
@@ -86,6 +96,9 @@ so the dark gradients of the backdrop stay smooth in an 8-bit H.264 file (`rende
 - **The timing of a scene:** each scene is one block in `comp/film.js`, with its times written out in seconds.
   Scene starts sit on the music's beat (96 BPM, one beat = 0.625 s).
 - **The designs shown:** the `TH` list in scene 7 of `comp/film.js`.
+- **A headline that breaks differently in the tall cut:** the `hv` (or `lineV`, `donateV`) entry beside it in `comp/copy.js`.
+- **After changing a scene, check both cuts.** `node video/scripts/frames.mjs he 29.8 out-dir 1 v` draws one tall frame;
+  leave the last `v` off for the wide one.
 
 ## Sound
 

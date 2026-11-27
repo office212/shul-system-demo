@@ -1,4 +1,4 @@
-/* The words of the film, in Hebrew and in English.
+/* The words of the film, in Hebrew and in English. (hv: the same headline, broken for the portrait cut.)
    Every claim here is one the demo's home page or drawer page already makes (see FEATURE-MAP.md). */
 window.COPY = {
   he: {
@@ -36,22 +36,22 @@ window.COPY = {
       kicker: "החשבון של המתפלל",
       h: ["לכל מתפלל", "חשבון בטלפון."],
       sub: "משלמים בכרטיס, והתשלום נרשם מעצמו.",
-      line: "אף אחד לא רודף אחרי חובות.",
-      donate: "תרומות באתר: כרטיס, Apple Pay ו‑Google Pay"
+      line: "אף אחד לא רודף אחרי חובות.", lineV: ["אף אחד לא רודף", "אחרי חובות."],
+      donate: "תרומות באתר: כרטיס, Apple Pay ו‑Google Pay", donateV: "תרומות באתר: כרטיס,<br>Apple Pay ו‑Google Pay"
     },
     s7: {
       kicker: "בעיצוב שלכם",
-      h: "ייראה כמו בית הכנסת שלכם.",
+      h: "ייראה כמו בית הכנסת שלכם.", hv: ["ייראה כמו", "בית הכנסת שלכם."],
       sub: "הלוגו, הצבעים והשם שלכם",
       label: "עיצוב לדוגמה",
       themes: { classic: "ירושלים", heichal: "היכל", techelet: "תכלת", parochet: "פרוכת", emerald: "אזמרגד", warm: "חם", argaman: "ארגמן", erez: "ארז", royal: "מלכותי" }
     },
     s8: {
-      h: "ועוד כמה דברים שכבר לא צריכים מגירה.",
+      h: "ועוד כמה דברים שכבר לא צריכים מגירה.", hv: ["ועוד כמה דברים", "שכבר לא צריכים מגירה."],
       cards: ["דף שבת שנבנה לבד", "יארצייטים, כל שנה בזמן", "הודעות ופליירים למסך", "הרשאה לכל גבאי", "יומן של כל פעולה", "גיבוי מלא כל לילה", "דוח שנתי ומכתבי מס", "עברית ואנגלית, בכל מסך"]
     },
     s9: {
-      h: ["רוצים לראות אותה", "עם השם של בית הכנסת שלכם?"],
+      h: ["רוצים לראות אותה", "עם השם של בית הכנסת שלכם?"], hv: ["רוצים לראות אותה", "עם השם של", "בית הכנסת שלכם?"],
       btn: "בקשת הדגמה אישית",
       fine: "הנתונים בסרטון בדויים. המערכת אמיתית."
     }
@@ -91,22 +91,22 @@ window.COPY = {
       kicker: "The member account",
       h: ["Every member", "has an account", "on their phone."],
       sub: "They pay by card, and the payment records itself.",
-      line: "Nobody chases balances.",
-      donate: "Donate by card, Apple Pay or Google Pay"
+      line: "Nobody chases balances.", lineV: ["Nobody chases", "balances."],
+      donate: "Donate by card, Apple Pay or Google Pay", donateV: "Donate by card,<br>Apple Pay or Google Pay"
     },
     s7: {
       kicker: "In your design",
-      h: "It will look like your shul.",
+      h: "It will look like your shul.", hv: ["It will look", "like your shul."],
       sub: "Your logo, colors and name",
       label: "Example design",
       themes: { classic: "Jerusalem", heichal: "Heichal", techelet: "Techelet", parochet: "Parochet", emerald: "Emerald", warm: "Warm", argaman: "Argaman", erez: "Erez", royal: "Royal" }
     },
     s8: {
-      h: "And a few more things that no longer need a drawer.",
+      h: "And a few more things that no longer need a drawer.", hv: ["And a few more things", "that no longer need a drawer."],
       cards: ["A Shabbat bulletin that builds itself", "Yahrzeits, every year on time", "Announcements and flyers on the screen", "Access for each gabbai", "A log of every action", "A full backup every night", "Annual report and tax letters", "Hebrew and English, on every screen"]
     },
     s9: {
-      h: ["Want to see it", "with your shul's name on it?"],
+      h: ["Want to see it", "with your shul's name on it?"], hv: ["Want to see it", "with your shul's", "name on it?"],
       btn: "Request a personal demo",
       fine: "The data in this video is fictional. The system is real."
     }
